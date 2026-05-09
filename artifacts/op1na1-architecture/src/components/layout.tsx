@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Share2, Table2, Code2, FolderOpen, GitMerge,
   Lock, ClipboardList, BellRing, Smartphone, Users, Cpu, Siren,
   BarChart3, Menu, X, Sun, Moon, Bell, Search, ChevronRight,
-  Activity, Zap, MapPin, Server, FlaskConical, UserCog,
+  Activity, Zap, MapPin, Server, FlaskConical, UserCog, SlidersHorizontal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -50,6 +50,7 @@ const NAV_SECTIONS = [
       { href: "/deployment-guide",  label: "Deployment Guide",  icon: Server },
       { href: "/testing-strategy", label: "Testing & CI/CD",   icon: FlaskConical },
       { href: "/user-management",  label: "Gestão de Utilizadores", icon: UserCog },
+      { href: "/channel-config",   label: "Canais & SLA",           icon: SlidersHorizontal },
     ],
   },
 ];

@@ -22,6 +22,7 @@ import MunicipalityConfig from "@/pages/MunicipalityConfig";
 import DeploymentGuide from "@/pages/DeploymentGuide";
 import TestingStrategy from "@/pages/TestingStrategy";
 import UserManagement from "@/pages/UserManagement";
+import ChannelConfig from "@/pages/ChannelConfig";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ function Router() {
         <Route path="/deployment-guide" component={DeploymentGuide} />
         <Route path="/testing-strategy" component={TestingStrategy} />
         <Route path="/user-management"  component={UserManagement} />
+        <Route path="/channel-config"   component={ChannelConfig} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
