@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, BookOpen, Layers, Database, FileJson, Shield, FolderTree, GitBranch } from "lucide-react";
+import { Menu, X, BookOpen, Layers, Database, FileJson, Shield, FolderTree, GitBranch, KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/rbac-matrix", label: "RBAC Matrix", icon: Shield },
   { href: "/folder-structure", label: "Folder Structure", icon: FolderTree },
   { href: "/alembic-migrations", label: "Migrações Alembic", icon: GitBranch },
+  { href: "/auth-module",        label: "Módulo Auth",        icon: KeyRound },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
