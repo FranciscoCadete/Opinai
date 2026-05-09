@@ -21,6 +21,7 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import MunicipalityConfig from "@/pages/MunicipalityConfig";
 import DeploymentGuide from "@/pages/DeploymentGuide";
 import TestingStrategy from "@/pages/TestingStrategy";
+import UserManagement from "@/pages/UserManagement";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ function Router() {
         <Route path="/admin-dashboard"  component={AdminDashboard} />
         <Route path="/deployment-guide" component={DeploymentGuide} />
         <Route path="/testing-strategy" component={TestingStrategy} />
+        <Route path="/user-management"  component={UserManagement} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
