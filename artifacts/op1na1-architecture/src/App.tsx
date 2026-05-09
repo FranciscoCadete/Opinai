@@ -14,6 +14,7 @@ import AlembicMigrations from "@/pages/AlembicMigrations";
 import AuthModule from "@/pages/AuthModule";
 import ReportsModule from "@/pages/ReportsModule";
 import NotificationEngine from "@/pages/NotificationEngine";
+import NLPPipeline from "@/pages/NLPPipeline";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function Router() {
         <Route path="/auth-module" component={AuthModule} />
         <Route path="/reports-module" component={ReportsModule} />
         <Route path="/notification-engine" component={NotificationEngine} />
+        <Route path="/nlp-pipeline" component={NLPPipeline} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
