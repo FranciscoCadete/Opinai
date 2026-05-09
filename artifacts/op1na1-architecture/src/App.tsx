@@ -15,6 +15,7 @@ import AuthModule from "@/pages/AuthModule";
 import ReportsModule from "@/pages/ReportsModule";
 import NotificationEngine from "@/pages/NotificationEngine";
 import NLPPipeline from "@/pages/NLPPipeline";
+import CrisisDetection from "@/pages/CrisisDetection";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ function Router() {
         <Route path="/reports-module" component={ReportsModule} />
         <Route path="/notification-engine" component={NotificationEngine} />
         <Route path="/nlp-pipeline" component={NLPPipeline} />
+        <Route path="/crisis-detection" component={CrisisDetection} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

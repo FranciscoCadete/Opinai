@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, BookOpen, Layers, Database, FileJson, Shield, FolderTree, GitBranch, KeyRound, FileText, Bell, Brain } from "lucide-react";
+import { Menu, X, BookOpen, Layers, Database, FileJson, Shield, FolderTree, GitBranch, KeyRound, FileText, Bell, Brain, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { href: "/reports-module",        label: "Módulo Relatórios",  icon: FileText },
   { href: "/notification-engine",   label: "Motor Notificações", icon: Bell },
   { href: "/nlp-pipeline",          label: "Pipeline NLP",        icon: Brain },
+  { href: "/crisis-detection",      label: "Detecção de Crises",  icon: AlertTriangle },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
