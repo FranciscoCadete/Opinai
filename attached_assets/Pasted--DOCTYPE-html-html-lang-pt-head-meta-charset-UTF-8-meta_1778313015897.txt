@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OP1NA1 — Painel Administrativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0b0f14;
+    --surface:   #111720;
+    --surface2:  #161e2a;
+    --surface3:  #1c2739;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.12);
+    --accent:    #00c49a;
+    --accent2:   #4fa3f7;
+    --warn:      #f7b84f;
+    --danger:    #f76f6f;
+    --text:      #e8edf4;
+    --muted:     #6b7d96;
+    --muted2:    #4a5668;
+    --mono:      'DM Mono', monospace;
+    --sans:      'DM Sans', sans-serif;
+    --display:   'Fraunces', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .logo-area {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+
+  .nav-section {
+    padding: 16px 12px 8px;
+  }
+
+  .nav-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.14s;
+    margin-bottom: 1px;
+    text-decoration: none;
+  }
+
+  .nav-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: rgba(0, 196, 154, 0.1);
+    color: var(--accent);
+  }
+
+  .nav-item .ni-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active .ni-icon { opacity: 1; }
+
+  .nav-badge {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 9px;
+    background: var(--danger);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--surface2);
+    cursor: pointer;
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(0,196,154,0.15);
+    border: 1px solid rgba(0,196,154,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .user-info .user-name { font-size: 12px; font-weight: 500; color: var(--text); }
+  .user-info .user-role { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    gap: 16px;
+  }
+
+  .topbar-title {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    transition: border-color 0.15s;
+  }
+
+  .search-box:focus-within { border-color: var(--border2); }
+
+  .search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 12px;
+    width: 180px;
+  }
+
+  .search-box input::placeholder { color: var(--muted2); }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.14s;
+    position: relative;
+    color: var(--muted);
+  }
+
+  .icon-btn:hover { background: var(--surface3); color: var(--text); }
+
+  .icon-btn .notif-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--danger);
+    border-radius: 50%;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    border: 1.5px solid var(--surface);
+  }
+
+  /* ── CONTENT ── */
+  .content { padding: 28px; flex: 1; }
+
+  /* ── CRISIS BANNER ── */
+  .crisis-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(247, 111, 111, 0.08);
+    border: 1px solid rgba(247, 111, 111, 0.25);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(247,111,111,0.25); }
+    50% { border-color: rgba(247,111,111,0.55); }
+  }
+
+  .crisis-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 0 rgba(247,111,111,0.5);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0% { box-shadow: 0 0 0 0 rgba(247,111,111,0.5); }
+    70% { box-shadow: 0 0 0 6px rgba(247,111,111,0); }
+    100% { box-shadow: 0 0 0 0 rgba(247,111,111,0); }
+  }
+
+  .crisis-text { flex: 1; font-size: 12.5px; color: var(--danger); }
+  .crisis-text strong { font-weight: 500; }
+
+  .crisis-dismiss {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    transition: all 0.14s;
+  }
+
+  .crisis-dismiss:hover { color: var(--text); border-color: var(--border2); }
+
+  /* ── KPI GRID ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+
+  .kpi-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 12px 12px 0 0;
+    opacity: 0.6;
+  }
+
+  .kpi-card.accent::before { background: var(--accent); }
+  .kpi-card.blue::before   { background: var(--accent2); }
+  .kpi-card.warn::before   { background: var(--warn); }
+  .kpi-card.danger::before { background: var(--danger); }
+  .kpi-card.muted::before  { background: var(--muted); }
+
+  .kpi-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .kpi-value {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .kpi-card.accent .kpi-value { color: var(--accent); }
+  .kpi-card.blue .kpi-value   { color: var(--accent2); }
+  .kpi-card.warn .kpi-value   { color: var(--warn); }
+  .kpi-card.danger .kpi-value { color: var(--danger); }
+  .kpi-card.muted .kpi-value  { color: var(--text); }
+
+  .kpi-delta {
+    font-family: var(--mono);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .kpi-delta.up   { color: var(--accent); }
+  .kpi-delta.down { color: var(--danger); }
+  .kpi-delta.neu  { color: var(--muted); }
+
+  /* ── GRID 2 COLS ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .grid-3-1 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .card-actions { display: flex; align-items: center; gap: 6px; }
+
+  .card-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 0.14s;
+    background: none;
+  }
+
+  .card-btn:hover { color: var(--text); border-color: var(--border2); }
+  .card-btn.active { color: var(--accent); border-color: rgba(0,196,154,0.3); background: rgba(0,196,154,0.06); }
+
+  /* ── BAIRRO BAR CHART ── */
+  .bairro-chart { padding: 16px 20px; }
+
+  .bairro-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 11px;
+  }
+
+  .bairro-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    width: 110px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+
+  .bar-fill.estrato-a { background: var(--accent); }
+  .bar-fill.estrato-b { background: var(--accent2); }
+  .bar-fill.estrato-c { background: var(--warn); }
+
+  .bar-val {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .estrato-legend {
+    display: flex;
+    gap: 14px;
+    padding: 0 20px 14px;
+  }
+
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .leg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── FEED ── */
+  .feed { padding: 0; }
+
+  .feed-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item:hover { background: var(--surface2); }
+
+  .feed-prio {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .feed-prio.p5 { background: var(--danger); box-shadow: 0 0 5px rgba(247,111,111,0.5); }
+  .feed-prio.p4 { background: var(--warn); }
+  .feed-prio.p3 { background: var(--accent2); }
+  .feed-prio.p2 { background: var(--accent); }
+  .feed-prio.p1 { background: var(--muted2); }
+
+  .feed-content { flex: 1; min-width: 0; }
+
+  .feed-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .feed-desc {
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .feed-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .feed-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .feed-tag.infra   { color: var(--accent); border-color: rgba(0,196,154,0.2); background: rgba(0,196,154,0.06); }
+  .feed-tag.saude   { color: var(--danger); border-color: rgba(247,111,111,0.2); background: rgba(247,111,111,0.06); }
+  .feed-tag.segur   { color: var(--warn); border-color: rgba(247,184,79,0.2); background: rgba(247,184,79,0.06); }
+  .feed-tag.amb     { color: var(--accent2); border-color: rgba(79,163,247,0.2); background: rgba(79,163,247,0.06); }
+
+  .feed-time {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted2);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .feed-channel {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted2);
+  }
+
+  /* ── STATUS PIE (CSS-only) ── */
+  .status-panel { padding: 20px; }
+
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .donut {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--accent)   0deg 207deg,
+      var(--accent2)  207deg 261deg,
+      var(--warn)     261deg 316deg,
+      var(--danger)   316deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .donut::after {
+    content: '';
+    width: 68px;
+    height: 68px;
+    background: var(--surface);
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .donut-center {
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .donut-pct {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .donut-lbl {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  .status-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .status-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .status-name { flex: 1; color: var(--muted); }
+  .status-n { font-family: var(--mono); font-size: 11px; color: var(--text); }
+  .status-pct { font-family: var(--mono); font-size: 10px; color: var(--muted2); width: 36px; text-align: right; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  tbody td {
+    padding: 11px 16px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .td-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .status-pill::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .pill-resolvido { color: var(--accent); border-color: rgba(0,196,154,0.25); background: rgba(0,196,154,0.07); }
+  .pill-progresso { color: var(--accent2); border-color: rgba(79,163,247,0.25); background: rgba(79,163,247,0.07); }
+  .pill-triagem   { color: var(--warn); border-color: rgba(247,184,79,0.25); background: rgba(247,184,79,0.07); }
+  .pill-aberto    { color: var(--muted); border-color: var(--border); background: var(--surface2); }
+  .pill-critico   { color: var(--danger); border-color: rgba(247,111,111,0.25); background: rgba(247,111,111,0.07); }
+
+  .channel-icon {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .action-btns { display: flex; gap: 5px; }
+
+  .action-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.14s;
+    letter-spacing: 0.04em;
+  }
+
+  .action-btn:hover { color: var(--text); border-color: var(--border2); }
+
+  /* ── MEDIADOR CARD ── */
+  .mediador-grid { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+
+  .med-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: border-color 0.14s;
+    cursor: pointer;
+  }
+
+  .med-row:hover { border-color: var(--border2); }
+
+  .med-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(79,163,247,0.12);
+    border: 1px solid rgba(79,163,247,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; color: var(--accent2);
+    flex-shrink: 0;
+  }
+
+  .med-info { flex: 1; min-width: 0; }
+  .med-name { font-size: 12px; font-weight: 500; color: var(--text); }
+  .med-bairro { font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  .med-status {
+    font-family: var(--mono); font-size: 9px;
+    padding: 2px 7px; border-radius: 4px;
+  }
+
+  .med-online { background: rgba(0,196,154,0.1); color: var(--accent); border: 1px solid rgba(0,196,154,0.25); }
+  .med-offline { background: var(--surface3); color: var(--muted2); border: 1px solid var(--border); }
+
+  .med-count {
+    font-family: var(--mono); font-size: 10px; color: var(--muted);
+    text-align: right;
+  }
+
+  .med-count span { display: block; font-size: 13px; color: var(--text); font-weight: 500; }
+
+  /* ── SLA GAUGE ── */
+  .sla-panel { padding: 20px; }
+
+  .sla-big {
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .sla-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .sla-track {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .sla-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .sla-breakdown { display: flex; flex-direction: column; gap: 8px; }
+
+  .sla-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .sla-cat { flex: 1; color: var(--muted); }
+  .sla-val { font-family: var(--mono); font-size: 10px; color: var(--text); }
+  .sla-ok  { font-family: var(--mono); font-size: 9px; color: var(--accent); }
+  .sla-nok { font-family: var(--mono); font-size: 9px; color: var(--danger); }
+
+  /* ── REFRESH TICKER ── */
+  .refresh-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted2);
+    padding: 10px 28px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .refresh-pulse {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+  /* ── PAGE LOAD ANIMATION ── */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    opacity: 0;
+    animation: fade-up 0.4s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.12s; }
+  .delay-3 { animation-delay: 0.19s; }
+  .delay-4 { animation-delay: 0.26s; }
+  .delay-5 { animation-delay: 0.33s; }
+  .delay-6 { animation-delay: 0.40s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { width: 60px; }
+    .logo-area, .nav-label, .user-info { display: none; }
+    .nav-item { justify-content: center; padding: 10px; }
+    .nav-item span { display: none; }
+    .grid-2, .grid-3-1 { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .search-box { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="logo-area">
+    <div class="logo-mark">OP1NA1</div>
+    <div class="logo-sub">Mulenvos · Adm. Municipal</div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-label">Principal</div>
+
+    <a href="#" class="nav-item active">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/>
+        <rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 4h12M2 8h9M2 12h5"/>
+      </svg>
+      <span>Ocorrências</span>
+      <span class="nav-badge">12</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/>
+      </svg>
+      <span>SLA &amp; Prazos</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 1v6l3.5 2M1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"/>
+      </svg>
+      <span>Análise H1·H2·H3</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 14c0-3.314 2.686-5 6-5s6 1.686 6 5"/>
+      </svg>
+      <span>Mediadores</span>
+    </a>
+  </nav>
+
+  <nav class="nav-section">
+    <div class="nav-label">Sistema</div>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 1l1.6 3.2L13 4.8l-2.5 2.4.6 3.4L8 9l-3.1 1.6.6-3.4L3 4.8l3.4-.6Z"/>
+      </svg>
+      <span>Utilizadores</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/>
+      </svg>
+      <span>Configurações</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <svg class="ni-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 4h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4ZM5 4V2h6v2"/>
+      </svg>
+      <span>Auditoria</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">FC</div>
+      <div class="user-info">
+        <div class="user-name">Francisco Cadete</div>
+        <div class="user-role">Administrador</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-title">Visão Geral — Mulenvos</div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#6b7d96" stroke-width="1.8">
+          <circle cx="6.5" cy="6.5" r="5"/><path d="M11 11l3 3"/>
+        </svg>
+        <input type="text" placeholder="Pesquisar ticket, bairro...">
+      </div>
+      <div class="icon-btn" title="Notificações">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 1a5 5 0 0 1 5 5v3l1.5 2.5H1.5L3 9V6a5 5 0 0 1 5-5ZM6.5 13.5a1.5 1.5 0 0 0 3 0"/>
+        </svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="icon-btn" title="Exportar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 12h10M8 3v7M5 7l3 3 3-3"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- CRISIS BANNER -->
+    <div class="crisis-banner animate-in delay-1" id="crisis-banner">
+      <div class="crisis-dot"></div>
+      <div class="crisis-text">
+        <strong>Alerta de crise activo:</strong> Caop C registou 47 ocorrências nas últimas 2h — 3,8× acima da média semanal. Categoria dominante: Saúde Pública.
+      </div>
+      <div class="crisis-dismiss" onclick="document.getElementById('crisis-banner').style.display='none'">Dispensar</div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid animate-in delay-2">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total do mês</div>
+        <div class="kpi-value">1 247</div>
+        <div class="kpi-delta up">↑ 18% vs mês anterior</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Resolvidas</div>
+        <div class="kpi-value">714</div>
+        <div class="kpi-delta up">↑ 57,3% resolução</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="kpi-label">Em aberto</div>
+        <div class="kpi-value">389</div>
+        <div class="kpi-delta down">↑ 24 acima do SLA</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Críticas P5</div>
+        <div class="kpi-value">144</div>
+        <div class="kpi-delta down">↑ 12 novas hoje</div>
+      </div>
+      <div class="kpi-card muted">
+        <div class="kpi-label">Tempo médio resolução</div>
+        <div class="kpi-value">38h</div>
+        <div class="kpi-delta neu">— Meta: 48h</div>
+      </div>
+    </div>
+
+    <!-- ROW: BAIRROS + FEED -->
+    <div class="grid-3-1 animate-in delay-3">
+
+      <!-- BAIRROS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-dot"></div>
+            Ocorrências por bairro
+          </div>
+          <div class="card-actions">
+            <button class="card-btn active">Volume</button>
+            <button class="card-btn">Resolução</button>
+            <button class="card-btn">SLA</button>
+          </div>
+        </div>
+        <div class="estrato-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div> Estrato A — Consolidado</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent2)"></div> Estrato B — Em consolidação</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--warn)"></div> Estrato C — Crítico</div>
+        </div>
+        <div class="bairro-chart">
+          <div class="bairro-row">
+            <div class="bairro-name">Caop C</div>
+            <div class="bar-track"><div class="bar-fill estrato-c" data-val="92"></div></div>
+            <div class="bar-val">92</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Capalanga</div>
+            <div class="bar-track"><div class="bar-fill estrato-c" data-val="87"></div></div>
+            <div class="bar-val">87</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Caop A</div>
+            <div class="bar-track"><div class="bar-fill estrato-c" data-val="76"></div></div>
+            <div class="bar-val">76</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Caop B</div>
+            <div class="bar-track"><div class="bar-fill estrato-c" data-val="71"></div></div>
+            <div class="bar-val">71</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Baixa de Cassanje</div>
+            <div class="bar-track"><div class="bar-fill estrato-b" data-val="65"></div></div>
+            <div class="bar-val">65</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">KM 14-B</div>
+            <div class="bar-track"><div class="bar-fill estrato-b" data-val="58"></div></div>
+            <div class="bar-val">58</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Boa-Fé</div>
+            <div class="bar-track"><div class="bar-fill estrato-b" data-val="54"></div></div>
+            <div class="bar-val">54</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">Mulenvos de Cima</div>
+            <div class="bar-track"><div class="bar-fill estrato-b" data-val="48"></div></div>
+            <div class="bar-val">48</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">KM 12-B</div>
+            <div class="bar-track"><div class="bar-fill estrato-a" data-val="38"></div></div>
+            <div class="bar-val">38</div>
+          </div>
+          <div class="bairro-row">
+            <div class="bairro-name">KM 9-B</div>
+            <div class="bar-track"><div class="bar-fill estrato-a" data-val="31"></div></div>
+            <div class="bar-val">31</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISTRIBUIÇÃO STATUS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-dot" style="background:var(--accent2)"></div>
+            Estado geral
+          </div>
+        </div>
+        <div class="status-panel">
+          <div class="donut-wrap">
+            <div class="donut">
+              <div class="donut-center">
+                <div class="donut-pct">57%</div>
+                <div class="donut-lbl">resolvido</div>
+              </div>
+            </div>
+          </div>
+          <div class="status-list">
+            <div class="status-row">
+              <div class="status-color" style="background:var(--accent);border-radius:2px"></div>
+              <div class="status-name">Resolvidas</div>
+              <div class="status-n">714</div>
+              <div class="status-pct">57.3%</div>
+            </div>
+            <div class="status-row">
+              <div class="status-color" style="background:var(--accent2);border-radius:2px"></div>
+              <div class="status-name">Em progresso</div>
+              <div class="status-n">155</div>
+              <div class="status-pct">12.4%</div>
+            </div>
+            <div class="status-row">
+              <div class="status-color" style="background:var(--warn);border-radius:2px"></div>
+              <div class="status-name">Triagem IA</div>
+              <div class="status-n">234</div>
+              <div class="status-pct">18.8%</div>
+            </div>
+            <div class="status-row">
+              <div class="status-color" style="background:var(--danger);border-radius:2px"></div>
+              <div class="status-name">Criticas (P5)</div>
+              <div class="status-n">144</div>
+              <div class="status-pct">11.5%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW: FEED + MEDIADORES + SLA -->
+    <div class="grid-2 animate-in delay-4">
+
+      <!-- FEED TEMPO REAL -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-dot" style="background:var(--warn)"></div>
+            Feed em tempo real
+          </div>
+          <div class="card-actions">
+            <span id="feed-timer" style="font-family:var(--mono);font-size:9px;color:var(--muted2)">Actualizar em 30s</span>
+          </div>
+        </div>
+        <div class="feed">
+          <div class="feed-item">
+            <div class="feed-prio p5"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0892</div>
+              <div class="feed-desc">Falta de água há 5 dias — rua principal Caop C</div>
+              <div class="feed-meta">
+                <span class="feed-tag infra">Infraestrutura</span>
+                <span class="feed-tag">Caop C · Est. C</span>
+                <span class="feed-channel">WhatsApp</span>
+                <span class="feed-time">há 3 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-prio p5"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0891</div>
+              <div class="feed-desc">Caso suspeito de cólera — bairro Capalanga Rua 4</div>
+              <div class="feed-meta">
+                <span class="feed-tag saude">Saúde Pública</span>
+                <span class="feed-tag">Capalanga · Est. C</span>
+                <span class="feed-channel">Mediador</span>
+                <span class="feed-time">há 8 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-prio p4"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0890</div>
+              <div class="feed-desc">Lixo acumulado há 12 dias na entrada do bairro</div>
+              <div class="feed-meta">
+                <span class="feed-tag amb">Ambiente</span>
+                <span class="feed-tag">Boa-Fé · Est. B</span>
+                <span class="feed-channel">SMS</span>
+                <span class="feed-time">há 14 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-prio p3"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0889</div>
+              <div class="feed-desc">Estrada intransitável após chuvas — KM 14-B</div>
+              <div class="feed-meta">
+                <span class="feed-tag infra">Infraestrutura</span>
+                <span class="feed-tag">KM 14-B · Est. B</span>
+                <span class="feed-channel">Facebook</span>
+                <span class="feed-time">há 21 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-prio p3"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0888</div>
+              <div class="feed-desc">Iluminação pública avariada — travessa Mulenvos de Cima</div>
+              <div class="feed-meta">
+                <span class="feed-tag segur">Segurança</span>
+                <span class="feed-tag">Mulenvos de Cima</span>
+                <span class="feed-channel">Portal</span>
+                <span class="feed-time">há 35 min</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-prio p2"></div>
+            <div class="feed-content">
+              <div class="feed-id">MUL-20260509-0887</div>
+              <div class="feed-desc">Escola sem água corrente — Baixa de Cassanje</div>
+              <div class="feed-meta">
+                <span class="feed-tag infra">Infraestrutura</span>
+                <span class="feed-tag">Baixa Cassanje · Est. B</span>
+                <span class="feed-channel">WhatsApp</span>
+                <span class="feed-time">há 1h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIADORES + SLA -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- SLA -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-dot" style="background:var(--accent)"></div>
+              Cumprimento SLA
+            </div>
+          </div>
+          <div class="sla-panel">
+            <div class="sla-big" id="sla-val">78%</div>
+            <div class="sla-label">SLA global este mês</div>
+            <div class="sla-track"><div class="sla-fill" id="sla-bar" data-val="78"></div></div>
+            <div class="sla-breakdown">
+              <div class="sla-row">
+                <div class="sla-cat">Infraestrutura</div>
+                <div class="sla-val">72h</div>
+                <div class="sla-ok">82% OK</div>
+              </div>
+              <div class="sla-row">
+                <div class="sla-cat">Saúde Pública</div>
+                <div class="sla-val">24h</div>
+                <div class="sla-nok">61% OK</div>
+              </div>
+              <div class="sla-row">
+                <div class="sla-cat">Segurança</div>
+                <div class="sla-val">12h</div>
+                <div class="sla-ok">89% OK</div>
+              </div>
+              <div class="sla-row">
+                <div class="sla-cat">Ambiente</div>
+                <div class="sla-val">96h</div>
+                <div class="sla-ok">91% OK</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEDIADORES -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-dot" style="background:var(--accent2)"></div>
+              Mediadores activos
+            </div>
+            <div class="card-actions">
+              <button class="card-btn">Ver todos</button>
+            </div>
+          </div>
+          <div class="mediador-grid">
+            <div class="med-row">
+              <div class="med-avatar">AM</div>
+              <div class="med-info">
+                <div class="med-name">António M.</div>
+                <div class="med-bairro">Caop C</div>
+              </div>
+              <div class="med-count"><span>14</span>tickets</div>
+              <div class="med-status med-online">online</div>
+            </div>
+            <div class="med-row">
+              <div class="med-avatar">CM</div>
+              <div class="med-info">
+                <div class="med-name">Clara M.</div>
+                <div class="med-bairro">Capalanga</div>
+              </div>
+              <div class="med-count"><span>9</span>tickets</div>
+              <div class="med-status med-online">online</div>
+            </div>
+            <div class="med-row">
+              <div class="med-avatar">JA</div>
+              <div class="med-info">
+                <div class="med-name">João António</div>
+                <div class="med-bairro">Boa-Fé</div>
+              </div>
+              <div class="med-count"><span>6</span>tickets</div>
+              <div class="med-status med-offline">offline</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TABELA DE TICKETS -->
+    <div class="card animate-in delay-5">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-title-dot" style="background:var(--muted)"></div>
+          Tickets recentes — todos os bairros
+        </div>
+        <div class="card-actions">
+          <button class="card-btn active">Todos</button>
+          <button class="card-btn">Críticos</button>
+          <button class="card-btn">Pendentes</button>
+          <button class="card-btn">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Descrição</th>
+              <th>Bairro</th>
+              <th>Categoria</th>
+              <th>Canal</th>
+              <th>Prioridade</th>
+              <th>Estado</th>
+              <th>Técnico</th>
+              <th>Criado</th>
+              <th>Acções</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-id">MUL-20260509-0892</td>
+              <td>Falta de água — Caop C Rua Principal</td>
+              <td>Caop C</td>
+              <td><span class="feed-tag infra">Infraestrutura</span></td>
+              <td><span class="channel-icon">WhatsApp</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--danger)">P5</td>
+              <td><span class="status-pill pill-triagem">Triagem</span></td>
+              <td style="color:var(--muted2);font-size:11px">— não atribuído</td>
+              <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">09/05 08:12</td>
+              <td><div class="action-btns"><button class="action-btn">Atribuir</button><button class="action-btn">Ver</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">MUL-20260509-0891</td>
+              <td>Caso suspeito de cólera — Capalanga</td>
+              <td>Capalanga</td>
+              <td><span class="feed-tag saude">Saúde Pública</span></td>
+              <td><span class="channel-icon">Mediador</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--danger)">P5</td>
+              <td><span class="status-pill pill-critico">Crítico</span></td>
+              <td style="font-size:11px">Téc. Bernardo</td>
+              <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">09/05 08:04</td>
+              <td><div class="action-btns"><button class="action-btn">Escalar</button><button class="action-btn">Ver</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">MUL-20260508-0874</td>
+              <td>Lixo acumulado — Boa-Fé entrada</td>
+              <td>Boa-Fé</td>
+              <td><span class="feed-tag amb">Ambiente</span></td>
+              <td><span class="channel-icon">SMS</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--warn)">P4</td>
+              <td><span class="status-pill pill-progresso">Em progresso</span></td>
+              <td style="font-size:11px">Téc. Amorim</td>
+              <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">08/05 15:38</td>
+              <td><div class="action-btns"><button class="action-btn">Ver</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">MUL-20260508-0865</td>
+              <td>Buraco na estrada — KM 14-B</td>
+              <td>KM 14-B</td>
+              <td><span class="feed-tag infra">Infraestrutura</span></td>
+              <td><span class="channel-icon">Facebook</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--accent2)">P3</td>
+              <td><span class="status-pill pill-resolvido">Resolvido</span></td>
+              <td style="font-size:11px">Téc. Faria</td>
+              <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">08/05 09:00</td>
+              <td><div class="action-btns"><button class="action-btn">Ver</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">MUL-20260507-0842</td>
+              <td>Iluminação avariada — Mulenvos de Cima</td>
+              <td>Mulenvos de Cima</td>
+              <td><span class="feed-tag segur">Segurança</span></td>
+              <td><span class="channel-icon">Portal</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--accent2)">P3</td>
+              <td><span class="status-pill pill-progresso">Em progresso</span></td>
+              <td style="font-size:11px">Téc. Costa</td>
+              <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">07/05 14:22</td>
+              <td><div class="action-btns"><button class="action-btn">Ver</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- REFRESH BAR -->
+  <div class="refresh-bar">
+    <div class="refresh-pulse"></div>
+    <span>Sistema operacional · Última actualização: <span id="last-update">09/05/2026, 08:17:34</span> · Próxima em <span id="countdown">30s</span></span>
+    <span style="margin-left:auto">n=390 · 10 bairros · 3 estratos · Mulenvos</span>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  // Animate bars on load
+  window.addEventListener('load', () => {
+    const maxVal = 92;
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const val = parseInt(bar.dataset.val);
+      const pct = (val / maxVal) * 100;
+      setTimeout(() => { bar.style.width = pct + '%'; }, 100);
+    });
+
+    // SLA bar
+    const slaBar = document.getElementById('sla-bar');
+    if (slaBar) {
+      setTimeout(() => { slaBar.style.width = slaBar.dataset.val + '%'; }, 200);
+    }
+  });
+
+  // Live countdown
+  let countdown = 30;
+  const countEl = document.getElementById('countdown');
+  const lastEl  = document.getElementById('last-update');
+
+  setInterval(() => {
+    countdown--;
+    if (countdown <= 0) {
+      countdown = 30;
+      lastEl.textContent = new Date().toLocaleString('pt-AO');
+    }
+    countEl.textContent = countdown + 's';
+  }, 1000);
+
+  // Feed timer display
+  const feedTimer = document.getElementById('feed-timer');
+  let feedCd = 30;
+  setInterval(() => {
+    feedCd--;
+    if (feedCd <= 0) feedCd = 30;
+    feedTimer.textContent = 'Actualizar em ' + feedCd + 's';
+  }, 1000);
+
+  // Nav items toggle
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Card buttons toggle
+  document.querySelectorAll('.card-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const siblings = btn.closest('.card-actions').querySelectorAll('.card-btn');
+      siblings.forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
