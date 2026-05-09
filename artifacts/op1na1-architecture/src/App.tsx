@@ -10,6 +10,7 @@ import ERDSchema from "@/pages/ERDSchema";
 import APIContract from "@/pages/APIContract";
 import RBACMatrix from "@/pages/RBACMatrix";
 import FolderStructure from "@/pages/FolderStructure";
+import AlembicMigrations from "@/pages/AlembicMigrations";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ function Router() {
         <Route path="/api-contract" component={APIContract} />
         <Route path="/rbac-matrix" component={RBACMatrix} />
         <Route path="/folder-structure" component={FolderStructure} />
+        <Route path="/alembic-migrations" component={AlembicMigrations} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
