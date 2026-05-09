@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+		<title>GOV.CHAT &#8211; Revolucione a interação entre governo e cidadãos</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel="alternate" type="application/rss+xml" title="Feed para GOV.CHAT &raquo;" href="https://govchat.tech/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Feed de comentários para GOV.CHAT &raquo;" href="https://govchat.tech/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://govchat.tech/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fgovchat.tech%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://govchat.tech/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fgovchat.tech%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='xpro-elementor-addons-widgets-css' href='https://govchat.tech/wp-content/plugins/xpro-elementor-addons/assets/css/xpro-widgets.css?ver=1.4.13' media='all' />
+<link rel='stylesheet' id='xpro-elementor-addons-responsive-css' href='https://govchat.tech/wp-content/plugins/xpro-elementor-addons/assets/css/xpro-responsive.css?ver=1.4.13' media='all' />
+<link rel='stylesheet' id='font-awesome-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=5.15.3' media='all' />
+<link rel='stylesheet' id='social-icons-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-social-icons.min.css?ver=3.28.0' media='all' />
+<link rel='stylesheet' id='xpro-icons-css' href='https://govchat.tech/wp-content/plugins/xpro-elementor-addons/assets/css/xpro-icons.min.css?ver=1.0.0' media='all' />
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<link rel='stylesheet' id='xpro-theme-builder-css' href='https://govchat.tech/wp-content/plugins/xpro-theme-builder/assets/css/xpro-theme-builder.css?ver=1.2.8.5' media='all' />
+<link rel='stylesheet' id='elementor-frontend-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/frontend.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='elementor-post-6-css' href='https://govchat.tech/wp-content/uploads/elementor/css/post-6.css?ver=1775736082' media='all' />
+<link rel='stylesheet' id='xpro-elementor-widgetarea-editor-css' href='https://govchat.tech/wp-content/plugins/xpro-elementor-addons/inc/controls/assets/css/widgetarea-editor.css?ver=1.4.13' media='all' />
+<link rel='stylesheet' id='widget-image-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-heading-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='e-motion-fx-css' href='https://govchat.tech/wp-content/plugins/elementor-pro/assets/css/modules/motion-fx.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='swiper-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5' media='all' />
+<link rel='stylesheet' id='e-swiper-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-image-carousel-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-image-carousel.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-nested-carousel-css' href='https://govchat.tech/wp-content/plugins/elementor-pro/assets/css/widget-nested-carousel.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-icon-list-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-icon-list.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='e-animation-slideInUp-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/animations/styles/slideInUp.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='e-animation-fadeInUp-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInUp.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-nested-tabs-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-nested-tabs.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='e-animation-fadeInRight-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInRight.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='e-animation-zoomIn-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/lib/animations/styles/zoomIn.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='widget-divider-css' href='https://govchat.tech/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.30.0' media='all' />
+<link rel='stylesheet' id='elementor-post-7-css' href='https://govchat.tech/wp-content/uploads/elementor/css/post-7.css?ver=1775736084' media='all' />
+<link rel='stylesheet' id='hello-elementor-css' href='https://govchat.tech/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.4.4' media='all' />
+<link rel='stylesheet' id='hello-elementor-theme-style-css' href='https://govchat.tech/wp-content/themes/hello-elementor/assets/css/theme.css?ver=3.4.4' media='all' />
+<link rel='stylesheet' id='hello-elementor-header-footer-css' href='https://govchat.tech/wp-content/themes/hello-elementor/assets/css/header-footer.css?ver=3.4.4' media='all' />
+<link rel='stylesheet' id='elementor-gf-local-dmsans-css' href='https://govchat.tech/wp-content/uploads/elementor/google-fonts/css/dmsans.css?ver=1751645299' media='all' />
+<link rel='stylesheet' id='elementor-gf-local-roboto-css' href='https://govchat.tech/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1751591126' media='all' />
+<link rel='stylesheet' id='elementor-gf-local-inter-css' href='https://govchat.tech/wp-content/uploads/elementor/google-fonts/css/inter.css?ver=1751718488' media='all' />
+<link rel='stylesheet' id='elementor-gf-local-opensans-css' href='https://govchat.tech/wp-content/uploads/elementor/google-fonts/css/opensans.css?ver=1751730842' media='all' />
+<script src="https://govchat.tech/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script src="https://govchat.tech/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://govchat.tech/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://govchat.tech/wp-json/wp/v2/pages/7" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://govchat.tech/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.4" />
+<link rel="canonical" href="https://govchat.tech/" />
+<link rel='shortlink' href='https://govchat.tech/' />
+		<script>
+			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+		</script>
+				<style>
+			.no-js img.lazyload {
+				display: none;
+			}
+
+			figure.wp-block-image img.lazyloading {
+				min-width: 150px;
+			}
+
+			.lazyload,
+			.lazyloading {
+				--smush-placeholder-width: 100px;
+				--smush-placeholder-aspect-ratio: 1/1;
+				width: var(--smush-placeholder-width) !important;
+				aspect-ratio: var(--smush-placeholder-aspect-ratio) !important;
+			}
+
+						.lazyload, .lazyloading {
+				opacity: 0;
+			}
+
+			.lazyloaded {
+				opacity: 1;
+				transition: opacity 400ms;
+				transition-delay: 0ms;
+			}
+
+					</style>
+		<meta name="generator" content="Elementor 3.30.0; features: e_font_icon_svg, additional_custom_breakpoints, e_element_cache; settings: css_print_method-external, google_font-enabled, font_display-swap">
+			<style>
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
+					background-image: none !important;
+				}
+				@media screen and (max-height: 1024px) {
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+				@media screen and (max-height: 640px) {
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+			</style>
+			<link rel="icon" href="https://govchat.tech/wp-content/uploads/2025/07/cropped-favicon-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://govchat.tech/wp-content/uploads/2025/07/cropped-favicon-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://govchat.tech/wp-content/uploads/2025/07/cropped-favicon-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://govchat.tech/wp-content/uploads/2025/07/cropped-favicon-1-270x270.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" /><style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 800px;--wp--style--global--wide-size: 1200px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.wp-site-blocks) > * { margin-block-start: 24px; margin-block-end: 0; }:where(.wp-site-blocks) > :first-child { margin-block-start: 0; }:where(.wp-site-blocks) > :last-child { margin-block-end: 0; }:root { --wp--style--block-gap: 24px; }:root :where(.is-layout-flow) > :first-child{margin-block-start: 0;}:root :where(.is-layout-flow) > :last-child{margin-block-end: 0;}:root :where(.is-layout-flow) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-constrained) > :first-child{margin-block-start: 0;}:root :where(.is-layout-constrained) > :last-child{margin-block-end: 0;}:root :where(.is-layout-constrained) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-flex){gap: 24px;}:root :where(.is-layout-grid){gap: 24px;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}a:where(:not(.wp-element-button)){text-decoration: underline;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+</head>
+<body class="home wp-singular page-template page-template-elementor_canvas page page-id-7 wp-embed-responsive wp-theme-hello-elementor xpro-theme-builder-template hello-elementor-default elementor-default elementor-template-canvas elementor-kit-6 elementor-page elementor-page-7">
+			<div data-elementor-type="wp-page" data-elementor-id="7" class="elementor elementor-7" data-elementor-post-type="page">
+				<div class="elementor-element elementor-element-fdcdda4 e-flex e-con-boxed e-con e-parent" data-id="fdcdda4" data-element_type="container" id="top" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-836ca0a e-con-full e-flex e-con e-child" data-id="836ca0a" data-element_type="container">
+				<div class="elementor-element elementor-element-303f990 elementor-widget-mobile__width-initial elementor-widget elementor-widget-image" data-id="303f990" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="105" height="20" data-src="https://govchat.tech/wp-content/uploads/2025/07/Logotypew.svg" class="attachment-1536x1536 size-1536x1536 wp-image-577 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 105px; --smush-placeholder-aspect-ratio: 105/20;" />															</div>
+		<div class="elementor-element elementor-element-11466a7 e-con-full e-flex e-con e-child" data-id="11466a7" data-element_type="container">
+				<div class="elementor-element elementor-element-6e96bf0 elementor-align-right elementor-widget elementor-widget-xpro-horizontal-menu" data-id="6e96bf0" data-element_type="widget" data-settings="{&quot;responsive_show&quot;:&quot;tablet&quot;}" data-widget_type="xpro-horizontal-menu.default">
+					<div class="xpro-elementor-horizontal-navbar-wrapper xpro-elementor-horizontal-menu-responsive-tablet xpro-push-right">
+
+		<button type="button" class="xpro-elementor-horizontal-menu-close">
+		<i aria-hidden="true" class="fas fa-times"></i>	</button>
+	
+	<div class="xpro-elementor-horizontal-navbar xpro-elementor-horizontal-menu-style-fade"><ul id="menu-menu-principal" class="xpro-elementor-horizontal-navbar-nav"><li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-277" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-277 nav-item"><a href="#" class="xpro-elementor-nav-link">Soluções</a></li>
+<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-278" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-278 nav-item"><a href="#contato" class="xpro-elementor-nav-link">Contato</a></li>
+<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-279" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-279 nav-item"><a href="#" class="xpro-elementor-nav-link">Suporte</a></li>
+</ul></div></div>
+
+<div class="xpro-elementor-horizontal-menu-overlay"></div>
+
+<div class="xpro-elementor-horizontal-menu-toggler-wrapper">
+	<button type="button" class="xpro-elementor-horizontal-menu-toggler">
+		<i aria-hidden="true" class="fas fa-bars"></i>	</button>
+</div>
+				</div>
+				<div class="elementor-element elementor-element-117e00c elementor-align-justify elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-hidden-mobile elementor-widget elementor-widget-button" data-id="117e00c" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Quero conhecer</span>
+					</span>
+					</a>
+								</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-fe35a0d elementor-widget__width-initial elementor-widget elementor-widget-heading" data-id="fe35a0d" data-element_type="widget" data-widget_type="heading.default">
+					<h1 class="elementor-heading-title elementor-size-default">Revolucione a interação entre governo e cidadãos</h1>				</div>
+				<div class="elementor-element elementor-element-175dbab elementor-widget__width-initial elementor-widget elementor-widget-heading" data-id="175dbab" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Transforme o atendimento público com inteligência artificial e automação.</h4>				</div>
+		<div class="elementor-element elementor-element-2b092cf e-con-full e-flex e-con e-child" data-id="2b092cf" data-element_type="container">
+				<div class="elementor-element elementor-element-f29f819 elementor-align-justify elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-button" data-id="f29f819" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Saiba Mais</span>
+					</span>
+					</a>
+								</div>
+				<div class="elementor-element elementor-element-847eac5 elementor-align-justify elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-button" data-id="847eac5" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#agenda" id="Agenda">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Fale Conosco</span>
+					</span>
+					</a>
+								</div>
+				</div>
+		<div class="elementor-element elementor-element-64e4a1a e-con-full e-flex e-con e-child" data-id="64e4a1a" data-element_type="container">
+				<div class="elementor-element elementor-element-a1173cf elementor-absolute elementor-hidden-mobile elementor-widget__width-initial elementor-widget elementor-widget-image" data-id="a1173cf" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;,&quot;motion_fx_motion_fx_scrolling&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_effect&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_speed&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:4,&quot;sizes&quot;:[]},&quot;motion_fx_translateY_affectedRange&quot;:{&quot;unit&quot;:&quot;%&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:{&quot;start&quot;:0,&quot;end&quot;:100}},&quot;motion_fx_devices&quot;:[&quot;desktop&quot;,&quot;tablet&quot;,&quot;mobile&quot;]}" data-widget_type="image.default">
+															<img decoding="async" width="425" height="101" data-src="https://govchat.tech/wp-content/uploads/2025/07/card-1-2.png" class="attachment-full size-full wp-image-548 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/card-1-2.png 425w, https://govchat.tech/wp-content/uploads/2025/07/card-1-2-300x71.png 300w" data-sizes="(max-width: 425px) 100vw, 425px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 425px; --smush-placeholder-aspect-ratio: 425/101;" />															</div>
+				<div class="elementor-element elementor-element-24a0683 elementor-absolute elementor-hidden-mobile elementor-widget__width-initial elementor-widget elementor-widget-image" data-id="24a0683" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;,&quot;motion_fx_motion_fx_scrolling&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_effect&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_speed&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:4,&quot;sizes&quot;:[]},&quot;motion_fx_translateY_affectedRange&quot;:{&quot;unit&quot;:&quot;%&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:{&quot;start&quot;:0,&quot;end&quot;:100}},&quot;motion_fx_devices&quot;:[&quot;desktop&quot;,&quot;tablet&quot;,&quot;mobile&quot;]}" data-widget_type="image.default">
+															<img decoding="async" width="416" height="102" data-src="https://govchat.tech/wp-content/uploads/2025/07/card-4.png" class="attachment-full size-full wp-image-544 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/card-4.png 416w, https://govchat.tech/wp-content/uploads/2025/07/card-4-300x74.png 300w" data-sizes="(max-width: 416px) 100vw, 416px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 416px; --smush-placeholder-aspect-ratio: 416/102;" />															</div>
+				<div class="elementor-element elementor-element-27ec14e elementor-absolute elementor-hidden-mobile elementor-widget__width-initial elementor-widget elementor-widget-image" data-id="27ec14e" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;,&quot;motion_fx_motion_fx_scrolling&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_effect&quot;:&quot;yes&quot;,&quot;motion_fx_translateY_speed&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:3,&quot;sizes&quot;:[]},&quot;motion_fx_translateY_affectedRange&quot;:{&quot;unit&quot;:&quot;%&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:{&quot;start&quot;:0,&quot;end&quot;:84}},&quot;motion_fx_devices&quot;:[&quot;desktop&quot;,&quot;tablet&quot;,&quot;mobile&quot;]}" data-widget_type="image.default">
+															<img decoding="async" width="1689" height="406" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1.png" class="attachment-full size-full wp-image-422 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1.png 1689w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1-300x72.png 300w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1-1024x246.png 1024w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1-768x185.png 768w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147224911-1-1536x369.png 1536w" data-sizes="(max-width: 1689px) 100vw, 1689px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 1689px; --smush-placeholder-aspect-ratio: 1689/406;" />															</div>
+				<div class="elementor-element elementor-element-8bea297 elementor-widget elementor-widget-image" data-id="8bea297" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="3473" height="1739" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-1-1.svg" class="attachment-full size-full wp-image-526 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 3473px; --smush-placeholder-aspect-ratio: 3473/1739;" />															</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-51e21dc e-con-full e-flex e-con e-parent" data-id="51e21dc" data-element_type="container">
+				<div class="elementor-element elementor-element-c4f335e elementor-widget elementor-widget-heading" data-id="c4f335e" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Companhias confiam no GovChat para modernizar o atendimento público</h4>				</div>
+				<div class="elementor-element elementor-element-49fd5c3 slider-logo elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-image-carousel" data-id="49fd5c3" data-element_type="widget" data-settings="{&quot;slides_to_show&quot;:&quot;6&quot;,&quot;slides_to_show_mobile&quot;:&quot;2&quot;,&quot;slides_to_scroll&quot;:&quot;1&quot;,&quot;navigation&quot;:&quot;none&quot;,&quot;lazyload&quot;:&quot;yes&quot;,&quot;image_spacing_custom_mobile&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:20,&quot;sizes&quot;:[]},&quot;autoplay&quot;:&quot;yes&quot;,&quot;pause_on_hover&quot;:&quot;yes&quot;,&quot;pause_on_interaction&quot;:&quot;yes&quot;,&quot;autoplay_speed&quot;:5000,&quot;infinite&quot;:&quot;yes&quot;,&quot;speed&quot;:500,&quot;image_spacing_custom&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:20,&quot;sizes&quot;:[]},&quot;image_spacing_custom_tablet&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]}}" data-widget_type="image-carousel.default">
+							<div class="elementor-image-carousel-wrapper swiper" role="region" aria-roledescription="carousel" aria-label="Carrossel de imagens" dir="ltr">
+			<div class="elementor-image-carousel swiper-wrapper" aria-live="off">
+								<div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="1 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225757.svg" alt="Frame 2147225757" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="2 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/logo-nova-1.svg" alt="logo-nova 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="3 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/Layer-2.svg" alt="Layer 2" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="4 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/PC-MA-1.svg" alt="PC MA 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="5 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/Logo-1.svg" alt="Logo 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="6 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/PC-PR-1.svg" alt="PC PR 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="7 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/YUAN-1.svg" alt="YUAN 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="8 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/logo-nova-1-1.svg" alt="logo-nova 1" /><div class="swiper-lazy-preloader"></div></figure></div><div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="9 de 9"><figure class="swiper-slide-inner"><img class="swiper-slide-image swiper-lazy" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-1171275029.svg" alt="Frame 1171275029" /><div class="swiper-lazy-preloader"></div></figure></div>			</div>
+							
+									</div>
+						</div>
+				<div class="elementor-element elementor-element-bd3cfb4 slider-logo elementor-widget elementor-widget-n-carousel" data-id="bd3cfb4" data-element_type="widget" data-settings="{&quot;carousel_items&quot;:[{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;0fc2a0b&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;4a95c04&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;2461974&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;87b9e3a&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;e68baee&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;69e3b51&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;6f76dd9&quot;},{&quot;slide_title&quot;:&quot;Slide #1&quot;,&quot;_id&quot;:&quot;f6c1a9d&quot;}],&quot;slides_to_show&quot;:&quot;7&quot;,&quot;image_spacing_custom&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:0,&quot;sizes&quot;:[]},&quot;slides_to_show_tablet&quot;:&quot;2&quot;,&quot;slides_to_show_mobile&quot;:&quot;1&quot;,&quot;autoplay&quot;:&quot;yes&quot;,&quot;autoplay_speed&quot;:5000,&quot;pause_on_hover&quot;:&quot;yes&quot;,&quot;pause_on_interaction&quot;:&quot;yes&quot;,&quot;infinite&quot;:&quot;yes&quot;,&quot;speed&quot;:500,&quot;offset_sides&quot;:&quot;none&quot;,&quot;image_spacing_custom_tablet&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]},&quot;image_spacing_custom_mobile&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]}}" data-widget_type="nested-carousel.default">
+							<div class="e-n-carousel swiper" role="region" aria-roledescription="carousel" aria-label="Carousel" dir="ltr">
+			<div class="swiper-wrapper" aria-live="off">
+										<div class="swiper-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="1 of 8">
+							<div class="elementor-element elementor-element-4341e58 e-flex e-con-boxed e-con e-child" data-id="4341e58" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-cd67f9e e-con-full e-flex e-con e-child" data-id="cd67f9e" data-element_type="container">
+				<div class="elementor-element elementor-element-3a30ab4 elementor-widget elementor-widget-image" data-id="3a30ab4" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="163" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/YUAN-1.svg" class="attachment-full size-full wp-image-469 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 163px; --smush-placeholder-aspect-ratio: 163/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="2 of 8">
+							<div class="elementor-element elementor-element-587e9ce e-flex e-con-boxed e-con e-child" data-id="587e9ce" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-4c6726e e-con-full e-flex e-con e-child" data-id="4c6726e" data-element_type="container">
+				<div class="elementor-element elementor-element-df39bf9 elementor-widget elementor-widget-image" data-id="df39bf9" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="75" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/PC-PR-1.svg" class="attachment-full size-full wp-image-468 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 75px; --smush-placeholder-aspect-ratio: 75/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="3 of 8">
+							<div class="elementor-element elementor-element-910ddc9 e-flex e-con-boxed e-con e-child" data-id="910ddc9" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-979269f e-con-full e-flex e-con e-child" data-id="979269f" data-element_type="container">
+				<div class="elementor-element elementor-element-2e7b5c5 elementor-widget elementor-widget-image" data-id="2e7b5c5" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="253" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225757.svg" class="attachment-full size-full wp-image-463 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 253px; --smush-placeholder-aspect-ratio: 253/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="4 of 8">
+							<div class="elementor-element elementor-element-57cbcde e-flex e-con-boxed e-con e-child" data-id="57cbcde" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-29fabab e-con-full e-flex e-con e-child" data-id="29fabab" data-element_type="container">
+				<div class="elementor-element elementor-element-a20abdb elementor-widget elementor-widget-image" data-id="a20abdb" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="53" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/logo-nova-1.svg" class="attachment-full size-full wp-image-466 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 53px; --smush-placeholder-aspect-ratio: 53/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="5 of 8">
+							<div class="elementor-element elementor-element-9a77361 e-flex e-con-boxed e-con e-child" data-id="9a77361" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-7999b52 e-con-full e-flex e-con e-child" data-id="7999b52" data-element_type="container">
+				<div class="elementor-element elementor-element-f916943 elementor-widget elementor-widget-image" data-id="f916943" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="210" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/Layer-2.svg" class="attachment-full size-full wp-image-464 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 210px; --smush-placeholder-aspect-ratio: 210/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="6 of 8">
+							<div class="elementor-element elementor-element-88aa3ea e-flex e-con-boxed e-con e-child" data-id="88aa3ea" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-7e54b28 e-con-full e-flex e-con e-child" data-id="7e54b28" data-element_type="container">
+				<div class="elementor-element elementor-element-13b745c elementor-widget elementor-widget-image" data-id="13b745c" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="83" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/Logo-1.svg" class="attachment-full size-full wp-image-465 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 83px; --smush-placeholder-aspect-ratio: 83/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="7 of 8">
+							<div class="elementor-element elementor-element-9746760 e-flex e-con-boxed e-con e-child" data-id="9746760" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-3303b2b e-con-full e-flex e-con e-child" data-id="3303b2b" data-element_type="container">
+				<div class="elementor-element elementor-element-8ed7965 elementor-widget elementor-widget-image" data-id="8ed7965" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="42" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/PC-MA-1.svg" class="attachment-full size-full wp-image-467 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 42px; --smush-placeholder-aspect-ratio: 42/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+											<div class="swiper-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="8 of 8">
+							<div class="elementor-element elementor-element-c53151d e-flex e-con-boxed e-con e-child" data-id="c53151d" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-bc3d6b4 e-con-full e-flex e-con e-child" data-id="bc3d6b4" data-element_type="container">
+				<div class="elementor-element elementor-element-fdbe7f0 elementor-widget elementor-widget-image" data-id="fdbe7f0" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="231" height="52" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-1171275029.svg" class="attachment-full size-full wp-image-470 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 231px; --smush-placeholder-aspect-ratio: 231/52;" />															</div>
+				</div>
+					</div>
+				</div>
+								</div>
+								</div>
+		</div>
+						</div>
+				</div>
+		<div class="elementor-element elementor-element-87b3c25 e-flex e-con-boxed e-con e-parent" data-id="87b3c25" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-a051d81 e-con-full e-flex e-con e-child" data-id="a051d81" data-element_type="container">
+				<div class="elementor-element elementor-element-fb154f2 elementor-widget elementor-widget-heading" data-id="fb154f2" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Plataforma Integrada</h5>				</div>
+				<div class="elementor-element elementor-element-8923b5c elementor-widget elementor-widget-heading" data-id="8923b5c" data-element_type="widget" data-widget_type="heading.default">
+					<h2 class="elementor-heading-title elementor-size-default">Centralize os canais de comunicação e aproxime o governo da população</h2>				</div>
+				<div class="elementor-element elementor-element-c38ac57 elementor-widget elementor-widget-text-editor" data-id="c38ac57" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Modernize a comunicação entre governo e cidadão. Centralize todos os canais dos orgãos públicos em um único ambiente, com atendimento automatizado via chatbot e gestão eficiente.</p>								</div>
+				<div class="elementor-element elementor-element-f35baa9 elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="f35baa9" data-element_type="widget" data-widget_type="icon-list.default">
+							<ul class="elementor-icon-list-items">
+							<li class="elementor-icon-list-item">
+											<span class="elementor-icon-list-icon">
+							<svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg>						</span>
+										<span class="elementor-icon-list-text">Atendimento multicanal em um único sistema</span>
+									</li>
+								<li class="elementor-icon-list-item">
+											<span class="elementor-icon-list-icon">
+							<svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg>						</span>
+										<span class="elementor-icon-list-text">Chatbots inteligentes para automatizar serviços 24/7</span>
+									</li>
+								<li class="elementor-icon-list-item">
+											<span class="elementor-icon-list-icon">
+							<svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg>						</span>
+										<span class="elementor-icon-list-text">Painéis de controle com dados e indicadores em tempo real</span>
+									</li>
+								<li class="elementor-icon-list-item">
+											<span class="elementor-icon-list-icon">
+							<svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg>						</span>
+										<span class="elementor-icon-list-text">Segurança, conformidade com a LGPD e canais oficiais verificados</span>
+									</li>
+						</ul>
+						</div>
+				<div class="elementor-element elementor-element-5a71754 elementor-widget elementor-widget-button" data-id="5a71754" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Saiba mais</span>
+					</span>
+					</a>
+								</div>
+				</div>
+		<div class="elementor-element elementor-element-d10c51d e-con-full e-flex e-con e-child" data-id="d10c51d" data-element_type="container">
+				<div class="elementor-element elementor-element-0c437b9 animated-fast elementor-invisible elementor-widget elementor-widget-image" data-id="0c437b9" data-element_type="widget" data-settings="{&quot;_animation&quot;:&quot;slideInUp&quot;}" data-widget_type="image.default">
+															<img decoding="async" width="5645" height="7751" data-src="https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3.png" class="attachment-full size-full wp-image-478 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3.png 5645w, https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3-218x300.png 218w, https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3-746x1024.png 746w, https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3-768x1055.png 768w, https://govchat.tech/wp-content/uploads/2025/07/Group-1171275030-3-1119x1536.png 1119w" data-sizes="(max-width: 5645px) 100vw, 5645px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 5645px; --smush-placeholder-aspect-ratio: 5645/7751;" />															</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-22312fb e-flex e-con-boxed e-con e-parent" data-id="22312fb" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-e31cbd8 elementor-widget elementor-widget-heading" data-id="e31cbd8" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Funcionalidades</h5>				</div>
+				<div class="elementor-element elementor-element-d5c50b0 elementor-widget elementor-widget-heading" data-id="d5c50b0" data-element_type="widget" data-widget_type="heading.default">
+					<h2 class="elementor-heading-title elementor-size-default">Funcionalidades que transformam a comunicação pública</h2>				</div>
+				<div class="elementor-element elementor-element-d0965b6 elementor-widget elementor-widget-text-editor" data-id="d0965b6" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Soluções completas para aproximar o governo dos cidadãos com agilidade, segurança e escala.</p>								</div>
+		<div class="elementor-element elementor-element-b1cc83c e-grid e-con-full e-con e-child" data-id="b1cc83c" data-element_type="container">
+		<div class="elementor-element elementor-element-a3ce231 e-con-full e-flex elementor-invisible e-con e-child" data-id="a3ce231" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-a8a8d2f elementor-view-default elementor-widget elementor-widget-icon" data-id="a8a8d2f" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="24" fill="#F5FFF9"></rect><rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M27.9521 28.54C27.8523 28.295 27.6594 28.0996 27.4158 27.9965C27.1721 27.8934 26.8975 27.8911 26.6521 27.99C24.9672 28.6649 23.0871 28.6649 21.4021 27.99C21.2807 27.9401 21.1506 27.9146 21.0192 27.915C20.8879 27.9154 20.758 27.9416 20.6368 27.9922C20.5156 28.0428 20.4056 28.1168 20.313 28.2099C20.2204 28.3031 20.147 28.4135 20.0971 28.535C20.0472 28.6565 20.0218 28.7866 20.0221 28.9179C20.0225 29.0492 20.0488 29.1792 20.0994 29.3004C20.15 29.4216 20.224 29.5316 20.3171 29.6242C20.4102 29.7168 20.5207 29.7901 20.6421 29.84C22.8099 30.7184 25.2344 30.7184 27.4021 29.84C27.6471 29.7401 27.8426 29.5473 27.9457 29.3036C28.0488 29.0599 28.0511 28.7854 27.9521 28.54ZM27.9621 15.71C28.9056 16.3525 29.6777 17.2159 30.211 18.2251C30.7443 19.2343 31.0228 20.3586 31.0221 21.5C31.0199 21.794 31.0032 22.0877 30.9721 22.38C30.9564 22.5113 30.9666 22.6445 31.0023 22.7718C31.038 22.8992 31.0985 23.0183 31.1802 23.1223C31.2619 23.2263 31.3633 23.3131 31.4786 23.378C31.5939 23.4428 31.7208 23.4842 31.8521 23.5C31.9835 23.5158 32.1166 23.5055 32.244 23.4698C32.3713 23.4341 32.4904 23.3737 32.5944 23.292C32.6984 23.2102 32.7853 23.1088 32.8501 22.9935C32.9149 22.8783 32.9564 22.7513 32.9721 22.62C33.015 22.2483 33.0317 21.874 33.0221 21.5C33.0228 20.0335 32.6651 18.5891 31.9801 17.2925C31.2952 15.9958 30.3038 14.8861 29.0921 14.06C28.9839 13.9839 28.8616 13.93 28.7323 13.9015C28.6031 13.873 28.4694 13.8705 28.3392 13.894C28.209 13.9176 28.0847 13.9667 27.9736 14.0386C27.8625 14.1106 27.7668 14.2038 27.692 14.313C27.6172 14.4222 27.5648 14.5452 27.5379 14.6748C27.511 14.8044 27.5101 14.938 27.5352 15.068C27.5604 15.1979 27.611 15.3216 27.6843 15.4318C27.7576 15.542 27.852 15.6366 27.9621 15.71ZM16.2021 23.49C16.4644 23.4575 16.7031 23.3225 16.8661 23.1145C17.0292 22.9065 17.1032 22.6424 17.0721 22.38C17.0578 22.0868 17.0578 21.7932 17.0721 21.5C17.0659 20.363 17.3367 19.2416 17.8612 18.2328C18.3856 17.224 19.1479 16.3581 20.0821 15.71C20.1923 15.6366 20.2867 15.542 20.36 15.4318C20.4333 15.3216 20.4839 15.1979 20.5091 15.068C20.5342 14.938 20.5333 14.8044 20.5064 14.6748C20.4795 14.5452 20.4271 14.4222 20.3523 14.313C20.2775 14.2038 20.1818 14.1106 20.0707 14.0386C19.9596 13.9667 19.8353 13.9176 19.7051 13.894C19.5748 13.8705 19.4412 13.873 19.312 13.9015C19.1827 13.93 19.0604 13.9839 18.9521 14.06C17.7405 14.8861 16.7491 15.9958 16.0642 17.2925C15.3792 18.5891 15.0215 20.0335 15.0221 21.5C15.0192 21.8745 15.0426 22.2488 15.0921 22.62C15.1247 22.8823 15.2597 23.121 15.4677 23.284C15.6757 23.447 15.9397 23.5211 16.2021 23.49ZM27.6921 19.5C27.7301 19.5012 27.7679 19.4937 27.8025 19.4781C27.8372 19.4625 27.8678 19.4392 27.8921 19.41C27.9145 19.3803 27.9304 19.3463 27.939 19.3102C27.9476 19.2741 27.9487 19.2366 27.9421 19.2C27.7401 18.3013 27.2384 17.498 26.5196 16.922C25.8007 16.3461 24.9073 16.0317 23.9861 16.0305C23.065 16.0294 22.1708 16.3415 21.4505 16.9156C20.7301 17.4898 20.2265 18.2918 20.0221 19.19C20.0054 19.2242 19.9966 19.2619 19.9966 19.3C19.9966 19.3381 20.0054 19.3758 20.0221 19.41C20.0714 19.4635 20.1395 19.4958 20.2121 19.5H27.6921ZM21.5221 12.5C21.5221 13.163 21.7855 13.7989 22.2544 14.2678C22.7232 14.7366 23.3591 15 24.0221 15C24.6852 15 25.3211 14.7366 25.7899 14.2678C26.2588 13.7989 26.5221 13.163 26.5221 12.5C26.5221 11.837 26.2588 11.2011 25.7899 10.7322C25.3211 10.2634 24.6852 10 24.0221 10C23.3591 10 22.7232 10.2634 22.2544 10.7322C21.7855 11.2011 21.5221 11.837 21.5221 12.5ZM32.0221 30.5C31.0892 30.4926 30.1823 30.8068 29.4538 31.3895C28.7253 31.9723 28.2197 32.7882 28.0221 33.7C28.0148 33.7359 28.0155 33.773 28.024 33.8086C28.0326 33.8443 28.049 33.8776 28.0719 33.9062C28.0948 33.9348 28.1237 33.9581 28.1566 33.9743C28.1894 33.9905 28.2255 33.9993 28.2621 34H35.7221C35.7978 33.9963 35.8692 33.9642 35.9221 33.91C35.937 33.8752 35.9447 33.8378 35.9447 33.8C35.9447 33.7622 35.937 33.7248 35.9221 33.69C35.7263 32.7968 35.2347 31.9958 34.5268 31.4168C33.819 30.8379 32.9365 30.5148 32.0221 30.5ZM29.5521 27C29.5521 27.663 29.8155 28.2989 30.2844 28.7678C30.7532 29.2366 31.3891 29.5 32.0521 29.5C32.7152 29.5 33.3511 29.2366 33.8199 28.7678C34.2888 28.2989 34.5521 27.663 34.5521 27C34.5521 26.337 34.2888 25.7011 33.8199 25.2322C33.3511 24.7634 32.7152 24.5 32.0521 24.5C31.3891 24.5 30.7532 24.7634 30.2844 25.2322C29.8155 25.7011 29.5521 26.337 29.5521 27ZM16.0221 30.5C15.0892 30.4926 14.1823 30.8068 13.4538 31.3895C12.7253 31.9723 12.2197 32.7882 12.0221 33.7C12.0075 33.7331 12 33.7688 12 33.805C12 33.8412 12.0075 33.8769 12.0221 33.91C12.0544 33.9569 12.1017 33.9914 12.1563 34.0078C12.2109 34.0242 12.2694 34.0214 12.3221 34H19.7721C19.8107 34.0011 19.849 33.9933 19.884 33.9772C19.919 33.9611 19.9499 33.9371 19.9741 33.907C19.9983 33.877 20.0152 33.8418 20.0236 33.8042C20.0319 33.7665 20.0314 33.7274 20.0221 33.69C19.8209 32.781 19.314 31.9684 18.5861 31.3879C17.8581 30.8074 16.9532 30.494 16.0221 30.5ZM13.5921 27C13.5921 27.663 13.8555 28.2989 14.3244 28.7678C14.7932 29.2366 15.4291 29.5 16.0921 29.5C16.7552 29.5 17.3911 29.2366 17.8599 28.7678C18.3288 28.2989 18.5921 27.663 18.5921 27C18.5921 26.337 18.3288 25.7011 17.8599 25.2322C17.3911 24.7634 16.7552 24.5 16.0921 24.5C15.4291 24.5 14.7932 24.7634 14.3244 25.2322C13.8555 25.7011 13.5921 26.337 13.5921 27Z" fill="#002E25"></path></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-8792c3c elementor-widget elementor-widget-heading" data-id="8792c3c" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Centralize e otimize seus atendimentos</h4>				</div>
+				<div class="elementor-element elementor-element-72a3c51 elementor-widget elementor-widget-text-editor" data-id="72a3c51" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Gerencie múltiplos canais em um só lugar e melhore a eficiência do seu time.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-bbc849e e-con-full e-flex elementor-invisible e-con e-child" data-id="bbc849e" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-76759a2 elementor-view-default elementor-widget elementor-widget-icon" data-id="76759a2" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none"><path d="M0.333496 24C0.333496 10.7452 11.0787 0 24.3335 0C37.5883 0 48.3335 10.7452 48.3335 24C48.3335 37.2548 37.5883 48 24.3335 48C11.0787 48 0.333496 37.2548 0.333496 24Z" fill="#F5FFF9"></path><rect x="0.833496" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><g clip-path="url(#clip0_101_568)"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.6433 24.0578L28.9698 29.0784C27.7898 32.6182 27.1999 34.3882 26.3347 34.8911C25.5117 35.3696 24.4951 35.3696 23.6721 34.8911C22.8069 34.3882 22.217 32.6182 21.037 29.0784C20.8476 28.51 20.7528 28.2258 20.5938 27.9883C20.4397 27.7581 20.2419 27.5603 20.0117 27.4062C19.7742 27.2472 19.49 27.1524 18.9216 26.963C15.3818 25.783 13.6118 25.193 13.1089 24.3279C12.6304 23.5048 12.6304 22.4883 13.1089 21.6653C13.6118 20.8001 15.3818 20.2102 18.9216 19.0302L23.9422 17.3567C28.3281 15.8947 30.5211 15.1637 31.6787 16.3213C32.8363 17.4789 32.1053 19.6719 30.6433 24.0578ZM23.5195 24.4296C23.2356 24.1425 23.2381 23.6795 23.5253 23.3955L27.6305 19.3355C27.9177 19.0515 28.3807 19.0541 28.6647 19.3412C28.9486 19.6284 28.9461 20.0914 28.6589 20.3753L24.5537 24.4354C24.2665 24.7193 23.8035 24.7168 23.5195 24.4296Z" fill="#002E25"></path></g><defs><clipPath id="clip0_101_568"><rect width="21" height="21" fill="white" transform="translate(11 14)"></rect></clipPath></defs></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-5920ab2 elementor-widget elementor-widget-heading" data-id="5920ab2" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Campanhas que viram conversas</h4>				</div>
+				<div class="elementor-element elementor-element-7b6092a elementor-widget elementor-widget-text-editor" data-id="7b6092a" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Integre seus anúncios com o WhatsApp e transforme cliques em atendimentos reais.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-f78041b e-con-full e-flex elementor-invisible e-con e-child" data-id="f78041b" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-2ea14ce elementor-view-default elementor-widget elementor-widget-icon" data-id="2ea14ce" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none"><path d="M0.666504 24C0.666504 10.7452 11.4117 0 24.6665 0C37.9213 0 48.6665 10.7452 48.6665 24C48.6665 37.2548 37.9213 48 24.6665 48C11.4117 48 0.666504 37.2548 0.666504 24Z" fill="#F5FFF9"></path><rect x="1.1665" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M33.6665 22.9749V19.9999C33.6665 19.4694 33.4558 18.9607 33.0807 18.5857C32.7056 18.2106 32.1969 17.9999 31.6665 17.9999H25.6665V16.6879C25.9715 16.4139 26.1665 16.0199 26.1665 15.5779C26.1665 15.1801 26.0085 14.7985 25.7272 14.5172C25.4459 14.2359 25.0643 14.0779 24.6665 14.0779C24.2687 14.0779 23.8871 14.2359 23.6058 14.5172C23.3245 14.7985 23.1665 15.1801 23.1665 15.5779C23.1665 16.0199 23.3615 16.4139 23.6665 16.6879V17.9999H17.6665C17.1361 17.9999 16.6274 18.2106 16.2523 18.5857C15.8772 18.9607 15.6665 19.4694 15.6665 19.9999V22.9979L15.5945 23.0029C15.3425 23.0211 15.1067 23.134 14.9345 23.319C14.7624 23.5039 14.6666 23.7472 14.6665 23.9999V25.9999C14.6665 26.2651 14.7719 26.5195 14.9594 26.707C15.1469 26.8945 15.4013 26.9999 15.6665 26.9999V31.9999C15.6665 32.5303 15.8772 33.039 16.2523 33.4141C16.6274 33.7892 17.1361 33.9999 17.6665 33.9999H31.6665C32.1969 33.9999 32.7056 33.7892 33.0807 33.4141C33.4558 33.039 33.6665 32.5303 33.6665 31.9999V26.9999C33.9317 26.9999 34.1861 26.8945 34.3736 26.707C34.5611 26.5195 34.6665 26.2651 34.6665 25.9999V24.0619C34.6782 23.9067 34.6536 23.7509 34.5945 23.6069C34.3925 23.1189 33.9595 23.0019 33.6665 22.9749ZM19.6665 23.9999C19.6665 22.8959 20.3385 21.9999 21.1665 21.9999C21.9945 21.9999 22.6665 22.8959 22.6665 23.9999C22.6665 25.1039 21.9945 25.9999 21.1665 25.9999C20.3385 25.9999 19.6665 25.1039 19.6665 23.9999ZM28.6645 29.9999C27.6635 29.9969 20.6665 29.9999 20.6665 29.9999V27.9999C20.6665 27.9999 27.6675 27.9979 28.6685 27.9999L28.6645 29.9999ZM28.1665 25.9999C27.3385 25.9999 26.6665 25.1039 26.6665 23.9999C26.6665 22.8959 27.3385 21.9999 28.1665 21.9999C28.9945 21.9999 29.6665 22.8959 29.6665 23.9999C29.6665 25.1039 28.9945 25.9999 28.1665 25.9999Z" fill="#002E25"></path></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-d382e61 elementor-widget elementor-widget-heading" data-id="d382e61" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Atendimento automático 24/7</h4>				</div>
+				<div class="elementor-element elementor-element-17d473d elementor-widget elementor-widget-text-editor" data-id="17d473d" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Chatbots inteligentes que respondem instantaneamente, dia e noite.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-7921d8e e-con-full e-flex elementor-invisible e-con e-child" data-id="7921d8e" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-f67ad26 elementor-view-default elementor-widget elementor-widget-icon" data-id="f67ad26" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24Z" fill="#F5FFF9"></path><rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M31.9999 18.147C31.7859 18.0971 31.5687 18.0614 31.3499 18.04C31.0491 16.5162 30.2822 15.1236 29.1552 14.0549C28.0282 12.9861 26.5969 12.294 25.0593 12.0743C23.5217 11.8547 21.9539 12.1183 20.5727 12.8288C19.1916 13.5393 18.0654 14.6614 17.3499 16.04C16.8889 16.0957 16.4358 16.2048 15.9999 16.365C14.8309 16.7754 13.8182 17.5387 13.1018 18.5494C12.3853 19.5602 12.0005 20.7686 12.0005 22.0075C12.0005 23.2465 12.3853 24.4548 13.1018 25.4656C13.8182 26.4764 14.8309 27.2397 15.9999 27.65V25.446C15.3921 25.098 14.887 24.5957 14.5357 23.9898C14.1844 23.3838 13.9994 22.6959 13.9994 21.9955C13.9994 21.2951 14.1844 20.6072 14.5357 20.0013C14.887 19.3954 15.3921 18.893 15.9999 18.545C16.4775 18.2645 17.0093 18.089 17.5599 18.03L18.6299 17.92L19.1299 16.97C19.6524 15.9579 20.4769 15.1334 21.4891 14.611C22.5013 14.0885 23.651 13.8941 24.7787 14.0546C25.9064 14.215 26.9562 14.7225 27.7825 15.5065C28.6087 16.2905 29.1705 17.3123 29.3899 18.43L29.6899 19.93L31.2199 20.04C31.4864 20.062 31.7487 20.1195 31.9999 20.211C32.5835 20.4117 33.0899 20.7895 33.4484 21.2919C33.8068 21.7942 33.9995 22.3959 33.9995 23.013C33.9995 23.6301 33.8068 24.2319 33.4484 24.7342C33.0899 25.2365 32.5835 25.6144 31.9999 25.815V27.899C33.1276 27.6741 34.1425 27.0654 34.8718 26.1763C35.601 25.2873 35.9996 24.1729 35.9996 23.023C35.9996 21.8731 35.601 20.7588 34.8718 19.8697C34.1425 18.9807 33.1276 18.3719 31.9999 18.147Z" fill="#002E25"></path><path d="M24 23C20.182 23 18 23.758 18 25.167V33.833C18 35.242 21.087 36 24 36C26.913 36 30 35.242 30 33.833V25.167C30 23.758 27.818 23 24 23ZM24 24C26.711 24 28.91 24.81 28.91 25.708C28.91 26.606 26.71 27.333 24 27.333C21.29 27.333 19.09 26.606 19.09 25.708C19.09 24.81 21.29 24 24 24ZM19.09 31.924V30.781C20.6465 31.4171 22.3193 31.7189 24 31.667C25.6807 31.7189 27.3535 31.4171 28.91 30.781V31.96C27.3421 32.5469 25.6729 32.8155 24 32.75C22.325 32.7987 20.6568 32.5181 19.09 31.924Z" fill="#002E25"></path></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-544f97b elementor-widget elementor-widget-heading" data-id="544f97b" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Dados para decisões estratégicas</h4>				</div>
+				<div class="elementor-element elementor-element-6464578 elementor-widget elementor-widget-text-editor" data-id="6464578" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Acesse relatórios e métricas em tempo real para acompanhar resultados.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-52b8c1e e-con-full e-flex elementor-invisible e-con e-child" data-id="52b8c1e" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-7fdb57d elementor-view-default elementor-widget elementor-widget-icon" data-id="7fdb57d" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none"><path d="M0.333496 24C0.333496 10.7452 11.0787 0 24.3335 0C37.5883 0 48.3335 10.7452 48.3335 24C48.3335 37.2548 37.5883 48 24.3335 48C11.0787 48 0.333496 37.2548 0.333496 24Z" fill="#F5FFF9"></path><rect x="0.833496" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M19.993 13.4344C20.1416 13.2862 20.3381 13.1525 20.5011 13.0904C20.7072 13.0091 20.8366 12.99 21.1002 13.0044C21.2967 13.0139 21.5556 13.0665 21.7233 13.1334C21.8815 13.1907 22.1739 13.3531 22.3704 13.4821C22.5669 13.6159 22.8688 13.8405 23.0414 13.9743C23.2139 14.1128 23.4967 14.3039 24 14.5619L24.2732 14.4234C24.4266 14.3469 24.81 14.0841 25.1264 13.8453C25.4427 13.6064 25.8837 13.3197 26.1041 13.2098C26.4876 13.0187 26.5355 13.0091 26.919 13.0091C27.2449 13.0091 27.3791 13.033 27.5564 13.119C27.6858 13.1764 27.8967 13.3388 28.0309 13.4726C28.1747 13.6207 28.3425 13.8644 28.4383 14.0603C28.5246 14.2418 28.6876 14.6957 28.7978 15.0636C28.9081 15.4315 29.0566 15.8567 29.1333 16.0048C29.2675 16.2724 29.2819 16.2819 29.4976 16.3106C29.627 16.3297 30.0728 16.3393 30.4946 16.3345C30.9163 16.3297 31.4196 16.3488 31.6065 16.3775C31.7983 16.4014 32.0715 16.4683 32.2057 16.516C32.3447 16.5686 32.5651 16.7024 32.6898 16.817C32.8288 16.9365 32.9773 17.1324 33.0492 17.2853C33.1547 17.5098 33.1739 17.6102 33.1739 17.978C33.1739 18.2647 33.1403 18.5355 33.0732 18.7903C33.0157 19.0005 32.9007 19.3445 32.8192 19.5547C32.7377 19.7649 32.637 20.1185 32.5172 20.7492L32.7521 20.9546C32.8815 21.0693 33.2122 21.3177 33.4902 21.5041C33.7682 21.6952 34.1516 22.001 34.3434 22.1825C34.5926 22.4166 34.7412 22.6077 34.8466 22.8275C34.976 23.0903 35 23.1906 35 23.4964C35 23.807 34.976 23.9025 34.8466 24.1653C34.7603 24.3469 34.5782 24.5953 34.4152 24.7577C34.2619 24.9106 33.9407 25.1734 33.7059 25.3406C33.471 25.5031 33.1403 25.742 32.9725 25.871C32.8048 25.9952 32.6418 26.1481 32.6035 26.2054C32.546 26.2962 32.5412 26.3679 32.5843 26.5876C32.6131 26.7405 32.7521 27.2183 32.9007 27.6531C33.0972 28.2455 33.1691 28.537 33.1882 28.8237C33.2074 29.096 33.193 29.2823 33.1403 29.4687C33.0972 29.612 32.9965 29.8222 32.9198 29.9321C32.8383 30.0468 32.6802 30.2044 32.5699 30.2857C32.4549 30.3621 32.2248 30.4768 32.0523 30.5293C31.7839 30.6153 31.6017 30.6344 30.7582 30.644C30.2166 30.6535 29.6606 30.6679 29.2723 30.7109L29.1333 31.0071C29.0566 31.1743 28.9129 31.5757 28.817 31.9053C28.7211 32.235 28.5534 32.6841 28.4479 32.9087C28.3185 33.1858 28.1795 33.3912 28.007 33.5584C27.844 33.7209 27.6715 33.8356 27.4749 33.9072C27.2449 33.9932 27.1251 34.0123 26.8758 33.9932C26.7033 33.9837 26.4349 33.9216 26.2767 33.8594C26.1185 33.8021 25.8261 33.6397 25.6296 33.5107C25.4331 33.3769 25.1312 33.1523 24.9586 33.0186C24.7861 32.88 24.5033 32.6889 24 32.4309L23.6741 32.5981C23.4967 32.6937 23.1564 32.9278 22.9216 33.1284C22.6867 33.3243 22.3512 33.5584 22.1786 33.6492C22.0061 33.7352 21.6946 33.8547 21.4837 33.912C21.2344 33.9837 21.0235 34.0123 20.8845 33.9932C20.7647 33.9837 20.5682 33.9263 20.4388 33.869C20.3142 33.8165 20.1129 33.6636 19.9834 33.5393C19.8588 33.4103 19.6815 33.1523 19.5808 32.9564C19.485 32.7606 19.3124 32.2971 19.2022 31.9292C19.0919 31.5613 18.9434 31.1361 18.8667 30.9832C18.7373 30.7252 18.7181 30.7109 18.5264 30.6822C18.4113 30.6679 17.8553 30.6535 17.2898 30.644C16.403 30.6297 16.2161 30.6153 15.9477 30.5293C15.7752 30.4768 15.5403 30.3621 15.4253 30.2713C15.3102 30.1853 15.1569 30.0277 15.0802 29.9225C15.0035 29.8174 14.9076 29.5833 14.8597 29.397C14.7878 29.1055 14.7878 29.0148 14.8405 28.6564C14.8741 28.4319 15.0179 27.9063 15.1569 27.4859C15.2959 27.0654 15.4253 26.6115 15.4397 26.4825C15.4732 26.2436 15.4732 26.2436 15.2431 26.0334C15.1185 25.9187 14.7878 25.6751 14.5098 25.484C14.2318 25.2976 13.8484 24.9966 13.6566 24.8103C13.4074 24.5762 13.2588 24.3851 13.1534 24.1653C13.024 23.9025 13 23.8022 13 23.4964C13 23.1858 13.024 23.0903 13.1534 22.8275C13.2444 22.6412 13.417 22.4071 13.5847 22.2398C13.7381 22.0917 14.0449 21.8385 14.2702 21.6808C14.4954 21.5232 14.8261 21.2795 15.0035 21.1409C15.1808 21.0072 15.363 20.8447 15.4013 20.7826C15.454 20.6966 15.4588 20.6249 15.4157 20.4004C15.3869 20.2523 15.2479 19.7745 15.0993 19.3397C14.9028 18.7473 14.8309 18.4558 14.8118 18.1692C14.7926 17.8968 14.807 17.7105 14.8597 17.5242C14.9028 17.3808 15.0035 17.1706 15.0802 17.0559C15.1617 16.946 15.3198 16.7884 15.4301 16.7072C15.5451 16.6307 15.7752 16.516 15.9477 16.4635C16.2161 16.3775 16.3983 16.3584 17.2418 16.3488C17.7834 16.3393 18.3394 16.3249 18.4736 16.3058C18.7181 16.2819 18.7325 16.2724 18.8427 16.0526C18.905 15.9284 19.0488 15.527 19.159 15.1591C19.2693 14.7913 19.4466 14.3087 19.5521 14.0841C19.6863 13.807 19.8205 13.6016 19.993 13.4344Z" fill="url(#paint0_linear_101_611)"></path><path d="M24.815 23.2096C25.764 22.5025 26.6124 21.8766 26.6987 21.8241H26.6939C26.7898 21.7667 26.9383 21.7285 27.0678 21.7285C27.2163 21.7285 27.3362 21.762 27.4464 21.8336C27.5375 21.8957 27.6525 21.9961 27.7004 22.063C27.7484 22.1299 27.8011 22.2684 27.8155 22.3735C27.8346 22.5025 27.8155 22.6315 27.7579 22.7796C27.6765 22.9803 27.5183 23.1045 25.4861 24.6239C23.9619 25.761 23.2525 26.2579 23.1375 26.2818C23.0464 26.3009 22.8834 26.2913 22.778 26.2626C22.6198 26.2196 22.3898 26.0142 21.4695 25.1064C20.856 24.4949 20.3288 23.955 20.3 23.9024C20.2712 23.8499 20.2281 23.7304 20.2089 23.6396C20.1898 23.5489 20.1993 23.396 20.2233 23.3052C20.2521 23.2144 20.3431 23.0711 20.4246 22.9899C20.5061 22.9086 20.6499 22.8179 20.741 22.7892C20.832 22.7653 20.9854 22.7557 21.0765 22.7749C21.1675 22.794 21.2874 22.837 21.3401 22.8656C21.3928 22.8943 21.7906 23.2717 22.2268 23.7065C22.663 24.1461 23.032 24.4996 23.0512 24.4996C23.0752 24.4996 23.866 23.9215 24.815 23.2096Z" fill="white"></path><defs><linearGradient id="paint0_linear_101_611" x1="31" y1="11" x2="16" y2="38" gradientUnits="userSpaceOnUse"><stop stop-color="#002E25"></stop></linearGradient></defs></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-d3e019f elementor-widget elementor-widget-heading" data-id="d3e019f" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Segurança e conformidade</h4>				</div>
+				<div class="elementor-element elementor-element-3cc2f32 elementor-widget elementor-widget-text-editor" data-id="3cc2f32" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Plataforma segura, com proteção de dados e conforme a LGPD.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-9276348 e-con-full e-flex elementor-invisible e-con e-child" data-id="9276348" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-1ee6d54 elementor-view-default elementor-widget elementor-widget-icon" data-id="1ee6d54" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none"><path d="M0.666504 24C0.666504 10.7452 11.4117 0 24.6665 0C37.9213 0 48.6665 10.7452 48.6665 24C48.6665 37.2548 37.9213 48 24.6665 48C11.4117 48 0.666504 37.2548 0.666504 24Z" fill="#F5FFF9"></path><rect x="1.1665" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path fill-rule="evenodd" clip-rule="evenodd" d="M24.298 14.1951C24.7506 14.0255 25.2494 14.0255 25.702 14.1951L32.702 16.8201C33.0833 16.9631 33.4119 17.219 33.6438 17.5537C33.8758 17.8884 34.0001 18.2859 34 18.6931V24.0561C34 25.7275 33.5346 27.366 32.6559 28.7878C31.7772 30.2096 30.52 31.3586 29.025 32.1061L25.671 33.7821C25.4627 33.8863 25.2329 33.9406 25 33.9406C24.7671 33.9406 24.5373 33.8863 24.329 33.7821L20.975 32.1051C19.48 31.3576 18.2228 30.2086 17.3441 28.7868C16.4654 27.365 16 25.7265 16 24.0551V18.6941C15.9997 18.2867 16.1239 17.889 16.3559 17.5541C16.5878 17.2192 16.9165 16.9631 17.298 16.8201L24.298 14.1951ZM26 23.7321C26.3813 23.512 26.6792 23.1722 26.8477 22.7654C27.0162 22.3587 27.0457 21.9077 26.9318 21.4825C26.8178 21.0572 26.5667 20.6815 26.2175 20.4134C25.8682 20.1454 25.4403 20.0001 25 20.0001C24.5597 20.0001 24.1318 20.1454 23.7825 20.4134C23.4333 20.6815 23.1822 21.0572 23.0682 21.4825C22.9543 21.9077 22.9838 22.3587 23.1523 22.7654C23.3208 23.1722 23.6187 23.512 24 23.7321V27.0001C24 27.2653 24.1054 27.5197 24.2929 27.7072C24.4804 27.8948 24.7348 28.0001 25 28.0001C25.2652 28.0001 25.5196 27.8948 25.7071 27.7072C25.8946 27.5197 26 27.2653 26 27.0001V23.7321Z" fill="#002E25"></path></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-05cd591 elementor-widget elementor-widget-heading" data-id="05cd591" data-element_type="widget" data-widget_type="heading.default">
+					<h4 class="elementor-heading-title elementor-size-default">Canal oficial e verificado</h4>				</div>
+				<div class="elementor-element elementor-element-c52abfb elementor-widget elementor-widget-text-editor" data-id="c52abfb" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Com o selo verde do WhatsApp, o cidadão reconhece a autenticidade do atendimento.</p>								</div>
+				</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-04c3530 e-flex e-con-boxed e-con e-parent" data-id="04c3530" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-aaeb377 elementor-widget elementor-widget-heading" data-id="aaeb377" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Campanhas de Disparo em Massa</h5>				</div>
+				<div class="elementor-element elementor-element-d22aa8f elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-heading" data-id="d22aa8f" data-element_type="widget" data-widget_type="heading.default">
+					<h2 class="elementor-heading-title elementor-size-default">Expanda o alcance das suas mensagens com envios inteligentes e oficiais</h2>				</div>
+				<div class="elementor-element elementor-element-09b212e elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-text-editor" data-id="09b212e" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>A GovChat facilita o envio de mensagens em massa respeitando as diretrizes da plataforma e a LGPD. Ideal para campanhas de utilidade pública, alertas e serviços essenciais.</p>								</div>
+				<div class="elementor-element elementor-element-bbedafa e-n-tabs-mobile elementor-widget elementor-widget-n-tabs" data-id="bbedafa" data-element_type="widget" data-widget_type="nested-tabs.default">
+							<div class="e-n-tabs" data-widget-number="197057274" aria-label="Abas. Abra itens com &quot;Enter&quot; ou &quot;Espaço&quot;, feche com &quot;Escape&quot; e navegue usando as teclas de &quot;Seta&quot;.">
+			<div class="e-n-tabs-heading" role="tablist">
+					<button id="e-n-tab-title-1970572741" class="e-n-tab-title" aria-selected="true" data-tab-index="1" role="tab" tabindex="0" aria-controls="e-n-tab-content-1970572741" style="--n-tabs-title-order: 1;">
+						<span class="e-n-tab-title-text">
+				<div><img decoding="async" data-src="https://govchat.tech/wp-content/uploads/2025/07/Vector.svg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" class="lazyload">Envio em Larga Escala</div><span>Dispare milhares de mensagens com agilidade via API Oficial do WhatsApp.</span>			</span>
+		</button>
+				<button id="e-n-tab-title-1970572742" class="e-n-tab-title" aria-selected="false" data-tab-index="2" role="tab" tabindex="-1" aria-controls="e-n-tab-content-1970572742" style="--n-tabs-title-order: 2;">
+						<span class="e-n-tab-title-text">
+				<div><img decoding="async" data-src="https://govchat.tech/wp-content/uploads/2025/07/Tuning-2.svg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" class="lazyload">Limites Inteligentes</div><span>Aumente sua capacidade de envio conforme o canal é verificado e ganha reputação.</span>			</span>
+		</button>
+				<button id="e-n-tab-title-1970572743" class="e-n-tab-title" aria-selected="false" data-tab-index="3" role="tab" tabindex="-1" aria-controls="e-n-tab-content-1970572743" style="--n-tabs-title-order: 3;">
+						<span class="e-n-tab-title-text">
+				<div><img decoding="async" data-src="https://govchat.tech/wp-content/uploads/2025/07/Hand-Stars.svg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" class="lazyload">Confiabilidade Garantida</div><span>Mensagens entregues com segurança, estabilidade e em conformidade com a LGPD.</span>			</span>
+		</button>
+					</div>
+			<div class="e-n-tabs-content">
+				<div id="e-n-tab-content-1970572741" role="tabpanel" aria-labelledby="e-n-tab-title-1970572741" data-tab-index="1" style="--n-tabs-title-order: 1;" class="e-active elementor-element elementor-element-ea0f785 e-con-full e-flex e-con e-child" data-id="ea0f785" data-element_type="container">
+		<div class="elementor-element elementor-element-5ecc5e3 e-flex e-con-boxed e-con e-child" data-id="5ecc5e3" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-d343ab7 elementor-widget elementor-widget-image" data-id="d343ab7" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="2525" height="2065" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225749-3.png" class="attachment-full size-full wp-image-485 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225749-3.png 2525w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225749-3-300x245.png 300w" data-sizes="(max-width: 2525px) 100vw, 2525px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 2525px; --smush-placeholder-aspect-ratio: 2525/2065;" />															</div>
+					</div>
+				</div>
+				</div>
+		<div id="e-n-tab-content-1970572742" role="tabpanel" aria-labelledby="e-n-tab-title-1970572742" data-tab-index="2" style="--n-tabs-title-order: 2;" class=" elementor-element elementor-element-de6640a e-con-full e-flex e-con e-child" data-id="de6640a" data-element_type="container">
+		<div class="elementor-element elementor-element-053a214 e-flex e-con-boxed e-con e-child" data-id="053a214" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-dbee1a0 elementor-widget elementor-widget-image" data-id="dbee1a0" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225753.png" class="attachment-full size-full wp-image-565 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 3152px; --smush-placeholder-aspect-ratio: 3152/2579;" />															</div>
+					</div>
+				</div>
+				</div>
+		<div id="e-n-tab-content-1970572743" role="tabpanel" aria-labelledby="e-n-tab-title-1970572743" data-tab-index="3" style="--n-tabs-title-order: 3;" class=" elementor-element elementor-element-3d1a953 e-con-full e-flex e-con e-child" data-id="3d1a953" data-element_type="container">
+		<div class="elementor-element elementor-element-1444ecc e-flex e-con-boxed e-con e-child" data-id="1444ecc" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-04b6005 elementor-widget elementor-widget-image" data-id="04b6005" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="2560" height="2095" data-src="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225754-1-1-scaled.png" class="attachment-full size-full wp-image-558 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225754-1-1-scaled.png 2560w, https://govchat.tech/wp-content/uploads/2025/07/Frame-2147225754-1-1-300x245.png 300w" data-sizes="(max-width: 2560px) 100vw, 2560px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 2560px; --smush-placeholder-aspect-ratio: 2560/2095;" />															</div>
+					</div>
+				</div>
+				</div>
+					</div>
+		</div>
+						</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-62d3bff e-flex e-con-boxed e-con e-parent" data-id="62d3bff" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-68a8f40 e-con-full e-flex e-con e-child" data-id="68a8f40" data-element_type="container">
+				<div class="elementor-element elementor-element-e740bd7 elementor-widget elementor-widget-heading" data-id="e740bd7" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Campanhas de Disparo em Massa</h5>				</div>
+				<div class="elementor-element elementor-element-ffcb913 elementor-widget elementor-widget-heading" data-id="ffcb913" data-element_type="widget" data-widget_type="heading.default">
+					<h2 class="elementor-heading-title elementor-size-default">Canais verificados e estratégias inteligentes para um atendimento público seguro e acessível</h2>				</div>
+				<div class="elementor-element elementor-element-9421451 elementor-widget elementor-widget-text-editor" data-id="9421451" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Transforme o atendimento governamental: do selo verde de verificação no WhatsApp ao uso estratégico de anúncios clicáveis que levam direto ao canal oficial. Tudo com automação, segurança e máxima entregabilidade.</p>								</div>
+		<div class="elementor-element elementor-element-9a0dbd9 e-grid e-con-full e-con e-child" data-id="9a0dbd9" data-element_type="container">
+		<div class="elementor-element elementor-element-cc24819 e-con-full e-flex elementor-invisible e-con e-child" data-id="cc24819" data-element_type="container" data-settings="{&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-867b424 elementor-view-default elementor-widget elementor-widget-icon" data-id="867b424" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="24" fill="white"></rect><rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M19.993 13.4344C20.1416 13.2862 20.3381 13.1525 20.5011 13.0904C20.7072 13.0091 20.8366 12.99 21.1002 13.0044C21.2967 13.0139 21.5556 13.0665 21.7233 13.1334C21.8815 13.1907 22.1739 13.3531 22.3704 13.4821C22.5669 13.6159 22.8688 13.8405 23.0414 13.9743C23.2139 14.1128 23.4967 14.3039 24 14.5619L24.2732 14.4234C24.4266 14.3469 24.81 14.0841 25.1264 13.8453C25.4427 13.6064 25.8837 13.3197 26.1041 13.2098C26.4876 13.0187 26.5355 13.0091 26.919 13.0091C27.2449 13.0091 27.3791 13.033 27.5564 13.119C27.6858 13.1764 27.8967 13.3388 28.0309 13.4726C28.1747 13.6207 28.3425 13.8644 28.4383 14.0603C28.5246 14.2418 28.6876 14.6957 28.7978 15.0636C28.9081 15.4315 29.0566 15.8567 29.1333 16.0048C29.2675 16.2724 29.2819 16.2819 29.4976 16.3106C29.627 16.3297 30.0728 16.3393 30.4946 16.3345C30.9163 16.3297 31.4196 16.3488 31.6065 16.3775C31.7983 16.4014 32.0715 16.4683 32.2057 16.516C32.3447 16.5686 32.5651 16.7024 32.6898 16.817C32.8288 16.9365 32.9773 17.1324 33.0492 17.2853C33.1547 17.5098 33.1739 17.6102 33.1739 17.978C33.1739 18.2647 33.1403 18.5355 33.0732 18.7903C33.0157 19.0005 32.9007 19.3445 32.8192 19.5547C32.7377 19.7649 32.637 20.1185 32.5172 20.7492L32.7521 20.9546C32.8815 21.0693 33.2122 21.3177 33.4902 21.5041C33.7682 21.6952 34.1516 22.001 34.3434 22.1825C34.5926 22.4166 34.7412 22.6077 34.8466 22.8275C34.976 23.0903 35 23.1906 35 23.4964C35 23.807 34.976 23.9025 34.8466 24.1653C34.7603 24.3469 34.5782 24.5953 34.4152 24.7577C34.2619 24.9106 33.9407 25.1734 33.7059 25.3406C33.471 25.5031 33.1403 25.742 32.9725 25.871C32.8048 25.9952 32.6418 26.1481 32.6035 26.2054C32.546 26.2962 32.5412 26.3679 32.5843 26.5876C32.6131 26.7405 32.7521 27.2183 32.9007 27.6531C33.0972 28.2455 33.1691 28.537 33.1882 28.8237C33.2074 29.096 33.193 29.2823 33.1403 29.4687C33.0972 29.612 32.9965 29.8222 32.9198 29.9321C32.8383 30.0468 32.6802 30.2044 32.5699 30.2857C32.4549 30.3621 32.2248 30.4768 32.0523 30.5293C31.7839 30.6153 31.6017 30.6344 30.7582 30.644C30.2166 30.6535 29.6606 30.6679 29.2723 30.7109L29.1333 31.0071C29.0566 31.1743 28.9129 31.5757 28.817 31.9053C28.7211 32.235 28.5534 32.6841 28.4479 32.9087C28.3185 33.1858 28.1795 33.3912 28.007 33.5584C27.844 33.7209 27.6715 33.8356 27.4749 33.9072C27.2449 33.9932 27.1251 34.0123 26.8758 33.9932C26.7033 33.9837 26.4349 33.9216 26.2767 33.8594C26.1185 33.8021 25.8261 33.6397 25.6296 33.5107C25.4331 33.3769 25.1312 33.1523 24.9586 33.0186C24.7861 32.88 24.5033 32.6889 24 32.4309L23.6741 32.5981C23.4967 32.6937 23.1564 32.9278 22.9216 33.1284C22.6867 33.3243 22.3512 33.5584 22.1786 33.6492C22.0061 33.7352 21.6946 33.8547 21.4837 33.912C21.2344 33.9837 21.0235 34.0123 20.8845 33.9932C20.7647 33.9837 20.5682 33.9263 20.4388 33.869C20.3142 33.8165 20.1129 33.6636 19.9834 33.5393C19.8588 33.4103 19.6815 33.1523 19.5808 32.9564C19.485 32.7606 19.3124 32.2971 19.2022 31.9292C19.0919 31.5613 18.9434 31.1361 18.8667 30.9832C18.7373 30.7252 18.7181 30.7109 18.5264 30.6822C18.4113 30.6679 17.8553 30.6535 17.2898 30.644C16.403 30.6297 16.2161 30.6153 15.9477 30.5293C15.7752 30.4768 15.5403 30.3621 15.4253 30.2713C15.3102 30.1853 15.1569 30.0277 15.0802 29.9225C15.0035 29.8174 14.9076 29.5833 14.8597 29.397C14.7878 29.1055 14.7878 29.0148 14.8405 28.6564C14.8741 28.4319 15.0179 27.9063 15.1569 27.4859C15.2959 27.0654 15.4253 26.6115 15.4397 26.4825C15.4732 26.2436 15.4732 26.2436 15.2431 26.0334C15.1185 25.9187 14.7878 25.6751 14.5098 25.484C14.2318 25.2976 13.8484 24.9966 13.6566 24.8103C13.4074 24.5762 13.2588 24.3851 13.1534 24.1653C13.024 23.9025 13 23.8022 13 23.4964C13 23.1858 13.024 23.0903 13.1534 22.8275C13.2444 22.6412 13.417 22.4071 13.5847 22.2398C13.7381 22.0917 14.0449 21.8385 14.2702 21.6808C14.4954 21.5232 14.8261 21.2795 15.0035 21.1409C15.1808 21.0072 15.363 20.8447 15.4013 20.7826C15.454 20.6966 15.4588 20.6249 15.4157 20.4004C15.3869 20.2523 15.2479 19.7745 15.0993 19.3397C14.9028 18.7473 14.8309 18.4558 14.8118 18.1692C14.7926 17.8968 14.807 17.7105 14.8597 17.5242C14.9028 17.3808 15.0035 17.1706 15.0802 17.0559C15.1617 16.946 15.3198 16.7884 15.4301 16.7072C15.5451 16.6307 15.7752 16.516 15.9477 16.4635C16.2161 16.3775 16.3983 16.3584 17.2418 16.3488C17.7834 16.3393 18.3394 16.3249 18.4736 16.3058C18.7181 16.2819 18.7325 16.2724 18.8427 16.0526C18.905 15.9284 19.0488 15.527 19.159 15.1591C19.2693 14.7913 19.4466 14.3087 19.5521 14.0841C19.6863 13.807 19.8205 13.6016 19.993 13.4344Z" fill="url(#paint0_linear_94_1590)"></path><path d="M24.815 23.2096C25.764 22.5025 26.6124 21.8766 26.6987 21.8241H26.6939C26.7898 21.7667 26.9383 21.7285 27.0678 21.7285C27.2163 21.7285 27.3362 21.762 27.4464 21.8336C27.5375 21.8957 27.6525 21.9961 27.7004 22.063C27.7484 22.1299 27.8011 22.2684 27.8155 22.3735C27.8346 22.5025 27.8155 22.6315 27.7579 22.7796C27.6765 22.9803 27.5183 23.1045 25.4861 24.6239C23.9619 25.761 23.2525 26.2579 23.1375 26.2818C23.0464 26.3009 22.8834 26.2913 22.778 26.2626C22.6198 26.2196 22.3898 26.0142 21.4695 25.1064C20.856 24.4949 20.3288 23.955 20.3 23.9024C20.2712 23.8499 20.2281 23.7304 20.2089 23.6396C20.1898 23.5489 20.1993 23.396 20.2233 23.3052C20.2521 23.2144 20.3431 23.0711 20.4246 22.9899C20.5061 22.9086 20.6499 22.8179 20.741 22.7892C20.832 22.7653 20.9854 22.7557 21.0765 22.7749C21.1675 22.794 21.2874 22.837 21.3401 22.8656C21.3928 22.8943 21.7906 23.2717 22.2268 23.7065C22.663 24.1461 23.032 24.4996 23.0512 24.4996C23.0752 24.4996 23.866 23.9215 24.815 23.2096Z" fill="white"></path><defs><linearGradient id="paint0_linear_94_1590" x1="31" y1="11" x2="16" y2="38" gradientUnits="userSpaceOnUse"><stop stop-color="#21CD61"></stop><stop offset="0.486587" stop-color="#20C65E"></stop><stop offset="1" stop-color="#116731"></stop></linearGradient></defs></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-72a6f55 elementor-widget elementor-widget-heading" data-id="72a6f55" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Canal Oficial Verificado</h5>				</div>
+				<div class="elementor-element elementor-element-d8e5e2c elementor-widget elementor-widget-text-editor" data-id="d8e5e2c" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Segurança, autenticidade e credibilidade desde o primeiro contato.</p>								</div>
+				</div>
+		<div class="elementor-element elementor-element-da4edf2 e-con-full e-flex elementor-invisible e-con e-child" data-id="da4edf2" data-element_type="container" data-settings="{&quot;animation&quot;:&quot;fadeInUp&quot;}">
+				<div class="elementor-element elementor-element-8de699b elementor-view-default elementor-widget elementor-widget-icon" data-id="8de699b" data-element_type="widget" data-widget_type="icon.default">
+							<div class="elementor-icon-wrapper">
+			<div class="elementor-icon">
+			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="24" fill="white"></rect><rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#E9EBF1"></rect><path d="M31.7388 16.2612C29.0572 13.5796 24.7095 13.5796 22.0279 16.2612L21.3071 16.982C21.0142 17.2749 21.0142 17.7498 21.3071 18.0427C21.6 18.3356 22.0748 18.3356 22.3677 18.0427L23.0886 17.3218C25.1844 15.2261 28.5823 15.2261 30.6781 17.3218C32.7739 19.4176 32.7739 22.8156 30.6781 24.9114L29.9573 25.6322C29.6644 25.9251 29.6644 26.4 29.9573 26.6929C30.2502 26.9858 30.725 26.9858 31.0179 26.6929L31.7388 25.972C34.4203 23.2905 34.4203 18.9428 31.7388 16.2612Z" fill="url(#paint0_linear_94_1602)"></path><path d="M18.0427 21.3071C18.3356 21.6 18.3356 22.0748 18.0427 22.3677L17.3218 23.0886C15.2261 25.1844 15.2261 28.5823 17.3218 30.6781C19.4176 32.7739 22.8156 32.7739 24.9114 30.6781L25.6322 29.9573C25.9251 29.6644 26.4 29.6644 26.6929 29.9573C26.9858 30.2501 26.9858 30.725 26.6929 31.0179L25.972 31.7388C23.2905 34.4203 18.9428 34.4203 16.2612 31.7388C13.5796 29.0572 13.5796 24.7095 16.2612 22.0279L16.982 21.3071C17.2749 21.0142 17.7498 21.0142 18.0427 21.3071Z" fill="url(#paint1_linear_94_1602)"></path><path d="M26.6928 21.3071C26.9857 21.6 26.9857 22.0748 26.6928 22.3677L22.3677 26.6928C22.0748 26.9857 21.6 26.9857 21.3071 26.6928C21.0142 26.3999 21.0142 25.9251 21.3071 25.6322L25.6322 21.3071C25.9251 21.0142 26.3999 21.0142 26.6928 21.3071Z" fill="url(#paint2_linear_94_1602)"></path><defs><linearGradient id="paint0_linear_94_1602" x1="24" y1="14.25" x2="24" y2="33.7499" gradientUnits="userSpaceOnUse"><stop offset="0.610577" stop-color="#0BB049"></stop><stop offset="1" stop-color="#1A763C"></stop></linearGradient><linearGradient id="paint1_linear_94_1602" x1="24" y1="14.25" x2="24" y2="33.7499" gradientUnits="userSpaceOnUse"><stop offset="0.610577" stop-color="#0BB049"></stop><stop offset="1" stop-color="#1A763C"></stop></linearGradient><linearGradient id="paint2_linear_94_1602" x1="24" y1="14.25" x2="24" y2="33.7499" gradientUnits="userSpaceOnUse"><stop offset="0.610577" stop-color="#0BB049"></stop><stop offset="1" stop-color="#1A763C"></stop></linearGradient></defs></svg>			</div>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-82cd3da elementor-widget elementor-widget-heading" data-id="82cd3da" data-element_type="widget" data-widget_type="heading.default">
+					<h5 class="elementor-heading-title elementor-size-default">Anúncios com Link</h5>				</div>
+				<div class="elementor-element elementor-element-6dc732c elementor-widget elementor-widget-text-editor" data-id="6dc732c" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Integre seus anúncios com o canal oficial e facilite o contato com o cidadão.</p>								</div>
+				</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-0016d55 elementor-widget__width-initial elementor-invisible elementor-widget elementor-widget-image" data-id="0016d55" data-element_type="widget" data-settings="{&quot;_animation&quot;:&quot;fadeInRight&quot;}" data-widget_type="image.default">
+															<img decoding="async" width="1140" height="2308" data-src="https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1.png" class="attachment-full size-full wp-image-500 lazyload" alt="" data-srcset="https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1.png 1140w, https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1-148x300.png 148w, https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1-506x1024.png 506w, https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1-768x1555.png 768w, https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1-759x1536.png 759w, https://govchat.tech/wp-content/uploads/2025/07/📱-Device-1-1-1012x2048.png 1012w" data-sizes="(max-width: 1140px) 100vw, 1140px" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 1140px; --smush-placeholder-aspect-ratio: 1140/2308;" />															</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-65902ff e-con-full e-flex e-con e-parent" data-id="65902ff" data-element_type="container" id="agenda">
+				<div class="elementor-element elementor-element-8e83349 elementor-widget elementor-widget-html" data-id="8e83349" data-element_type="widget" data-widget_type="html.default">
+					<!-- Cal inline embed code begins -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-30min"></div>
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "30min", {origin:"https://app.cal.com"});
+
+  Cal.ns["30min"]("inline", {
+    elementOrSelector:"#my-cal-inline-30min",
+    config: {"layout":"month_view"},
+    calLink: "govchat/30min",
+  });
+
+  Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#23CC61"}},"hideEventTypeDetails":false,"layout":"month_view"});
+  </script>
+  <!-- Cal inline embed code ends -->				</div>
+				</div>
+		<div class="elementor-element elementor-element-e2579cd e-flex e-con-boxed e-con e-parent" data-id="e2579cd" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-3161270 e-con-full e-flex elementor-invisible e-con e-child" data-id="3161270" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;,&quot;animation&quot;:&quot;zoomIn&quot;}">
+		<div class="elementor-element elementor-element-c3c6c54 e-con-full e-flex e-con e-child" data-id="c3c6c54" data-element_type="container">
+				<div class="elementor-element elementor-element-481930c elementor-widget elementor-widget-heading" data-id="481930c" data-element_type="widget" data-widget_type="heading.default">
+					<h3 class="elementor-heading-title elementor-size-default">Leve a experiência do cidadão a um novo nível</h3>				</div>
+				<div class="elementor-element elementor-element-899c3e5 elementor-widget elementor-widget-text-editor" data-id="899c3e5" data-element_type="widget" data-widget_type="text-editor.default">
+									<p>Modernize o atendimento do seu órgão com inteligência artificial, automação e canais oficiais.</p>								</div>
+				<div class="elementor-element elementor-element-e6017e2 elementor-align-justify elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-button" data-id="e6017e2" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Agende uma Demonstração</span>
+					</span>
+					</a>
+								</div>
+				</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-b4022e8 e-flex e-con-boxed e-con e-parent" data-id="b4022e8" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-a50d9ba e-con-full e-flex e-con e-child" data-id="a50d9ba" data-element_type="container">
+		<div class="elementor-element elementor-element-55d98cf e-con-full e-flex e-con e-child" data-id="55d98cf" data-element_type="container">
+				<div class="elementor-element elementor-element-56f51ee elementor-widget elementor-widget-image" data-id="56f51ee" data-element_type="widget" data-widget_type="image.default">
+															<img decoding="async" width="105" height="20" data-src="https://govchat.tech/wp-content/uploads/2025/07/Logotypew.svg" class="attachment-large size-large wp-image-577 lazyload" alt="" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 105px; --smush-placeholder-aspect-ratio: 105/20;" />															</div>
+				<div class="elementor-element elementor-element-7906f70 elementor-widget elementor-widget-heading" data-id="7906f70" data-element_type="widget" data-widget_type="heading.default">
+					<span class="elementor-heading-title elementor-size-default">Uma abordagem integrada de atendimento </span>				</div>
+				</div>
+		<div class="elementor-element elementor-element-fdd01dc e-con-full e-flex e-con e-child" data-id="fdd01dc" data-element_type="container">
+				<div class="elementor-element elementor-element-961d628 elementor-align-right elementor-widget elementor-widget-button" data-id="961d628" data-element_type="widget" data-widget_type="button.default">
+										<a class="elementor-button elementor-button-link elementor-size-sm" href="#top">
+						<span class="elementor-button-content-wrapper">
+						<span class="elementor-button-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.66885e-06 12.3711C2.59061e-06 18.9991 5.372 24.3711 12 24.3711C18.628 24.3711 24 18.9991 24 12.3711C24 5.74309 18.628 0.371091 12 0.371092C5.372 0.371093 7.47089e-07 5.74309 1.66885e-06 12.3711Z" fill="#2BFF7A"></path><path d="M16 13.1709L12 9.1709L8 13.1709" stroke="#01071F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>			</span>
+									<span class="elementor-button-text">Voltar ao topo</span>
+					</span>
+					</a>
+								</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-f10e7c9 elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="f10e7c9" data-element_type="widget" data-widget_type="icon-list.default">
+							<ul class="elementor-icon-list-items elementor-inline-items">
+							<li class="elementor-icon-list-item elementor-inline-item">
+											<a href="https://status.apps.vopithe.tech/status/govchat">
+
+											<span class="elementor-icon-list-text">Status</span>
+											</a>
+									</li>
+								<li class="elementor-icon-list-item elementor-inline-item">
+										<span class="elementor-icon-list-text">Documentação</span>
+									</li>
+						</ul>
+						</div>
+				<div class="elementor-element elementor-element-b208673 elementor-widget-divider--view-line elementor-widget elementor-widget-divider" data-id="b208673" data-element_type="widget" data-widget_type="divider.default">
+							<div class="elementor-divider">
+			<span class="elementor-divider-separator">
+						</span>
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-764128b elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="764128b" data-element_type="widget" data-widget_type="icon-list.default">
+							<ul class="elementor-icon-list-items">
+							<li class="elementor-icon-list-item">
+										<span class="elementor-icon-list-text">© 2025 - Todos os direitos reservados</span>
+									</li>
+						</ul>
+						</div>
+					</div>
+				</div>
+				</div>
+		<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/hello-elementor/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+			<script>
+				const lazyloadRunObserver = () => {
+					const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
+					const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
+						entries.forEach( ( entry ) => {
+							if ( entry.isIntersecting ) {
+								let lazyloadBackground = entry.target;
+								if( lazyloadBackground ) {
+									lazyloadBackground.classList.add( 'e-lazyloaded' );
+								}
+								lazyloadBackgroundObserver.unobserve( entry.target );
+							}
+						});
+					}, { rootMargin: '200px 0px 200px 0px' } );
+					lazyloadBackgrounds.forEach( ( lazyloadBackground ) => {
+						lazyloadBackgroundObserver.observe( lazyloadBackground );
+					} );
+				};
+				const events = [
+					'DOMContentLoaded',
+					'elementor/lazyload/observe',
+				];
+				events.forEach( ( event ) => {
+					document.addEventListener( event, lazyloadRunObserver );
+				} );
+			</script>
+			<script id="xpro-elementor-addons-widgets-js-extra">
+var XproElementorAddons = {"ajax_url":"https://govchat.tech/wp-admin/admin-ajax.php","nonce":"261b7954f6"};
+//# sourceURL=xpro-elementor-addons-widgets-js-extra
+</script>
+<script src="https://govchat.tech/wp-content/plugins/xpro-elementor-addons/assets/js/xpro-widgets.js?ver=1.4.13" id="xpro-elementor-addons-widgets-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/xpro-theme-builder/assets/js/xpro-theme-builder.js?ver=1.2.8.5" id="xpro-theme-builder-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.30.0" id="elementor-webpack-runtime-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.30.0" id="elementor-frontend-modules-js"></script>
+<script src="https://govchat.tech/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3" id="jquery-ui-core-js"></script>
+<script id="elementor-frontend-js-before">
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Compartilhar no Facebook","shareOnTwitter":"Compartilhar no Twitter","pinIt":"Fixar","download":"Baixar","downloadImage":"Baixar imagem","fullscreen":"Tela cheia","zoom":"Zoom","share":"Compartilhar","playVideo":"Reproduzir v\u00eddeo","previous":"Anterior","next":"Pr\u00f3ximo","close":"Fechar","a11yCarouselPrevSlideMessage":"Slide anterior","a11yCarouselNextSlideMessage":"Pr\u00f3ximo slide","a11yCarouselFirstSlideMessage":"Este \u00e9 o primeiro slide","a11yCarouselLastSlideMessage":"Este \u00e9 o \u00faltimo slide","a11yCarouselPaginationBulletMessage":"Ir para o slide"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Dispositivos m\u00f3veis no modo retrato","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Dispositivos m\u00f3veis no modo paisagem","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet no modo retrato","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet no modo paisagem","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Notebook","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Tela ampla (widescreen)","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},"hasCustomBreakpoints":false},"version":"3.30.0","is_static":false,"experimentalFeatures":{"e_font_icon_svg":true,"additional_custom_breakpoints":true,"container":true,"e_optimized_markup":true,"theme_builder_v2":true,"hello-theme-header-footer":true,"nested-elements":true,"e_element_cache":true,"home_screen":true,"global_classes_should_enforce_capabilities":true,"cloud-library":true,"e_opt_in_v4_page":true,"mega-menu":true},"urls":{"assets":"https:\/\/govchat.tech\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/govchat.tech\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/govchat.tech\/wp-content\/uploads"},"nonces":{"floatingButtonsClickTracking":"ed04cdb915"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description","hello_header_logo_type":"title","hello_header_menu_layout":"horizontal","hello_footer_logo_type":"logo"},"post":{"id":7,"title":"GOV.CHAT%20%E2%80%93%20Revolucione%20a%20intera%C3%A7%C3%A3o%20entre%20governo%20e%20cidad%C3%A3os","excerpt":"","featuredImage":false}};
+//# sourceURL=elementor-frontend-js-before
+</script>
+<script src="https://govchat.tech/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.30.0" id="elementor-frontend-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5" id="swiper-js"></script>
+<script src="https://govchat.tech/wp-content/themes/hello-elementor/assets/js/hello-frontend.js?ver=3.4.4" id="hello-theme-frontend-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/xpro-elementor-addons/assets/vendor/js/anime.min.js?ver=3.0.1" id="anime-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/xpro-elementor-addons/modules/floating-effect/js/floating-effect.min.js?ver=1.4.13" id="xpro-floating-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/wp-smushit/app/assets/js/smush-lazy-load.min.js?ver=3.20.0" id="smush-lazy-load-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.30.0" id="elementor-pro-webpack-runtime-js"></script>
+<script src="https://govchat.tech/wp-includes/js/dist/hooks.min.js?ver=dd5603f07f9220ed27f1" id="wp-hooks-js"></script>
+<script src="https://govchat.tech/wp-includes/js/dist/i18n.min.js?ver=c26c3dc7bed366793375" id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="elementor-pro-frontend-js-before">
+var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/govchat.tech\/wp-admin\/admin-ajax.php","nonce":"6ddcbffcc7","urls":{"assets":"https:\/\/govchat.tech\/wp-content\/plugins\/elementor-pro\/assets\/","rest":"https:\/\/govchat.tech\/wp-json\/"},"settings":{"lazy_load_background_images":true},"popup":{"hasPopUps":false},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"},"x-twitter":{"title":"X"},"threads":{"title":"Threads"}},"facebook_sdk":{"lang":"pt_BR","app_id":""},"lottie":{"defaultAnimationUrl":"https:\/\/govchat.tech\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}};
+//# sourceURL=elementor-pro-frontend-js-before
+</script>
+<script src="https://govchat.tech/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.30.0" id="elementor-pro-frontend-js"></script>
+<script src="https://govchat.tech/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=3.30.0" id="pro-elements-handlers-js"></script>
+<script id="xpro-elementor-widgetarea-editor-js-extra">
+var XproWidgetAreaEditorParams = {"rest_api_url":"https://govchat.tech/wp-json/"};
+//# sourceURL=xpro-elementor-widgetarea-editor-js-extra
+</script>
+<script src="https://govchat.tech/wp-content/plugins/xpro-elementor-addons/inc/controls/assets/js/widgetarea-editor.js?ver=1.4.13" id="xpro-elementor-widgetarea-editor-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://govchat.tech/wp-includes/js/wp-emoji-release.min.js?ver=6.9.4"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=https://govchat.tech/wp-includes/js/wp-emoji-loader.min.js
+</script>
+	</body>
+</html>
