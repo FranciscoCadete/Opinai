@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Share2, Table2, Code2, FolderOpen, GitMerge,
   Lock, ClipboardList, BellRing, Smartphone, Users, Cpu, Siren,
   BarChart3, Menu, X, Sun, Moon, Bell, Search, ChevronRight,
-  Activity, Zap,
+  Activity, Zap, MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,8 @@ const NAV_SECTIONS = [
       { href: "/overview",       label: "Overview",          icon: LayoutDashboard },
       { href: "/c4-architecture",label: "C4 Architecture",   icon: Share2 },
       { href: "/erd-schema",     label: "ERD Schema",        icon: Table2 },
-      { href: "/folder-structure",label: "Folder Structure", icon: FolderOpen },
+      { href: "/folder-structure",    label: "Folder Structure",    icon: FolderOpen },
+      { href: "/municipality-config", label: "Municípios & Bairros", icon: MapPin },
     ],
   },
   {

@@ -1,0 +1,223 @@
+# Instrução de Atualização do Sistema OP1NA1
+
+## Implementação de Campo Dinâmico de Município e Bairros/Zonas
+
+Deve ser realizada uma atualização estrutural no módulo de cadastro, participação cidadã, formulários e georreferenciação do sistema OP1NA1, adicionando um mecanismo hierárquico de localização administrativa.
+
+---
+
+# Objetivo da Atualização
+
+Permitir que o utilizador selecione primeiro o **Município** e, posteriormente, visualize automaticamente os respetivos **bairros/zonas** associados.
+
+Essa atualização deverá melhorar:
+
+* organização territorial dos dados;
+* filtragem estatística;
+* dashboards geográficos;
+* relatórios por zona;
+* georreferenciação;
+* inteligência territorial;
+* segmentação analítica.
+
+---
+
+# Requisito Funcional
+
+## Novo Campo Obrigatório:
+
+### Município
+
+Ao selecionar o município, o sistema deve carregar dinamicamente os bairros/zonas correspondentes.
+
+---
+
+# Estrutura Esperada
+
+## Campo 1 — Município
+
+Tipo:
+
+* Select dropdown;
+* Pesquisa inteligente;
+* Obrigatório.
+
+### Município inicial a adicionar:
+
+* Município dos Mulenvos
+
+---
+
+## Campo 2 — Bairro/Zona
+
+Tipo:
+
+* Select dependente do município;
+* Carregamento dinâmico;
+* Obrigatório.
+
+---
+
+# Município a Adicionar
+
+## Município dos Mulenvos
+
+### Bairros/Zonas:
+
+* Km 9-B
+* Km 12-B
+* Mulenvos De Cima
+* Baixa De Cassanje
+* Km 14-B
+* Boa-Fé
+* Caop C
+* Caop A
+* Caop B
+* Capalanga
+
+---
+
+# Comportamento Esperado do Sistema
+
+## Fluxo:
+
+1. Utilizador seleciona:
+   → “Município dos Mulenvos”
+
+2. O sistema carrega automaticamente:
+
+   * Km 9-B
+   * Km 12-B
+   * Mulenvos De Cima
+   * Baixa De Cassanje
+   * Km 14-B
+   * Boa-Fé
+   * Caop C
+   * Caop A
+   * Caop B
+   * Capalanga
+
+3. Utilizador seleciona o bairro/zona correspondente.
+
+---
+
+# Aplicação da Atualização
+
+A nova estrutura deve ser integrada nos seguintes módulos:
+
+## Módulo de Participação Cidadã
+
+* criação de reclamações;
+* sugestões;
+* denúncias;
+* solicitações.
+
+---
+
+## Dashboard Analítico
+
+Permitir:
+
+* filtros por município;
+* filtros por bairro/zona;
+* heatmaps territoriais;
+* estatísticas geográficas.
+
+---
+
+## Sistema de IA e Analytics
+
+A IA deve utilizar:
+
+* município;
+* bairro/zona;
+  para:
+* clusterização;
+* tendências;
+* alertas territoriais;
+* análise espacial.
+
+---
+
+## Relatórios e Exportações
+
+Adicionar:
+
+* município;
+* bairro/zona;
+  nos relatórios:
+* Excel;
+* CSV;
+* PDF;
+* dashboards Power BI.
+
+---
+
+# Atualização da Base de Dados
+
+## Criar Estrutura Relacional
+
+### Tabela: municipalities
+
+Campos:
+
+* id
+* name
+* created_at
+
+---
+
+### Tabela: neighborhoods
+
+Campos:
+
+* id
+* municipality_id
+* name
+* created_at
+
+---
+
+# Relacionamento Esperado
+
+```sql
+Municipality (1)
+   ↓
+Neighborhoods (N)
+```
+
+---
+
+# Atualização do Frontend
+
+## Interface:
+
+* dropdown moderno;
+* carregamento dinâmico;
+* pesquisa rápida;
+* compatível com mobile;
+* UX simplificada.
+
+---
+
+# Benefícios da Atualização
+
+* Melhor organização territorial;
+* Inteligência geográfica mais precisa;
+* Análise estatística avançada;
+* Dashboards mais estratégicos;
+* Melhor gestão municipal;
+* Escalabilidade multi-município futura.
+
+---
+
+# Observação Técnica
+
+A estrutura deve ser preparada para futura expansão, permitindo adicionar:
+
+* novos municípios;
+* comunas;
+* distritos;
+* bairros;
+* zonas administrativas;
+  sem necessidade de alteração estrutural do sistema.

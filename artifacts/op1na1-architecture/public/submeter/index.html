@@ -755,37 +755,43 @@
       <div class="field-error" id="audio-error" role="alert"></div>
     </div>
 
-    <!-- Location -->
+    <!-- Location — cascading municipality → neighborhood -->
     <div class="card">
       <p class="section-title" style="font-size:15px;margin-block-end:12px">Localização</p>
 
+      <!-- Step 1: Municipality -->
       <div class="field-group">
-        <label class="field-label" for="bairro-select">
-          Bairro <span class="req" aria-hidden="true">*</span>
+        <label class="field-label" for="municipio-select">
+          Município <span class="req" aria-hidden="true">*</span>
           <span class="sr-only">(obrigatório)</span>
         </label>
-        <select id="bairro-select" name="bairro" required aria-required="true" aria-describedby="bairro-error">
-          <option value="">— Seleccione o bairro —</option>
-          <optgroup label="Município dos Mulenvos">
-            <option value="Rangel">Rangel</option>
-            <option value="Palanca">Palanca</option>
-            <option value="Camama">Camama</option>
-            <option value="Golf 2">Golf 2</option>
-            <option value="Benfica">Benfica</option>
-            <option value="Kikolo">Kikolo</option>
-            <option value="Cazenga">Cazenga</option>
-            <option value="Hoji Ya Henda">Hoji Ya Henda</option>
-            <option value="Viana">Viana</option>
-            <option value="Rocha Pinto">Rocha Pinto</option>
-            <option value="São Paulo">São Paulo</option>
-            <option value="Terra Nova">Terra Nova</option>
-            <option value="Prenda">Prenda</option>
-            <option value="Mota">Mota</option>
-            <option value="Marçal">Marçal</option>
-          </optgroup>
-          <option value="outro">Outro / Não listado</option>
+        <select id="municipio-select" name="municipio" required aria-required="true"
+                aria-describedby="municipio-error" onchange="onMunicipioChange(this.value)">
+          <option value="">— Seleccione o Município —</option>
+          <option value="mulenvos" data-id="1">Município dos Mulenvos</option>
         </select>
-        <div class="field-error" id="bairro-error" role="alert">Por favor, seleccione o bairro.</div>
+        <div class="field-error" id="municipio-error" role="alert">Por favor, seleccione o município.</div>
+      </div>
+
+      <!-- Step 2: Neighborhood (dynamically enabled) -->
+      <div class="field-group">
+        <label class="field-label" for="bairro-select">
+          Bairro / Zona <span class="req" aria-hidden="true">*</span>
+          <span class="sr-only">(obrigatório)</span>
+        </label>
+        <div style="position:relative">
+          <select id="bairro-select" name="bairro" required aria-required="true"
+                  aria-describedby="bairro-error" disabled aria-disabled="true"
+                  style="width:100%;opacity:.55;cursor:not-allowed;transition:opacity .2s">
+            <option value="">← Seleccione primeiro o Município</option>
+          </select>
+          <div id="bairro-loader" aria-live="polite" style="
+            display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);
+            width:16px;height:16px;border:2px solid #cc000030;border-top-color:#CC0000;
+            border-radius:50%;animation:spin .7s linear infinite;">
+          </div>
+        </div>
+        <div class="field-error" id="bairro-error" role="alert">Por favor, seleccione o bairro/zona.</div>
       </div>
 
       <div style="display:flex;align-items:center;gap:10px;margin-block-end:8px">
@@ -873,10 +879,22 @@
   document.getElementById('js-next-1').style.display = 'flex';
 
   // ── State ──────────────────────────────────────────────────
+  // ── Geography lookup (mirrors migration 0008 seed data) ───────
+  const GEOGRAPHY = {
+    mulenvos: {
+      label: 'Município dos Mulenvos',
+      bairros: [
+        'Km 9-B','Km 12-B','Mulenvos De Cima','Baixa De Cassanje',
+        'Km 14-B','Boa-Fé','Caop C','Caop A','Caop B','Capalanga',
+      ],
+    },
+  };
+
   const state = {
     step:        1,
     reportType:  '',
     description: '',
+    municipio:   '',    // slug, e.g. 'mulenvos'
     bairro:      '',
     gpsLat:      null,
     gpsLng:      null,
@@ -885,6 +903,45 @@
     audioBlob:   null,
     ticketId:    '',
   };
+
+  // ── Cascading municipality → neighborhood ─────────────────────
+  function onMunicipioChange(slug) {
+    const bairroSel = document.getElementById('bairro-select');
+    const loader    = document.getElementById('bairro-loader');
+    const muniErr   = document.getElementById('municipio-error');
+    muniErr.classList.remove('show');
+
+    if (!slug || !GEOGRAPHY[slug]) {
+      bairroSel.innerHTML = '<option value="">← Seleccione primeiro o Município</option>';
+      bairroSel.disabled = true;
+      bairroSel.style.opacity = '.55';
+      bairroSel.style.cursor = 'not-allowed';
+      state.municipio = '';
+      state.bairro = '';
+      return;
+    }
+
+    // Show loading state
+    loader.style.display = 'block';
+    bairroSel.disabled = true;
+    bairroSel.style.opacity = '.55';
+    bairroSel.innerHTML = '<option value="">A carregar bairros…</option>';
+    state.municipio = slug;
+    state.bairro = '';
+
+    // Simulate async load (replace with fetch /api/v1/geography/municipalities/{id}/neighborhoods)
+    setTimeout(() => {
+      const opts = GEOGRAPHY[slug].bairros
+        .map(b => `<option value="${b}">${b}</option>`)
+        .join('');
+      bairroSel.innerHTML = `<option value="">— Seleccione o Bairro/Zona —</option>${opts}`;
+      bairroSel.disabled = false;
+      bairroSel.style.opacity = '1';
+      bairroSel.style.cursor = '';
+      bairroSel.setAttribute('aria-disabled', 'false');
+      loader.style.display = 'none';
+    }, 350);
+  }
 
   // ── Step navigation ────────────────────────────────────────
   function goToStep(n) {
@@ -945,27 +1002,40 @@
   function validateStep2() {
     let ok = true;
 
-    const desc   = document.getElementById('descricao');
-    const bairro = document.getElementById('bairro-select');
+    const desc      = document.getElementById('descricao');
+    const municipio = document.getElementById('municipio-select');
+    const bairro    = document.getElementById('bairro-select');
 
     // Description
     const descErr = document.getElementById('desc-error');
     if (!desc.value || desc.value.trim().length < 10) {
       descErr.classList.add('show');
       desc.setAttribute('aria-invalid', 'true');
-      if (ok) desc.focus();
+      if (ok) { desc.focus(); }
       ok = false;
     } else {
       descErr.classList.remove('show');
       desc.removeAttribute('aria-invalid');
     }
 
-    // Bairro
+    // Município
+    const muniErr = document.getElementById('municipio-error');
+    if (!municipio.value) {
+      muniErr.classList.add('show');
+      municipio.setAttribute('aria-invalid', 'true');
+      if (ok) { municipio.focus(); }
+      ok = false;
+    } else {
+      muniErr.classList.remove('show');
+      municipio.removeAttribute('aria-invalid');
+    }
+
+    // Bairro / Zona
     const bairroErr = document.getElementById('bairro-error');
     if (!bairro.value) {
       bairroErr.classList.add('show');
       bairro.setAttribute('aria-invalid', 'true');
-      if (ok) bairro.focus();
+      if (ok) { bairro.focus(); }
       ok = false;
     } else {
       bairroErr.classList.remove('show');
@@ -974,6 +1044,7 @@
 
     if (ok) {
       state.description = desc.value.trim();
+      state.municipio   = municipio.value;
       state.bairro      = bairro.value;
       state.anonymous   = document.getElementById('anon-toggle').checked;
     }
@@ -1212,7 +1283,8 @@
 
     const rows = [
       ['Tipo',       state.reportType],
-      ['Bairro',     state.bairro],
+      ['Município',  (GEOGRAPHY[state.municipio] || {}).label || state.municipio],
+      ['Bairro/Zona',state.bairro],
       ['Fotos',      state.photos.length > 0 ? state.photos.length + ' ficheiro(s)' : 'Nenhuma'],
       ['Voz',        state.audioBlob ? 'Gravação incluída' : 'Nenhuma'],
       ['Localização',state.gpsLat ? `${state.gpsLat.toFixed(4)}, ${state.gpsLng.toFixed(4)}` : 'Não capturada'],
@@ -1240,7 +1312,8 @@
       `🔴 Relatório OP1NA1\n` +
       `Ticket: ${ticket}\n` +
       `Tipo: ${state.reportType}\n` +
-      `Bairro: ${state.bairro}\n\n` +
+      `Município: ${(GEOGRAPHY[state.municipio] || {}).label || state.municipio}\n` +
+      `Bairro/Zona: ${state.bairro}\n\n` +
       `Acompanhe em: https://mulenvos.gv.ao/track/${ticket}`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener');
@@ -1257,7 +1330,7 @@
   function resetForm() {
     // Clear state
     Object.assign(state, {
-      step: 1, reportType: '', description: '', bairro: '',
+      step: 1, reportType: '', description: '', municipio: '', bairro: '',
       gpsLat: null, gpsLng: null, anonymous: false,
       photos: [], audioBlob: null, ticketId: '',
     });
@@ -1265,7 +1338,11 @@
     // Reset DOM
     document.querySelectorAll('input[name="report_type"]').forEach(r => r.checked = false);
     document.getElementById('descricao').value = '';
-    document.getElementById('bairro-select').value = '';
+    document.getElementById('municipio-select').value = '';
+    const _bs = document.getElementById('bairro-select');
+    _bs.innerHTML = '<option value="">← Seleccione primeiro o Município</option>';
+    _bs.disabled = true;
+    _bs.style.opacity = '.55';
     document.getElementById('img-previews').innerHTML = '';
     document.getElementById('audio-playback').classList.remove('show');
     document.getElementById('audio-playback').src = '';

@@ -25,20 +25,25 @@ interface Ticket {
   assignee: string | null;
 }
 
-// ─── Mock data ──────────────────────────────────────────────────
-const BAIRROS = ["Rangel","Palanca","Camama","Golf 2","Benfica","Kikolo","Cazenga","Hoji Ya Henda"];
+// ─── Mock data — Municipality / Neighborhood (migration 0008) ───
+const MUNICIPALITIES = [{ id: 1, name: "Município dos Mulenvos" }];
+
+const BAIRROS = [
+  "Km 9-B", "Km 12-B", "Mulenvos De Cima", "Baixa De Cassanje",
+  "Km 14-B", "Boa-Fé", "Caop C", "Caop A", "Caop B", "Capalanga",
+];
 const CATEGORIES: Category[] = ["Reclamação","Sugestão","Denúncia","Solicitação","Elogio"];
 const STATUSES: Status[] = ["Submetido","Triagem","Em Progresso","Resolvido","Fechado"];
 
 const BAIRRO_DATA = [
-  { bairro: "Rangel",       reports: 187 },
-  { bairro: "Palanca",      reports: 156 },
-  { bairro: "Camama",       reports: 143 },
-  { bairro: "Golf 2",       reports: 128 },
-  { bairro: "Benfica",      reports: 112 },
-  { bairro: "Kikolo",       reports: 98  },
-  { bairro: "Cazenga",      reports: 87  },
-  { bairro: "H. Ya Henda",  reports: 76  },
+  { bairro: "Km 9-B",            reports: 194 },
+  { bairro: "Mulenvos De Cima",  reports: 167 },
+  { bairro: "Baixa De Cassanje", reports: 148 },
+  { bairro: "Km 12-B",           reports: 131 },
+  { bairro: "Boa-Fé",            reports: 112 },
+  { bairro: "Capalanga",         reports: 97  },
+  { bairro: "Caop A",            reports: 83  },
+  { bairro: "Km 14-B",           reports: 76  },
 ];
 
 const CATEGORY_DATA = [
@@ -217,6 +222,7 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
 
   // Filters
+  const [filterMuni,     setFilterMuni]     = useState<string>("all");
   const [filterStatus,   setFilterStatus]   = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterBairro,   setFilterBairro]   = useState<string>("all");
@@ -238,14 +244,14 @@ export default function AdminDashboard() {
     return () => clearInterval(interval);
   }, [simulateRefresh]);
 
-  // Filtered tickets
+  // Filtered tickets (municipality filter = global for now — all tickets are Mulenvos)
   const filteredTickets = useMemo(() => MOCK_TICKETS.filter(t => {
     if (filterStatus   !== "all" && t.status !== filterStatus)   return false;
     if (filterCategory !== "all" && t.tipo   !== filterCategory) return false;
     if (filterBairro   !== "all" && t.bairro !== filterBairro)   return false;
     if (filterSLA      !== "all" && t.sla    !== filterSLA)      return false;
     return true;
-  }), [filterStatus, filterCategory, filterBairro, filterSLA]);
+  }), [filterMuni, filterStatus, filterCategory, filterBairro, filterSLA]);
 
   // CSV export
   function exportCSV() {
@@ -530,10 +536,11 @@ export default function AdminDashboard() {
           {/* Filters */}
           <div className="flex flex-wrap gap-2">
             {[
-              { label: "Estado", state: filterStatus,   set: setFilterStatus,   opts: STATUSES },
-              { label: "Categoria", state: filterCategory, set: setFilterCategory, opts: CATEGORIES },
-              { label: "Bairro",    state: filterBairro,   set: setFilterBairro,   opts: BAIRROS },
-              { label: "SLA",       state: filterSLA,      set: setFilterSLA,      opts: ["OK","RISCO","EXPIRADO"] },
+              { label: "Município", state: filterMuni,     set: setFilterMuni,     opts: MUNICIPALITIES.map(m => m.name) },
+              { label: "Estado",   state: filterStatus,   set: setFilterStatus,   opts: STATUSES },
+              { label: "Categoria",state: filterCategory, set: setFilterCategory, opts: CATEGORIES },
+              { label: "Bairro",   state: filterBairro,   set: setFilterBairro,   opts: BAIRROS },
+              { label: "SLA",      state: filterSLA,      set: setFilterSLA,      opts: ["OK","RISCO","EXPIRADO"] },
             ].map(f => (
               <div key={f.label} className="relative">
                 <select
