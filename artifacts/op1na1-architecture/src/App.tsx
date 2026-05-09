@@ -19,6 +19,7 @@ import CrisisDetection from "@/pages/CrisisDetection";
 import MobileSubmitForm from "@/pages/MobileSubmitForm";
 import AdminDashboard from "@/pages/AdminDashboard";
 import MunicipalityConfig from "@/pages/MunicipalityConfig";
+import DeploymentGuide from "@/pages/DeploymentGuide";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +42,8 @@ function Router() {
         <Route path="/crisis-detection" component={CrisisDetection} />
         <Route path="/mobile-submit" component={MobileSubmitForm} />
         <Route path="/municipality-config" component={MunicipalityConfig} />
-        <Route path="/admin-dashboard" component={AdminDashboard} />
+        <Route path="/admin-dashboard"  component={AdminDashboard} />
+        <Route path="/deployment-guide" component={DeploymentGuide} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Share2, Table2, Code2, FolderOpen, GitMerge,
   Lock, ClipboardList, BellRing, Smartphone, Users, Cpu, Siren,
   BarChart3, Menu, X, Sun, Moon, Bell, Search, ChevronRight,
-  Activity, Zap, MapPin,
+  Activity, Zap, MapPin, Server,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +46,8 @@ const NAV_SECTIONS = [
     id: "ops",
     label: "Operações",
     items: [
-      { href: "/admin-dashboard", label: "Dashboard Admin", icon: BarChart3, badge: "LIVE" },
+      { href: "/admin-dashboard",  label: "Dashboard Admin",  icon: BarChart3, badge: "LIVE" },
+      { href: "/deployment-guide", label: "Deployment Guide", icon: Server },
     ],
   },
 ];
