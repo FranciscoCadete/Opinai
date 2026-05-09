@@ -13,6 +13,7 @@ import FolderStructure from "@/pages/FolderStructure";
 import AlembicMigrations from "@/pages/AlembicMigrations";
 import AuthModule from "@/pages/AuthModule";
 import ReportsModule from "@/pages/ReportsModule";
+import NotificationEngine from "@/pages/NotificationEngine";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ function Router() {
         <Route path="/alembic-migrations" component={AlembicMigrations} />
         <Route path="/auth-module" component={AuthModule} />
         <Route path="/reports-module" component={ReportsModule} />
+        <Route path="/notification-engine" component={NotificationEngine} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
