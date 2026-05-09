@@ -24,10 +24,11 @@ import TestingStrategy from "@/pages/TestingStrategy";
 import UserManagement from "@/pages/UserManagement";
 import ChannelConfig from "@/pages/ChannelConfig";
 import AuditCenter from "@/pages/AuditCenter";
+import Login from "@/pages/Login";
 
 const queryClient = new QueryClient();
 
-function Router() {
+function PortalRoutes() {
   return (
     <Layout>
       <Switch>
@@ -55,6 +56,15 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     </Layout>
+  );
+}
+
+function Router() {
+  return (
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route component={PortalRoutes} />
+    </Switch>
   );
 }
 
