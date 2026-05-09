@@ -12,6 +12,7 @@ import RBACMatrix from "@/pages/RBACMatrix";
 import FolderStructure from "@/pages/FolderStructure";
 import AlembicMigrations from "@/pages/AlembicMigrations";
 import AuthModule from "@/pages/AuthModule";
+import ReportsModule from "@/pages/ReportsModule";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/folder-structure" component={FolderStructure} />
         <Route path="/alembic-migrations" component={AlembicMigrations} />
         <Route path="/auth-module" component={AuthModule} />
+        <Route path="/reports-module" component={ReportsModule} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
