@@ -17,6 +17,7 @@ import NotificationEngine from "@/pages/NotificationEngine";
 import NLPPipeline from "@/pages/NLPPipeline";
 import CrisisDetection from "@/pages/CrisisDetection";
 import MobileSubmitForm from "@/pages/MobileSubmitForm";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ function Router() {
         <Route path="/nlp-pipeline" component={NLPPipeline} />
         <Route path="/crisis-detection" component={CrisisDetection} />
         <Route path="/mobile-submit" component={MobileSubmitForm} />
+        <Route path="/admin-dashboard" component={AdminDashboard} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
