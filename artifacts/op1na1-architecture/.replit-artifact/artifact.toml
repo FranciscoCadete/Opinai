@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "OP1NA1 Architecture Portal"
+version = "1.0.0"
+id = "artifacts/op1na1-architecture"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23221
+
+[services.development]
+run = "pnpm --filter @workspace/op1na1-architecture run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/op1na1-architecture", "run", "build" ]
+publicDir = "artifacts/op1na1-architecture/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23221"
+BASE_PATH = "/"
