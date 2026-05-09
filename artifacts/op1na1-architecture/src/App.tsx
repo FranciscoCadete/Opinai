@@ -23,6 +23,7 @@ import DeploymentGuide from "@/pages/DeploymentGuide";
 import TestingStrategy from "@/pages/TestingStrategy";
 import UserManagement from "@/pages/UserManagement";
 import ChannelConfig from "@/pages/ChannelConfig";
+import AuditCenter from "@/pages/AuditCenter";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ function Router() {
         <Route path="/testing-strategy" component={TestingStrategy} />
         <Route path="/user-management"  component={UserManagement} />
         <Route path="/channel-config"   component={ChannelConfig} />
+        <Route path="/audit-center"     component={AuditCenter} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
