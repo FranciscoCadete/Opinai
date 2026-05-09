@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Submeta o seu relatório ao Município dos Mulenvos de forma rápida e segura.">
+  <meta name="theme-color" content="#1e2d4a">
+  <title>Submeter Relatório — OP1NA1 | Mulenvos</title>
+  <style>
+    /* ── Reset & tokens ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #1e2d4a;
+      --red:    #CC0000;
+      --green:  #15803d;
+      --amber:  #b45309;
+      --text:   #111827;
+      --muted:  #4b5563;
+      --border: #d1d5db;
+      --bg:     #f3f4f6;
+      --white:  #ffffff;
+      --radius: 12px;
+      --shadow: 0 1px 4px rgba(0,0,0,.12);
+      --focus:  0 0 0 3px rgba(204,0,0,.40);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Skip link (WCAG 2.4.1) ─────────────────────────── */
+    .skip-link {
+      position: absolute;
+      inset-inline-start: -999px;
+      top: 8px;
+      background: var(--navy);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 0 0 8px 0;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 999;
+    }
+    .skip-link:focus { inset-inline-start: 0; }
+
+    /* ── Header ─────────────────────────────────────────── */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: var(--red);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+    .logo-text { font-size: 15px; font-weight: 700; line-height: 1.2; }
+    .logo-sub  { font-size: 11px; color: #93a8cb; font-weight: 400; }
+
+    /* ── Progress bar ────────────────────────────────────── */
+    .progress-nav {
+      background: var(--navy);
+      padding: 0 20px 16px;
+    }
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+    .progress-steps li {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      font-size: 11px;
+      color: #93a8cb;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .progress-steps li.done   { color: #86efac; }
+    .progress-steps li.active { color: var(--white); }
+    .step-bubble {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 2px solid rgba(255,255,255,.25);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-inline-end: 6px;
+      transition: background .2s, border-color .2s;
+    }
+    .progress-steps li.done   .step-bubble { background: #16a34a; border-color: #16a34a; color: var(--white); }
+    .progress-steps li.active .step-bubble { background: var(--red); border-color: var(--red); color: var(--white); }
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: rgba(255,255,255,.15);
+      margin: 0 4px;
+    }
+    .step-connector.done { background: #16a34a; }
+
+    /* ── Main ────────────────────────────────────────────── */
+    main { padding: 20px 16px 40px; max-width: 520px; margin: 0 auto; }
+
+    /* ── Step wrapper ────────────────────────────────────── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* ── Card ────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-block-end: 16px;
+    }
+
+    /* ── Section title ───────────────────────────────────── */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-block-end: 4px;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-block-end: 20px;
+    }
+
+    /* ── Report type cards (step 1, CSS-only) ────────────── */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .type-grid .full { grid-column: 1 / -1; }
+
+    /* Hide native radio */
+    .type-input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    .type-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .15s, background .15s, box-shadow .15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .type-label:hover {
+      border-color: var(--navy);
+      background: #f0f4fa;
+    }
+    .type-input:checked + .type-label {
+      border-color: var(--red);
+      background: #fff5f5;
+      box-shadow: 0 0 0 3px rgba(204,0,0,.15);
+    }
+    .type-input:focus-visible + .type-label {
+      outline: 3px solid var(--red);
+      outline-offset: 2px;
+    }
+    .type-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+    .type-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .type-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── Form elements ───────────────────────────────────── */
+    label.field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-block-end: 6px;
+    }
+    label.field-label .req {
+      color: var(--red);
+      margin-inline-start: 2px;
+      aria-hidden: true;
+    }
+    .field-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-block-start: 4px;
+    }
+    .field-group { margin-block-end: 20px; }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px; /* prevent iOS zoom */
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color .15s, box-shadow .15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    textarea:focus, input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: var(--focus);
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-inline-end: 36px; }
+
+    /* Character counter */
+    .char-counter {
+      display: flex;
+      justify-content: flex-end;
+      font-size: 12px;
+      color: var(--muted);
+      margin-block-start: 4px;
+    }
+    .char-counter.warn { color: var(--amber); font-weight: 600; }
+    .char-counter.over { color: var(--red);   font-weight: 700; }
+
+    /* Error */
+    .field-error {
+      display: none;
+      font-size: 12px;
+      color: var(--red);
+      margin-block-start: 4px;
+      font-weight: 500;
+    }
+    .field-error.show { display: block; }
+    [aria-invalid="true"] { border-color: var(--red); }
+
+    /* ── Image upload ─────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone:focus-within { border-color: var(--navy); background: #f8fafc; }
+    #img-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 36px; margin-block-end: 8px; }
+    .upload-label { font-size: 14px; color: var(--navy); font-weight: 600; }
+    .upload-sub   { font-size: 12px; color: var(--muted); margin-block-start: 4px; }
+
+    #img-previews {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-block-start: 12px;
+    }
+    .preview-thumb {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .preview-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+    }
+    .preview-remove {
+      position: absolute;
+      top: -6px;
+      inset-inline-end: -6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    /* ── Audio recorder ────────────────────────────────────── */
+    .audio-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-audio {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--navy);
+      transition: background .15s, border-color .15s;
+      font-family: inherit;
+    }
+    .btn-audio:hover { background: #f0f4fa; border-color: var(--navy); }
+    .btn-audio:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+    .btn-audio.recording { border-color: var(--red); background: #fff5f5; color: var(--red); animation: pulse 1s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+    .audio-timer { font-size: 14px; color: var(--red); font-weight: 700; font-variant-numeric: tabular-nums; }
+    #audio-playback { width: 100%; margin-block-start: 8px; display: none; }
+    #audio-playback.show { display: block; }
+
+    /* ── Location ──────────────────────────────────────────── */
+    .location-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .location-row .field-group { flex: 1; min-width: 0; margin-block-end: 0; }
+    .btn-gps {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--navy);
+      white-space: nowrap;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .15s, border-color .15s;
+    }
+    .btn-gps:hover { background: #f0f4fa; border-color: var(--navy); }
+    .btn-gps:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+    .btn-gps.got { border-color: var(--green); color: var(--green); }
+    .btn-gps.loading { opacity: .7; cursor: wait; }
+    #gps-status { font-size: 12px; color: var(--muted); margin-block-start: 6px; }
+    #gps-status.ok  { color: var(--green); font-weight: 600; }
+    #gps-status.err { color: var(--red);   font-weight: 600; }
+
+    /* ── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s, box-shadow .15s, transform .1s;
+      min-height: 52px;
+      touch-action: manipulation;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+    .btn-primary   { background: var(--red);   color: var(--white); width: 100%; }
+    .btn-primary:hover   { background: #aa0000; }
+    .btn-secondary { background: var(--white); color: var(--navy); border: 2px solid var(--border); }
+    .btn-secondary:hover { background: var(--bg); }
+    .btn-whatsapp  { background: #25D366; color: var(--white); width: 100%; font-size: 15px; }
+    .btn-whatsapp:hover  { background: #1ebe5d; }
+    .btn-ghost     { background: transparent; color: var(--muted); font-size: 14px; width: 100%; min-height: auto; padding: 10px; }
+    .btn-ghost:hover { color: var(--navy); }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-block-start: 8px;
+    }
+    .btn-row .btn-secondary { flex-shrink: 0; padding-inline: 16px; }
+
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── Loading state ─────────────────────────────────────── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-block-start-color: white;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-text { opacity: .7; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Anonymous toggle ──────────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .toggle-label { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .toggle-sub   { font-size: 12px; color: var(--muted); margin-block-start: 2px; }
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .toggle input:checked ~ .toggle-track { background: var(--green); }
+    .toggle input:focus-visible ~ .toggle-track { outline: 3px solid var(--red); outline-offset: 2px; }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      inset-inline-start: 3px;
+      width: 22px; height: 22px;
+      background: var(--white);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,.3);
+      transition: inset-inline-start .2s;
+      pointer-events: none;
+    }
+    .toggle input:checked ~ .toggle-track .toggle-knob { inset-inline-start: 23px; }
+
+    /* ── Confirmation screen ───────────────────────────────── */
+    .confirm-icon {
+      text-align: center;
+      font-size: 60px;
+      margin-block-end: 16px;
+    }
+    .ticket-box {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      margin-block: 20px;
+    }
+    .ticket-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .ticket-id {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 1px;
+      margin-block: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .ticket-hint { font-size: 12px; color: var(--muted); }
+
+    .summary-list {
+      list-style: none;
+      border-block-start: 1px solid var(--border);
+      margin-block: 16px;
+    }
+    .summary-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-block-end: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .summary-list li .key   { color: var(--muted); font-weight: 600; flex-shrink: 0; }
+    .summary-list li .val   { color: var(--text);  text-align: end; font-weight: 500; }
+
+    .confirm-buttons { display: flex; flex-direction: column; gap: 10px; margin-block-start: 20px; }
+
+    /* ── Info banner ────────────────────────────────────────── */
+    .banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #1e40af;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .banner-icon { font-size: 16px; flex-shrink: 0; margin-block-start: 1px; }
+
+    /* ── Visually hidden (accessible text) ─────────────────── */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* ── No-JS fallback ─────────────────────────────────────── */
+    .no-js-btn {
+      display: none;
+    }
+    noscript .no-js-btn,
+    html:not(.js) .no-js-btn { display: flex; }
+    html.js #js-next-1 { display: flex; }
+
+    /* ── Print / reduce-motion ─────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    @media print { header, .progress-nav, .btn-row { display: none; } }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Saltar para o conteúdo principal</a>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header role="banner">
+  <div class="logo-mark" aria-hidden="true">OP1</div>
+  <div>
+    <div class="logo-text">OP1NA1</div>
+    <div class="logo-sub">Município dos Mulenvos · Luanda</div>
+  </div>
+</header>
+
+<!-- ── Progress ─────────────────────────────────────────────── -->
+<div class="progress-nav" role="navigation" aria-label="Progresso do formulário">
+  <ol class="progress-steps" id="progress-steps">
+    <li class="active" id="ps-1">
+      <span class="step-bubble" aria-hidden="true">1</span>
+      <span>Tipo</span>
+    </li>
+    <div class="step-connector" id="conn-1"></div>
+    <li id="ps-2">
+      <span class="step-bubble" aria-hidden="true">2</span>
+      <span>Detalhes</span>
+    </li>
+    <div class="step-connector" id="conn-2"></div>
+    <li id="ps-3">
+      <span class="step-bubble" aria-hidden="true">3</span>
+      <span>Confirmação</span>
+    </li>
+  </ol>
+</div>
+
+<!-- ── Main ─────────────────────────────────────────────────── -->
+<main id="main" tabindex="-1">
+
+  <!-- ═══════════════════════════════════════════════════════
+       PASSO 1 — TIPO DE RELATÓRIO
+       Works without JavaScript via radio :checked CSS
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step active" id="step-1">
+    <div class="card">
+      <p class="section-title">Que tipo de relatório é este?</p>
+      <p class="section-sub">Seleccione uma opção para continuar.</p>
+
+      <fieldset style="border:none;padding:0">
+        <legend class="sr-only">Tipo de relatório</legend>
+
+        <div class="type-grid" role="list">
+
+          <div role="listitem">
+            <input type="radio" name="report_type" id="t-reclamacao" value="Reclamação"
+                   class="type-input" required>
+            <label for="t-reclamacao" class="type-label">
+              <span class="type-icon" aria-hidden="true">🔴</span>
+              <span class="type-name">Reclamação</span>
+              <span class="type-desc">Problema ou falha num serviço municipal</span>
+            </label>
+          </div>
+
+          <div role="listitem">
+            <input type="radio" name="report_type" id="t-sugestao" value="Sugestão"
+                   class="type-input">
+            <label for="t-sugestao" class="type-label">
+              <span class="type-icon" aria-hidden="true">💡</span>
+              <span class="type-name">Sugestão</span>
+              <span class="type-desc">Ideia para melhorar o município</span>
+            </label>
+          </div>
+
+          <div role="listitem">
+            <input type="radio" name="report_type" id="t-denuncia" value="Denúncia"
+                   class="type-input">
+            <label for="t-denuncia" class="type-label">
+              <span class="type-icon" aria-hidden="true">⚠️</span>
+              <span class="type-name">Denúncia</span>
+              <span class="type-desc">Irregularidade ou infracção a reportar</span>
+            </label>
+          </div>
+
+          <div role="listitem">
+            <input type="radio" name="report_type" id="t-solicitacao" value="Solicitação"
+                   class="type-input">
+            <label for="t-solicitacao" class="type-label">
+              <span class="type-icon" aria-hidden="true">📋</span>
+              <span class="type-name">Solicitação</span>
+              <span class="type-desc">Pedido de serviço ou informação</span>
+            </label>
+          </div>
+
+          <div role="listitem" class="full">
+            <input type="radio" name="report_type" id="t-elogio" value="Elogio"
+                   class="type-input">
+            <label for="t-elogio" class="type-label" style="flex-direction:row;justify-content:center">
+              <span class="type-icon" aria-hidden="true">⭐</span>
+              <div style="text-align:start">
+                <span class="type-name">Elogio</span>
+                <span class="type-desc" style="display:block">Reconhecer um bom serviço prestado</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div id="type-error" class="field-error" role="alert">
+          Por favor, seleccione o tipo de relatório.
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="banner">
+      <span class="banner-icon" aria-hidden="true">ℹ️</span>
+      <span>As suas informações são tratadas de forma confidencial. Pode submeter anonimamente no passo seguinte.</span>
+    </div>
+
+    <div class="btn-row" style="margin-block-start:16px">
+      <!-- JS-powered button (shown when JS available) -->
+      <button type="button" class="btn btn-primary" id="js-next-1" onclick="goToStep(2)"
+              style="display:none" aria-label="Próximo passo: Detalhes">
+        <span class="btn-text">Próximo</span>
+        <span aria-hidden="true">→</span>
+      </button>
+      <!-- No-JS fallback: link to step 2 as anchor (graceful degradation) -->
+      <a href="#step-2-anchor" class="btn btn-primary no-js-btn"
+         style="text-decoration:none" onclick="goToStep(2);return false;">
+        Próximo →
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PASSO 2 — DETALHES
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step" id="step-2">
+    <span id="step-2-anchor" aria-hidden="true"></span>
+
+    <!-- Description -->
+    <div class="card">
+      <p class="section-title">Descreva o problema</p>
+      <p class="section-sub" id="step2-type-echo"></p>
+
+      <div class="field-group">
+        <label class="field-label" for="descricao">
+          Descrição <span class="req" aria-hidden="true">*</span>
+          <span class="sr-only">(obrigatório)</span>
+        </label>
+        <textarea
+          id="descricao"
+          name="descricao"
+          rows="5"
+          maxlength="1000"
+          placeholder="Descreva o problema com o máximo de detalhe possível. Inclua a localização exacta, quando começou e como afecta os moradores…"
+          required
+          aria-required="true"
+          aria-describedby="desc-counter desc-error"
+        ></textarea>
+        <div class="char-counter" id="desc-counter" aria-live="polite" aria-atomic="true">
+          <span id="char-count">0</span>/1000 caracteres
+        </div>
+        <div class="field-error" id="desc-error" role="alert">
+          Por favor, descreva o problema (mínimo 10 caracteres).
+        </div>
+      </div>
+    </div>
+
+    <!-- Images -->
+    <div class="card">
+      <p class="section-title" style="font-size:15px;margin-block-end:4px">Fotografias <span style="color:var(--muted);font-weight:400;font-size:12px">(opcional)</span></p>
+      <p class="section-sub">Até 3 fotos · máx. 5 MB cada · JPG ou PNG</p>
+
+      <div class="upload-zone" id="upload-zone"
+           role="button" tabindex="0"
+           aria-label="Carregar fotografias — clique ou arraste"
+           onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('img-input').click()">
+        <input type="file" id="img-input" name="photos" accept="image/jpeg,image/png,image/webp"
+               multiple aria-hidden="true" tabindex="-1">
+        <div class="upload-icon" aria-hidden="true">📷</div>
+        <div class="upload-label">Toque para adicionar fotos</div>
+        <div class="upload-sub">ou arraste aqui</div>
+      </div>
+      <div id="img-previews" role="list" aria-label="Pré-visualização das fotografias"></div>
+      <div class="field-error" id="img-error" role="alert"></div>
+    </div>
+
+    <!-- Audio -->
+    <div class="card">
+      <p class="section-title" style="font-size:15px;margin-block-end:4px">Mensagem de voz <span style="color:var(--muted);font-weight:400;font-size:12px">(opcional)</span></p>
+      <p class="section-sub">Grave uma descrição de até 2 minutos</p>
+
+      <div class="audio-row">
+        <button type="button" class="btn-audio" id="btn-record"
+                onclick="toggleRecording()"
+                aria-label="Iniciar gravação de áudio"
+                aria-pressed="false">
+          <span aria-hidden="true">🎙️</span>
+          <span id="rec-label">Gravar</span>
+        </button>
+        <span class="audio-timer" id="audio-timer" aria-live="polite" aria-label="Tempo de gravação"></span>
+      </div>
+      <audio id="audio-playback" controls class="audio-playback" aria-label="Reproduzir gravação"></audio>
+      <div class="field-error" id="audio-error" role="alert"></div>
+    </div>
+
+    <!-- Location -->
+    <div class="card">
+      <p class="section-title" style="font-size:15px;margin-block-end:12px">Localização</p>
+
+      <div class="field-group">
+        <label class="field-label" for="bairro-select">
+          Bairro <span class="req" aria-hidden="true">*</span>
+          <span class="sr-only">(obrigatório)</span>
+        </label>
+        <select id="bairro-select" name="bairro" required aria-required="true" aria-describedby="bairro-error">
+          <option value="">— Seleccione o bairro —</option>
+          <optgroup label="Município dos Mulenvos">
+            <option value="Rangel">Rangel</option>
+            <option value="Palanca">Palanca</option>
+            <option value="Camama">Camama</option>
+            <option value="Golf 2">Golf 2</option>
+            <option value="Benfica">Benfica</option>
+            <option value="Kikolo">Kikolo</option>
+            <option value="Cazenga">Cazenga</option>
+            <option value="Hoji Ya Henda">Hoji Ya Henda</option>
+            <option value="Viana">Viana</option>
+            <option value="Rocha Pinto">Rocha Pinto</option>
+            <option value="São Paulo">São Paulo</option>
+            <option value="Terra Nova">Terra Nova</option>
+            <option value="Prenda">Prenda</option>
+            <option value="Mota">Mota</option>
+            <option value="Marçal">Marçal</option>
+          </optgroup>
+          <option value="outro">Outro / Não listado</option>
+        </select>
+        <div class="field-error" id="bairro-error" role="alert">Por favor, seleccione o bairro.</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;margin-block-end:8px">
+        <button type="button" class="btn-gps" id="btn-gps" onclick="captureGPS()"
+                aria-label="Usar a minha localização GPS">
+          <span aria-hidden="true">📍</span>
+          Usar minha localização
+        </button>
+        <div id="gps-status" aria-live="polite"></div>
+      </div>
+      <p class="field-hint">A localização GPS ajuda a identificar o ponto exacto do problema.</p>
+    </div>
+
+    <!-- Anonymous toggle -->
+    <div class="card">
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Submissão anónima</div>
+          <div class="toggle-sub">O seu nome não será associado ao relatório</div>
+        </div>
+        <label class="toggle" aria-label="Activar submissão anónima">
+          <input type="checkbox" id="anon-toggle" name="anonymous" value="1">
+          <div class="toggle-track">
+            <div class="toggle-knob"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" onclick="goToStep(1)"
+              aria-label="Voltar ao passo 1">
+        ← Voltar
+      </button>
+      <button type="button" class="btn btn-primary" id="btn-submit" onclick="submitForm()"
+              aria-label="Submeter relatório">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btn-text">Submeter</span>
+        <span aria-hidden="true">✓</span>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PASSO 3 — CONFIRMAÇÃO
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step" id="step-3" role="region" aria-label="Confirmação de submissão" aria-live="polite">
+    <div class="card" style="text-align:center">
+      <div class="confirm-icon" aria-hidden="true">✅</div>
+      <p class="section-title">Relatório submetido!</p>
+      <p style="font-size:14px;color:var(--muted)">
+        Recebemos o seu relatório. Será analisado pela equipa municipal e receberá actualizações pelo canal que escolheu.
+      </p>
+
+      <div class="ticket-box">
+        <div class="ticket-label">Número do seu ticket</div>
+        <div class="ticket-id" id="ticket-display" aria-label="Número do ticket"></div>
+        <div class="ticket-hint">Guarde este número para acompanhar o estado do seu relatório.</div>
+      </div>
+
+      <ul class="summary-list" id="summary-list" aria-label="Resumo do relatório"></ul>
+    </div>
+
+    <div class="confirm-buttons">
+      <button type="button" class="btn btn-whatsapp" id="btn-whatsapp" onclick="shareWhatsApp()">
+        <span aria-hidden="true">💬</span> Partilhar no WhatsApp
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="trackReport()"
+              style="width:100%">
+        <span aria-hidden="true">🔍</span> Acompanhar relatório
+      </button>
+      <button type="button" class="btn btn-ghost" onclick="resetForm()">
+        Submeter novo relatório
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Mark JS available
+  document.documentElement.classList.add('js');
+  document.getElementById('js-next-1').style.display = 'flex';
+
+  // ── State ──────────────────────────────────────────────────
+  const state = {
+    step:        1,
+    reportType:  '',
+    description: '',
+    bairro:      '',
+    gpsLat:      null,
+    gpsLng:      null,
+    anonymous:   false,
+    photos:      [],       // File objects
+    audioBlob:   null,
+    ticketId:    '',
+  };
+
+  // ── Step navigation ────────────────────────────────────────
+  function goToStep(n) {
+    if (n === 2 && !validateStep1()) return;
+    if (n === 3 && !validateStep2()) return;
+
+    // Hide all
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+
+    // Update progress
+    for (let i = 1; i <= 3; i++) {
+      const li = document.getElementById('ps-' + i);
+      li.classList.remove('active', 'done');
+      const conn = document.getElementById('conn-' + i);
+      if (conn) conn.classList.remove('done');
+
+      if (i < n) {
+        li.classList.add('done');
+        if (conn) conn.classList.add('done');
+      } else if (i === n) {
+        li.classList.add('active');
+        li.setAttribute('aria-current', 'step');
+      } else {
+        li.removeAttribute('aria-current');
+      }
+    }
+
+    state.step = n;
+
+    // Focus main for screen readers
+    const main = document.getElementById('main');
+    main.focus();
+    main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Populate step 2 echo
+    if (n === 2) {
+      const echo = document.getElementById('step2-type-echo');
+      if (echo) echo.textContent = 'Tipo seleccionado: ' + state.reportType;
+    }
+  }
+
+  // ── Validation step 1 ──────────────────────────────────────
+  function validateStep1() {
+    const checked = document.querySelector('input[name="report_type"]:checked');
+    const err = document.getElementById('type-error');
+    if (!checked) {
+      err.classList.add('show');
+      document.getElementById('t-reclamacao').focus();
+      return false;
+    }
+    err.classList.remove('show');
+    state.reportType = checked.value;
+    return true;
+  }
+
+  // ── Validation step 2 ──────────────────────────────────────
+  function validateStep2() {
+    let ok = true;
+
+    const desc   = document.getElementById('descricao');
+    const bairro = document.getElementById('bairro-select');
+
+    // Description
+    const descErr = document.getElementById('desc-error');
+    if (!desc.value || desc.value.trim().length < 10) {
+      descErr.classList.add('show');
+      desc.setAttribute('aria-invalid', 'true');
+      if (ok) desc.focus();
+      ok = false;
+    } else {
+      descErr.classList.remove('show');
+      desc.removeAttribute('aria-invalid');
+    }
+
+    // Bairro
+    const bairroErr = document.getElementById('bairro-error');
+    if (!bairro.value) {
+      bairroErr.classList.add('show');
+      bairro.setAttribute('aria-invalid', 'true');
+      if (ok) bairro.focus();
+      ok = false;
+    } else {
+      bairroErr.classList.remove('show');
+      bairro.removeAttribute('aria-invalid');
+    }
+
+    if (ok) {
+      state.description = desc.value.trim();
+      state.bairro      = bairro.value;
+      state.anonymous   = document.getElementById('anon-toggle').checked;
+    }
+    return ok;
+  }
+
+  // ── Character counter ──────────────────────────────────────
+  const descArea  = document.getElementById('descricao');
+  const charCount = document.getElementById('char-count');
+  const counter   = document.getElementById('desc-counter');
+
+  descArea.addEventListener('input', () => {
+    const len = descArea.value.length;
+    charCount.textContent = len;
+    counter.classList.remove('warn', 'over');
+    if (len > 900) counter.classList.add('over');
+    else if (len > 700) counter.classList.add('warn');
+  });
+
+  // ── Image upload ───────────────────────────────────────────
+  const imgInput    = document.getElementById('img-input');
+  const imgPreviews = document.getElementById('img-previews');
+  const imgError    = document.getElementById('img-error');
+
+  imgInput.addEventListener('change', handleImages);
+
+  function handleImages(e) {
+    const files = Array.from(e.target.files || []);
+    imgError.classList.remove('show');
+
+    for (const file of files) {
+      if (state.photos.length >= 3) {
+        imgError.textContent = 'Máximo de 3 fotografias atingido.';
+        imgError.classList.add('show');
+        break;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        imgError.textContent = `"${file.name}" excede 5 MB.`;
+        imgError.classList.add('show');
+        continue;
+      }
+      if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+        imgError.textContent = 'Formato inválido. Use JPG ou PNG.';
+        imgError.classList.add('show');
+        continue;
+      }
+      state.photos.push(file);
+      renderPreview(file, state.photos.length - 1);
+    }
+    imgInput.value = '';
+  }
+
+  function renderPreview(file, idx) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'preview-thumb';
+      wrap.setAttribute('role', 'listitem');
+      wrap.dataset.idx = idx;
+
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.alt = `Fotografia ${idx + 1}`;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'preview-remove';
+      btn.innerHTML = '×';
+      btn.setAttribute('aria-label', `Remover fotografia ${idx + 1}`);
+      btn.onclick = () => { state.photos.splice(idx, 1); wrap.remove(); };
+
+      wrap.append(img, btn);
+      imgPreviews.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Drag-and-drop
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.style.borderColor = 'var(--navy)'; });
+  zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.style.borderColor = '';
+    const dt = e.dataTransfer;
+    if (dt && dt.files.length) handleImages({ target: { files: dt.files } });
+  });
+
+  // ── Audio recording ────────────────────────────────────────
+  let mediaRecorder = null;
+  let audioChunks   = [];
+  let timerInterval = null;
+  let recSeconds    = 0;
+  const MAX_REC     = 120; // 2 min
+
+  async function toggleRecording() {
+    const btn   = document.getElementById('btn-record');
+    const label = document.getElementById('rec-label');
+    const timer = document.getElementById('audio-timer');
+    const err   = document.getElementById('audio-error');
+    const audio = document.getElementById('audio-playback');
+
+    err.classList.remove('show');
+
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      // Stop
+      mediaRecorder.stop();
+      clearInterval(timerInterval);
+      btn.classList.remove('recording');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', 'Iniciar gravação de áudio');
+      label.textContent = 'Gravar novamente';
+      timer.textContent = '';
+      return;
+    }
+
+    // Start
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      err.textContent = 'Gravação de áudio não suportada neste dispositivo.';
+      err.classList.add('show');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        state.audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        audio.src = URL.createObjectURL(state.audioBlob);
+        audio.classList.add('show');
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      mediaRecorder.start();
+      btn.classList.add('recording');
+      btn.setAttribute('aria-pressed', 'true');
+      btn.setAttribute('aria-label', 'Parar gravação de áudio');
+      label.textContent = 'Parar';
+      recSeconds = 0;
+
+      timerInterval = setInterval(() => {
+        recSeconds++;
+        const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+        const s = String(recSeconds % 60).padStart(2, '0');
+        timer.textContent = m + ':' + s;
+        timer.setAttribute('aria-label', `Tempo de gravação: ${m} minutos e ${s} segundos`);
+        if (recSeconds >= MAX_REC) {
+          mediaRecorder.stop();
+          clearInterval(timerInterval);
+          btn.classList.remove('recording');
+          btn.setAttribute('aria-pressed', 'false');
+          label.textContent = 'Gravar novamente';
+          timer.textContent = '';
+        }
+      }, 1000);
+
+    } catch (ex) {
+      err.textContent = 'Não foi possível aceder ao microfone. Verifique as permissões.';
+      err.classList.add('show');
+    }
+  }
+
+  // ── GPS capture ────────────────────────────────────────────
+  function captureGPS() {
+    const btn    = document.getElementById('btn-gps');
+    const status = document.getElementById('gps-status');
+
+    if (!navigator.geolocation) {
+      status.textContent = 'GPS não disponível neste dispositivo.';
+      status.className   = 'err';
+      return;
+    }
+
+    btn.classList.add('loading');
+    btn.disabled = true;
+    status.textContent = 'A obter localização…';
+    status.className = '';
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        state.gpsLat = pos.coords.latitude;
+        state.gpsLng = pos.coords.longitude;
+        status.textContent = `📍 ${state.gpsLat.toFixed(4)}, ${state.gpsLng.toFixed(4)}`;
+        status.className = 'ok';
+        btn.classList.remove('loading');
+        btn.classList.add('got');
+        btn.disabled = false;
+        btn.setAttribute('aria-label', 'Localização GPS capturada com sucesso');
+      },
+      (err) => {
+        const msgs = {
+          1: 'Permissão negada. Active o GPS nas definições.',
+          2: 'Não foi possível determinar a localização.',
+          3: 'Tempo esgotado. Tente novamente.',
+        };
+        status.textContent = msgs[err.code] || 'Erro ao obter localização.';
+        status.className   = 'err';
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      },
+      { timeout: 10000, enableHighAccuracy: true, maximumAge: 60000 }
+    );
+  }
+
+  // ── Ticket ID generator ────────────────────────────────────
+  function generateTicketId() {
+    const now  = new Date();
+    const ymd  = now.getFullYear().toString() +
+                 String(now.getMonth() + 1).padStart(2, '0') +
+                 String(now.getDate()).padStart(2, '0');
+    const seq  = String(Math.floor(Math.random() * 9000) + 1000);
+    return `MUL-${ymd}-${seq}`;
+  }
+
+  // ── Form submission ────────────────────────────────────────
+  async function submitForm() {
+    if (!validateStep2()) return;
+
+    const btn = document.getElementById('btn-submit');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    // Simulate API call (replace with real fetch in production)
+    await new Promise(r => setTimeout(r, 1200));
+
+    state.ticketId = generateTicketId();
+
+    btn.classList.remove('loading');
+    btn.disabled = false;
+
+    // Populate confirmation
+    document.getElementById('ticket-display').textContent = state.ticketId;
+
+    const rows = [
+      ['Tipo',       state.reportType],
+      ['Bairro',     state.bairro],
+      ['Fotos',      state.photos.length > 0 ? state.photos.length + ' ficheiro(s)' : 'Nenhuma'],
+      ['Voz',        state.audioBlob ? 'Gravação incluída' : 'Nenhuma'],
+      ['Localização',state.gpsLat ? `${state.gpsLat.toFixed(4)}, ${state.gpsLng.toFixed(4)}` : 'Não capturada'],
+      ['Anónimo',    state.anonymous ? 'Sim' : 'Não'],
+    ];
+
+    const ul = document.getElementById('summary-list');
+    ul.innerHTML = rows.map(([k, v]) =>
+      `<li><span class="key">${k}</span><span class="val">${v}</span></li>`
+    ).join('');
+
+    // WhatsApp button
+    const wa = document.getElementById('btn-whatsapp');
+    wa.dataset.ticket  = state.ticketId;
+    wa.dataset.bairro  = state.bairro;
+    wa.dataset.type    = state.reportType;
+
+    goToStep(3);
+  }
+
+  // ── WhatsApp share ─────────────────────────────────────────
+  function shareWhatsApp() {
+    const ticket  = state.ticketId;
+    const text    = encodeURIComponent(
+      `🔴 Relatório OP1NA1\n` +
+      `Ticket: ${ticket}\n` +
+      `Tipo: ${state.reportType}\n` +
+      `Bairro: ${state.bairro}\n\n` +
+      `Acompanhe em: https://mulenvos.gv.ao/track/${ticket}`
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener');
+  }
+
+  // ── Track report ───────────────────────────────────────────
+  function trackReport() {
+    const url = `/track/${state.ticketId}`;
+    // In production, navigate to the tracking page
+    alert(`Acompanhe o seu relatório em:\nmulenvos.gv.ao/track/${state.ticketId}`);
+  }
+
+  // ── Reset form ─────────────────────────────────────────────
+  function resetForm() {
+    // Clear state
+    Object.assign(state, {
+      step: 1, reportType: '', description: '', bairro: '',
+      gpsLat: null, gpsLng: null, anonymous: false,
+      photos: [], audioBlob: null, ticketId: '',
+    });
+
+    // Reset DOM
+    document.querySelectorAll('input[name="report_type"]').forEach(r => r.checked = false);
+    document.getElementById('descricao').value = '';
+    document.getElementById('bairro-select').value = '';
+    document.getElementById('img-previews').innerHTML = '';
+    document.getElementById('audio-playback').classList.remove('show');
+    document.getElementById('audio-playback').src = '';
+    document.getElementById('gps-status').textContent = '';
+    document.getElementById('gps-status').className = '';
+    document.getElementById('anon-toggle').checked = false;
+    document.getElementById('btn-gps').className = 'btn-gps';
+    document.getElementById('char-count').textContent = '0';
+    document.getElementById('desc-counter').classList.remove('warn','over');
+    document.getElementById('btn-record').className = 'btn-audio';
+    document.getElementById('rec-label').textContent = 'Gravar';
+
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+      clearInterval(timerInterval);
+    }
+    mediaRecorder = null;
+
+    goToStep(1);
+  }
+</script>
+</body>
+</html>
