@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Share2, Table2, Code2, FolderOpen, GitMerge,
   Lock, ClipboardList, BellRing, Smartphone, Users, Cpu, Siren,
   BarChart3, Menu, X, Sun, Moon, Bell, Search, ChevronRight,
-  Activity, Zap, MapPin, Server, FlaskConical, UserCog, SlidersHorizontal, ShieldCheck,
+  Activity, Zap, MapPin, Server, FlaskConical, UserCog, SlidersHorizontal, ShieldCheck, Globe2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,10 +43,17 @@ const NAV_SECTIONS = [
     ],
   },
   {
+    id: "citizen",
+    label: "Demo ao Vivo",
+    items: [
+      { href: "/citizen-portal",   label: "Portal do Cidadão", icon: Globe2,   badge: "DEMO" },
+      { href: "/admin-dashboard",  label: "Dashboard Admin",   icon: BarChart3, badge: "LIVE" },
+    ],
+  },
+  {
     id: "ops",
     label: "Operações",
     items: [
-      { href: "/admin-dashboard",  label: "Dashboard Admin",  icon: BarChart3, badge: "LIVE" },
       { href: "/deployment-guide",  label: "Deployment Guide",  icon: Server },
       { href: "/testing-strategy", label: "Testing & CI/CD",   icon: FlaskConical },
       { href: "/user-management",  label: "Gestão de Utilizadores", icon: UserCog },

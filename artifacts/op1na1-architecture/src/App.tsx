@@ -25,6 +25,7 @@ import UserManagement from "@/pages/UserManagement";
 import ChannelConfig from "@/pages/ChannelConfig";
 import AuditCenter from "@/pages/AuditCenter";
 import Login from "@/pages/Login";
+import CitizenPortal from "@/pages/CitizenPortal";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
+      <Route path="/citizen-portal" component={CitizenPortal} />
       <Route component={PortalRoutes} />
     </Switch>
   );

@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OP1NA1 — Portal do Cidadão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #f5f4f0;
+  --bg2:      #eceae4;
+  --white:    #ffffff;
+  --surface:  #fafaf8;
+  --border:   rgba(0,0,0,0.08);
+  --border2:  rgba(0,0,0,0.14);
+  --accent:   #00c49a;
+  --accent-d: #009b7a;
+  --accent-l: rgba(0,196,154,0.1);
+  --ink:      #0f1a12;
+  --ink2:     #2d3d32;
+  --muted:    #7a8c80;
+  --muted2:   #aab8af;
+  --danger:   #d94f4f;
+  --warn:     #d48b00;
+  --blue:     #2f6ef5;
+  --mono:     'DM Mono', monospace;
+  --sans:     'DM Sans', sans-serif;
+  --display:  'Fraunces', serif;
+  --radius:   14px;
+  --radius-sm:8px;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,244,240,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 58px;
+}
+
+.topbar-logo {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-logo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+
+.topbar-track-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  background: var(--white);
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+}
+
+.topbar-track-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.topbar-lang {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.topbar-lang:hover { background: var(--bg2); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  padding: 52px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(0,196,154,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(47,110,245,0.08) 0%, transparent 70%);
+}
+
+.hero-inner { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(0,196,154,0.25);
+  background: rgba(0,196,154,0.08);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 20px;
+}
+
+.hero-pill-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  margin-bottom: 14px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+/* CHANNEL TABS */
+.channel-tabs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ch-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.ch-tab:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); }
+
+.ch-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ch-tab svg { width: 12px; height: 12px; }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stats-bar::-webkit-scrollbar { display: none; }
+
+.stat-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 24px;
+  gap: 3px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  min-width: 110px;
+}
+
+.stat-unit:last-child { border-right: none; }
+
+.stat-num {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.stat-num.accent { color: var(--accent); }
+.stat-num.warn   { color: var(--warn); }
+.stat-num.danger { color: var(--danger); }
+
+.stat-desc {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 780px) {
+  .main { grid-template-columns: 1fr; padding: 20px 16px 80px; }
+  .sidebar-col { order: -1; }
+}
+
+/* ── SECTION HEADING ── */
+.sec-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.sec-title {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.sec-link {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.14s;
+}
+
+.sec-link:hover { border-color: var(--accent); }
+
+/* ── STEPS (WIZARD) ── */
+.step-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 24px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 0;
+}
+
+.step-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.step-item:last-child { border-right: none; }
+
+.step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+
+.step-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  transition: color 0.18s;
+  white-space: nowrap;
+}
+
+.step-item.active .step-num {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.step-item.active .step-label { color: var(--ink); font-weight: 500; }
+
+.step-item.done .step-num {
+  background: rgba(0,196,154,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.step-item.done .step-label { color: var(--accent); }
+
+/* CHECK ICON IN DONE STATE */
+.step-item.done .step-num::after {
+  content: '✓';
+  font-size: 11px;
+}
+
+.step-item.done .step-num-text { display: none; }
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.form-card-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-card-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-l);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.form-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.form-card-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.form-card-body { padding: 22px; }
+
+/* STEP PANELS */
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+/* TYPE GRID */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 480px) { .type-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.type-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.16s;
+  background: var(--surface);
+  text-align: center;
+  position: relative;
+}
+
+.type-opt:hover {
+  border-color: var(--border2);
+  background: var(--white);
+  transform: translateY(-1px);
+}
+
+.type-opt.selected {
+  border-color: var(--accent);
+  background: rgba(0,196,154,0.05);
+}
+
+.type-opt.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 6px; right: 8px;
+  font-size: 9px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+.type-emoji { font-size: 24px; line-height: 1; }
+
+.type-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink2);
+}
+
+.type-desc {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+}
+
+/* FIELD */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+
+.field-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.field-req {
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.field input,
+.field textarea,
+.field select {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,196,154,0.1);
+  background: var(--white);
+}
+
+.field input.err,
+.field textarea.err { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(217,79,79,0.08); }
+
+.field textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8c80' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.char-count {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted2);
+  text-align: right;
+  letter-spacing: 0.04em;
+}
+
+.char-count.near { color: var(--warn); }
+.char-count.over { color: var(--danger); }
+
+.field-hint {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.field-err-msg {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--danger);
+  letter-spacing: 0.04em;
+  display: none;
+}
+
+.field-err-msg.show { display: block; }
+
+/* UPLOAD AREA */
+.upload-area {
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--surface);
+  position: relative;
+}
+
+.upload-area:hover, .upload-area.drag-over {
+  border-color: var(--accent);
+  background: rgba(0,196,154,0.04);
+}
+
+.upload-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--accent-l);
+  margin: 0 auto 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.upload-title { font-size: 13px; font-weight: 500; color: var(--ink2); margin-bottom: 4px; }
+.upload-sub { font-family: var(--mono); font-size: 9px; color: var(--muted2); letter-spacing: 0.06em; }
+
+.upload-previews {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.preview-thumb {
+  width: 64px; height: 64px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.preview-thumb-wrap {
+  position: relative;
+  width: 64px; height: 64px;
+}
+
+.preview-remove {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 9px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+
+/* GPS BUTTON */
+.gps-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border2);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink2);
+  transition: all 0.16s;
+  width: 100%;
+  font-family: var(--sans);
+}
+
+.gps-btn:hover { border-color: var(--accent); color: var(--accent); }
+.gps-btn.got { border-color: var(--accent); background: rgba(0,196,154,0.06); color: var(--accent-d); }
+
+.gps-btn svg { flex-shrink: 0; }
+
+/* BAIRRO GRID */
+.bairro-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.bairro-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.14s;
+  background: var(--surface);
+}
+
+.bairro-opt:hover { border-color: var(--border2); }
+
+.bairro-opt.selected {
+  border-color: var(--accent);
+  background: rgba(0,196,154,0.06);
+}
+
+.bairro-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-a { background: var(--accent); }
+.dot-b { background: var(--blue); }
+.dot-c { background: var(--warn); }
+
+.bairro-name { font-size: 12px; color: var(--ink2); flex: 1; }
+
+.bairro-estrato {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted2);
+  letter-spacing: 0.06em;
+}
+
+/* CONFIRM BLOCK */
+.confirm-block {
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.confirm-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+
+.confirm-row:last-child { border-bottom: none; }
+.confirm-key { color: var(--muted); width: 120px; flex-shrink: 0; font-weight: 400; }
+.confirm-val { color: var(--ink); font-weight: 500; flex: 1; }
+
+.confirm-image-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.confirm-thumb {
+  width: 52px; height: 52px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+/* ANON TOGGLE */
+.anon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(47,110,245,0.05);
+  border: 1px solid rgba(47,110,245,0.15);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.toggle-switch {
+  width: 36px; height: 20px;
+  border-radius: 10px;
+  background: var(--border2);
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.18s;
+  margin-top: 1px;
+}
+
+.toggle-switch.on { background: var(--accent); }
+
+.toggle-knob {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 3px; left: 3px;
+  transition: transform 0.18s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.toggle-switch.on .toggle-knob { transform: translateX(16px); }
+
+.anon-info { flex: 1; }
+.anon-title { font-size: 12.5px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.anon-sub { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.04em; line-height: 1.5; }
+
+/* TERMS */
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+
+.custom-cb {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.14s;
+}
+
+.custom-cb.on { background: var(--accent); border-color: var(--accent); }
+.custom-cb.on::after { content: '✓'; font-size: 9px; color: #fff; font-family: var(--mono); }
+
+.terms-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.terms-text a { color: var(--accent); text-decoration: none; }
+.terms-text a:hover { text-decoration: underline; }
+
+/* NAV BUTTONS */
+.nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  align-items: center;
+}
+
+.btn-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 11px 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border2);
+  background: var(--white);
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.14s;
+  font-family: var(--sans);
+}
+
+.btn-back:hover { border-color: var(--border2); color: var(--ink); }
+
+.btn-next {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: var(--sans);
+  letter-spacing: 0.01em;
+}
+
+.btn-next:hover {
+  background: var(--accent-d);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(0,196,154,0.28);
+}
+
+.btn-next:active { transform: none; }
+.btn-next:disabled { background: var(--muted2); cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-next.loading {
+  pointer-events: none;
+  background: var(--accent-d);
+}
+
+.btn-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+.btn-next.loading .btn-spinner { display: block; }
+.btn-next.loading .btn-label { opacity: 0.8; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── SUCCESS SCREEN ── */
+.success-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 24px;
+  gap: 16px;
+}
+
+.success-screen.show { display: flex; }
+
+.success-ring {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  animation: ring-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes ring-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.success-check {
+  font-size: 28px;
+  animation: check-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+}
+
+@keyframes check-pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.success-sub { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 280px; }
+
+.ticket-box {
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.ticket-lbl { font-family: var(--mono); font-size: 9px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+
+.ticket-id {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.ticket-hint { font-family: var(--mono); font-size: 9px; color: var(--muted2); margin-top: 4px; letter-spacing: 0.04em; line-height: 1.5; }
+
+.share-row { display: flex; gap: 8px; }
+
+.share-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-size: 12px;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all 0.14s;
+  font-family: var(--sans);
+}
+
+.share-btn:hover { border-color: var(--border2); transform: translateY(-1px); }
+
+.btn-new {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.16s;
+}
+
+.btn-new:hover { background: var(--accent-d); }
+
+/* ── SIDEBAR ── */
+.sidebar-col { display: flex; flex-direction: column; gap: 16px; }
+
+.side-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.side-card-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.side-card-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.side-card-body { padding: 16px 18px; }
+
+/* TRACK TICKET */
+.track-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.track-input-row input {
+  flex: 1;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+  letter-spacing: 0.04em;
+}
+
+.track-input-row input:focus { border-color: var(--accent); }
+.track-input-row input::placeholder { color: var(--muted2); }
+
+.track-btn {
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.14s;
+  font-family: var(--sans);
+  flex-shrink: 0;
+}
+
+.track-btn:hover { background: var(--ink2); }
+
+.ticket-status-card {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid var(--border);
+  display: none;
+}
+
+.ticket-status-card.show { display: block; animation: fade-up 0.3s ease; }
+
+.tsc-id { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.tsc-desc { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+
+.tl-item {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.tl-item:last-child { padding-bottom: 0; }
+
+.tl-line-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.tl-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  background: var(--white);
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.2s;
+}
+
+.tl-dot.done { background: var(--accent); border-color: var(--accent); }
+.tl-dot.current { background: var(--white); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,196,154,0.2); }
+
+.tl-connector {
+  flex: 1;
+  width: 1.5px;
+  background: var(--border2);
+  min-height: 16px;
+}
+
+.tl-connector.done { background: var(--accent); }
+
+.tl-content { flex: 1; }
+.tl-status { font-size: 11.5px; font-weight: 500; color: var(--muted); }
+.tl-status.done, .tl-status.current { color: var(--ink); }
+.tl-time { font-family: var(--mono); font-size: 9px; color: var(--muted2); margin-top: 1px; }
+
+/* LIVE RESOLVED */
+.resolved-list { display: flex; flex-direction: column; gap: 8px; }
+
+.resolved-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.14s;
+}
+
+.resolved-item:hover { border-color: var(--border2); transform: translateY(-1px); }
+
+.ri-icon {
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  background: var(--bg2);
+}
+
+.ri-body { flex: 1; min-width: 0; }
+.ri-desc { font-size: 11.5px; color: var(--ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ri-meta { font-family: var(--mono); font-size: 9px; color: var(--muted2); margin-top: 2px; letter-spacing: 0.04em; }
+
+.ri-badge {
+  align-self: center;
+  font-family: var(--mono);
+  font-size: 8px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(0,196,154,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(0,196,154,0.2);
+  white-space: nowrap;
+}
+
+/* MEDIATOR CARD */
+.mediador-list { display: flex; flex-direction: column; gap: 8px; }
+
+.mediador-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.med-av {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(47,110,245,0.1);
+  border: 1px solid rgba(47,110,245,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.med-info { flex: 1; }
+.med-name { font-size: 12px; font-weight: 500; color: var(--ink2); }
+.med-zone { font-family: var(--mono); font-size: 9px; color: var(--muted2); }
+
+.med-on {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,196,154,0.2);
+  flex-shrink: 0;
+}
+
+.med-off { background: var(--muted2); box-shadow: none; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  padding: 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 2;
+}
+
+.footer a { color: var(--accent); text-decoration: none; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 11px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+  letter-spacing: 0.04em;
+  z-index: 999;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ANIMATIONS */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fade-up 0.3s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <div class="topbar-logo-dot"></div>
+    OP1NA1
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-track-btn" onclick="focusTrack()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      Consultar pedido
+    </button>
+    <div class="topbar-lang">PT</div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <div class="hero-pill-dot"></div>
+      Participação cidadã · Mulenvos
+    </div>
+    <h1 class="hero-title">
+      A sua voz chega<br>
+      à <em>Administração.</em>
+    </h1>
+    <p class="hero-sub">Reporte problemas, faça sugestões e acompanhe as respostas — pelo canal que preferir.</p>
+    <div class="channel-tabs">
+      <button class="ch-tab active" onclick="selectChannel(this,'portal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        Portal
+      </button>
+      <button class="ch-tab" onclick="selectChannel(this,'whatsapp')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+        WhatsApp
+      </button>
+      <button class="ch-tab" onclick="selectChannel(this,'sms')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+        SMS
+      </button>
+      <button class="ch-tab" onclick="selectChannel(this,'ussd')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        USSD *123#
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="stat-unit">
+    <div class="stat-num accent" id="stat-resolved">—</div>
+    <div class="stat-desc">Resolvidas este mês</div>
+  </div>
+  <div class="stat-unit">
+    <div class="stat-num" id="stat-open">—</div>
+    <div class="stat-desc">Em progresso</div>
+  </div>
+  <div class="stat-unit">
+    <div class="stat-num" id="stat-time">—</div>
+    <div class="stat-desc">Tempo médio (h)</div>
+  </div>
+  <div class="stat-unit">
+    <div class="stat-num warn" id="stat-mediators">—</div>
+    <div class="stat-desc">Mediadores activos</div>
+  </div>
+  <div class="stat-unit">
+    <div class="stat-num" id="stat-bairros">10</div>
+    <div class="stat-desc">Bairros cobertos</div>
+  </div>
+</div>
+
+<!-- CHANNEL REDIRECT BANNER -->
+<div id="channel-banner" style="display:none; background:var(--ink); color:#fff; text-align:center; padding:18px 24px; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.1);">
+  <span id="channel-banner-text"></span>
+  <button onclick="document.getElementById('channel-banner').style.display='none'; document.querySelector('.ch-tab').click();" style="margin-left:14px; font-family:var(--mono); font-size:10px; color:var(--accent); background:none; border:1px solid rgba(0,196,154,0.3); padding:4px 12px; border-radius:4px; cursor:pointer;">Usar portal</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- LEFT: FORM -->
+  <div class="form-col">
+
+    <!-- STEP BAR -->
+    <div class="step-bar" id="step-bar">
+      <div class="step-item active" data-step="1">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-label">Tipo</div>
+      </div>
+      <div class="step-item" data-step="2">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-label">Detalhes</div>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-label">Localização</div>
+      </div>
+      <div class="step-item" data-step="4">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-label">Confirmar</div>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+
+      <!-- SUCCESS SCREEN -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-ring">
+          <div class="success-check">✓</div>
+        </div>
+        <div class="success-title">Pedido registado!</div>
+        <div class="success-sub">A Administração dos Mulenvos recebeu o seu pedido. Receberá uma resposta pelo canal seleccionado.</div>
+        <div class="ticket-box">
+          <div class="ticket-lbl">Número do seu pedido</div>
+          <div class="ticket-id" id="success-ticket-id">MUL-—</div>
+          <div class="ticket-hint">Guarde este número para acompanhar o seu pedido neste portal ou pelo WhatsApp.</div>
+        </div>
+        <div class="share-row">
+          <button class="share-btn" onclick="copyTicket()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Copiar número
+          </button>
+          <button class="share-btn" onclick="shareWhatsApp()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/>
+            </svg>
+            Partilhar
+          </button>
+        </div>
+        <button class="btn-new" onclick="resetForm()">Fazer novo pedido</button>
+      </div>
+
+      <!-- STEP 1: TIPO -->
+      <div id="step-1" class="step-panel active">
+        <div class="form-card-header">
+          <div class="form-card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div>
+            <div class="form-card-title">Qual é o tipo de pedido?</div>
+            <div class="form-card-sub">Escolha a opção que melhor descreve a sua situação</div>
+          </div>
+        </div>
+        <div class="form-card-body">
+          <div class="type-grid">
+            <div class="type-opt selected" data-type="reclamacao" onclick="selectType(this)">
+              <div class="type-emoji">⚠️</div>
+              <div class="type-name">Reclamação</div>
+              <div class="type-desc">Problema no bairro</div>
+            </div>
+            <div class="type-opt" data-type="sugestao" onclick="selectType(this)">
+              <div class="type-emoji">💡</div>
+              <div class="type-name">Sugestão</div>
+              <div class="type-desc">Ideia de melhoria</div>
+            </div>
+            <div class="type-opt" data-type="denuncia" onclick="selectType(this)">
+              <div class="type-emoji">🔍</div>
+              <div class="type-name">Denúncia</div>
+              <div class="type-desc">Situação irregular</div>
+            </div>
+            <div class="type-opt" data-type="solicitacao" onclick="selectType(this)">
+              <div class="type-emoji">📋</div>
+              <div class="type-name">Solicitação</div>
+              <div class="type-desc">Pedido de serviço</div>
+            </div>
+            <div class="type-opt" data-type="elogio" onclick="selectType(this)">
+              <div class="type-emoji">👏</div>
+              <div class="type-name">Elogio</div>
+              <div class="type-desc">Feedback positivo</div>
+            </div>
+            <div class="type-opt" data-type="urgente" onclick="selectType(this)">
+              <div class="type-emoji">🚨</div>
+              <div class="type-name">Urgente</div>
+              <div class="type-desc">Situação de risco</div>
+            </div>
+          </div>
+          <div class="nav-row">
+            <button class="btn-next" onclick="goStep(2)">
+              <span class="btn-label">Continuar</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: DETALHES -->
+      <div id="step-2" class="step-panel">
+        <div class="form-card-header">
+          <div class="form-card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="form-card-title">Descreva o problema</div>
+            <div class="form-card-sub">Quanto mais detalhes, mais rápida será a resposta</div>
+          </div>
+        </div>
+        <div class="form-card-body">
+
+          <div class="field">
+            <label class="field-label">Categoria <span class="field-req">*</span></label>
+            <select id="categoria" onchange="validateField(this)">
+              <option value="">Seleccione uma categoria...</option>
+              <option>Água e saneamento</option>
+              <option>Electricidade e iluminação</option>
+              <option>Estradas e vias públicas</option>
+              <option>Recolha de lixo</option>
+              <option>Segurança pública</option>
+              <option>Saúde pública</option>
+              <option>Educação</option>
+              <option>Outra</option>
+            </select>
+            <div class="field-err-msg" id="categoria-err">Seleccione uma categoria.</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Descrição <span class="field-req">*</span></label>
+            <textarea id="descricao" placeholder="Descreva o problema com o máximo de detalhes possível. Quando começou? Quantas pessoas são afectadas? Houve alguma tentativa de resolução anterior?" maxlength="800" oninput="updateCharCount(this,'desc-count',800)" onblur="validateField(this)"></textarea>
+            <div class="char-count" id="desc-count">0 / 800</div>
+            <div class="field-err-msg" id="descricao-err">A descrição é obrigatória (mínimo 20 caracteres).</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Fotos ou vídeos (opcional)</label>
+            <div class="upload-area" id="upload-area">
+              <input type="file" multiple accept="image/*,video/*" onchange="handleFiles(this)" id="file-input">
+              <div class="upload-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+                  <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+                  <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+                </svg>
+              </div>
+              <div class="upload-title">Toque para carregar fotos</div>
+              <div class="upload-sub">JPG, PNG, MP4 · Máx. 5MB por ficheiro · Até 3 ficheiros</div>
+            </div>
+            <div class="upload-previews" id="upload-previews"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Nome (opcional)</label>
+            <input type="text" id="nome" placeholder="O seu nome completo" autocomplete="name">
+            <div class="field-hint">Pode submeter de forma anónima. O nome não é obrigatório.</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Contacto WhatsApp / Telefone (opcional)</label>
+            <input type="tel" id="telefone" placeholder="+244 9XX XXX XXX" autocomplete="tel">
+            <div class="field-hint">Para receber actualizações sobre o seu pedido via SMS ou WhatsApp.</div>
+          </div>
+
+          <div class="nav-row">
+            <button class="btn-back" onclick="goStep(1)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Voltar
+            </button>
+            <button class="btn-next" onclick="validateStep2()">
+              <span class="btn-label">Continuar</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: LOCALIZAÇÃO -->
+      <div id="step-3" class="step-panel">
+        <div class="form-card-header">
+          <div class="form-card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="form-card-title">Onde é o problema?</div>
+            <div class="form-card-sub">Seleccione o bairro ou use o GPS para localização exacta</div>
+          </div>
+        </div>
+        <div class="form-card-body">
+
+          <button class="gps-btn" id="gps-btn" onclick="getGPS()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>
+            </svg>
+            <span id="gps-label">Usar a minha localização GPS</span>
+          </button>
+
+          <div style="display:flex;align-items:center;gap:10px;margin:14px 0;">
+            <div style="flex:1;height:1px;background:var(--border2)"></div>
+            <span style="font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:0.1em">OU SELECCIONAR BAIRRO</span>
+            <div style="flex:1;height:1px;background:var(--border2)"></div>
+          </div>
+
+          <div class="bairro-grid" id="bairro-grid">
+            <div class="bairro-opt" data-bairro="KM 9-B" data-estrato="A" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-a"></div>
+              <div class="bairro-name">KM 9-B</div>
+              <div class="bairro-estrato">Est. A</div>
+            </div>
+            <div class="bairro-opt" data-bairro="KM 12-B" data-estrato="A" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-a"></div>
+              <div class="bairro-name">KM 12-B</div>
+              <div class="bairro-estrato">Est. A</div>
+            </div>
+            <div class="bairro-opt" data-bairro="Mulenvos de Cima" data-estrato="B" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-b"></div>
+              <div class="bairro-name">Mulenvos de Cima</div>
+              <div class="bairro-estrato">Est. B</div>
+            </div>
+            <div class="bairro-opt" data-bairro="Baixa de Cassanje" data-estrato="B" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-b"></div>
+              <div class="bairro-name">Baixa de Cassanje</div>
+              <div class="bairro-estrato">Est. B</div>
+            </div>
+            <div class="bairro-opt" data-bairro="KM 14-B" data-estrato="B" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-b"></div>
+              <div class="bairro-name">KM 14-B</div>
+              <div class="bairro-estrato">Est. B</div>
+            </div>
+            <div class="bairro-opt" data-bairro="Boa-Fé" data-estrato="B" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-b"></div>
+              <div class="bairro-name">Boa-Fé</div>
+              <div class="bairro-estrato">Est. B</div>
+            </div>
+            <div class="bairro-opt" data-bairro="CAOP A" data-estrato="C" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-c"></div>
+              <div class="bairro-name">CAOP A</div>
+              <div class="bairro-estrato">Est. C</div>
+            </div>
+            <div class="bairro-opt" data-bairro="CAOP B" data-estrato="C" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-c"></div>
+              <div class="bairro-name">CAOP B</div>
+              <div class="bairro-estrato">Est. C</div>
+            </div>
+            <div class="bairro-opt" data-bairro="CAOP C" data-estrato="C" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-c"></div>
+              <div class="bairro-name">CAOP C</div>
+              <div class="bairro-estrato">Est. C</div>
+            </div>
+            <div class="bairro-opt" data-bairro="Capalanga" data-estrato="C" onclick="selectBairro(this)">
+              <div class="bairro-dot dot-c"></div>
+              <div class="bairro-name">Capalanga</div>
+              <div class="bairro-estrato">Est. C</div>
+            </div>
+          </div>
+
+          <div class="field-err-msg" id="bairro-err" style="margin-top:8px">Seleccione o seu bairro ou use o GPS.</div>
+
+          <div class="field" style="margin-top:16px">
+            <label class="field-label">Referência de localização (opcional)</label>
+            <input type="text" id="referencia" placeholder="Ex: Perto do mercado, rua do poço, em frente à escola...">
+          </div>
+
+          <div class="nav-row">
+            <button class="btn-back" onclick="goStep(2)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Voltar
+            </button>
+            <button class="btn-next" onclick="validateStep3()">
+              <span class="btn-label">Continuar</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: CONFIRMAR -->
+      <div id="step-4" class="step-panel">
+        <div class="form-card-header">
+          <div class="form-card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div>
+            <div class="form-card-title">Confirmar e enviar</div>
+            <div class="form-card-sub">Reveja os dados antes de submeter o pedido</div>
+          </div>
+        </div>
+        <div class="form-card-body">
+
+          <div class="confirm-block" id="confirm-block">
+            <div class="confirm-row">
+              <div class="confirm-key">Tipo</div>
+              <div class="confirm-val" id="cf-tipo">—</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-key">Categoria</div>
+              <div class="confirm-val" id="cf-cat">—</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-key">Descrição</div>
+              <div class="confirm-val" id="cf-desc" style="white-space:pre-wrap;word-break:break-word">—</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-key">Bairro</div>
+              <div class="confirm-val" id="cf-bairro">—</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-key">Referência</div>
+              <div class="confirm-val" id="cf-ref">—</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-key">Contacto</div>
+              <div class="confirm-val" id="cf-contact">Anónimo</div>
+            </div>
+            <div class="confirm-row" id="cf-img-row" style="display:none">
+              <div class="confirm-key">Ficheiros</div>
+              <div class="confirm-val">
+                <div class="confirm-image-row" id="cf-images"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANON TOGGLE -->
+          <div class="anon-row" onclick="toggleAnon()">
+            <div class="toggle-switch" id="anon-toggle">
+              <div class="toggle-knob"></div>
+            </div>
+            <div class="anon-info">
+              <div class="anon-title">Submeter de forma anónima</div>
+              <div class="anon-sub">O seu nome e contacto não serão partilhados com a Administração. O número do pedido será o único identificador.</div>
+            </div>
+          </div>
+
+          <!-- TERMS -->
+          <div class="terms-row" onclick="toggleTerms()">
+            <div class="custom-cb" id="terms-cb"></div>
+            <div class="terms-text">
+              Li e aceito os <a href="#" onclick="return false">Termos de Uso</a> e a <a href="#" onclick="return false">Política de Privacidade</a> do OP1NA1. Os meus dados são tratados de acordo com a legislação angolana de protecção de dados pessoais.
+            </div>
+          </div>
+          <div class="field-err-msg" id="terms-err">Deve aceitar os termos para continuar.</div>
+
+          <div class="nav-row">
+            <button class="btn-back" onclick="goStep(3)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Voltar
+            </button>
+            <button class="btn-next" id="submit-btn" onclick="submitForm()">
+              <div class="btn-spinner"></div>
+              <span class="btn-label">Enviar pedido</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-card -->
+  </div><!-- /form-col -->
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="sidebar-col">
+
+    <!-- TRACK TICKET -->
+    <div class="side-card" id="track-card">
+      <div class="side-card-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <div class="side-card-title">Acompanhar pedido</div>
+      </div>
+      <div class="side-card-body">
+        <div class="track-input-row">
+          <input type="text" id="track-input" placeholder="MUL-20260509-XXXX" onkeydown="if(event.key==='Enter')trackTicket()">
+          <button class="track-btn" onclick="trackTicket()">Consultar</button>
+        </div>
+        <div class="ticket-status-card" id="tsc">
+          <div class="tsc-id" id="tsc-id"></div>
+          <div class="tsc-desc" id="tsc-desc"></div>
+          <div class="timeline" id="tsc-timeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENTLY RESOLVED -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c49a" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <div class="side-card-title">Problemas resolvidos recentemente</div>
+      </div>
+      <div class="side-card-body">
+        <div class="resolved-list">
+          <div class="resolved-item">
+            <div class="ri-icon">💧</div>
+            <div class="ri-body">
+              <div class="ri-desc">Avaria na conduta de água — KM 12-B</div>
+              <div class="ri-meta">Infraestrutura · Resolvido em 18h</div>
+            </div>
+            <div class="ri-badge">✓ Resolvido</div>
+          </div>
+          <div class="resolved-item">
+            <div class="ri-icon">🗑</div>
+            <div class="ri-body">
+              <div class="ri-desc">Recolha de lixo irregular — Boa-Fé</div>
+              <div class="ri-meta">Ambiente · Resolvido em 36h</div>
+            </div>
+            <div class="ri-badge">✓ Resolvido</div>
+          </div>
+          <div class="resolved-item">
+            <div class="ri-icon">💡</div>
+            <div class="ri-body">
+              <div class="ri-desc">Iluminação avariada — Mulenvos de Cima</div>
+              <div class="ri-meta">Segurança · Resolvido em 24h</div>
+            </div>
+            <div class="ri-badge">✓ Resolvido</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIATORS -->
+    <div class="side-card">
+      <div class="side-card-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2f6ef5" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <div class="side-card-title">Mediadores no terreno</div>
+      </div>
+      <div class="side-card-body">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:0.06em;margin-bottom:10px">
+          Sem telemóvel? Um mediador pode registar o seu pedido presencialmente.
+        </div>
+        <div class="mediador-list">
+          <div class="mediador-item">
+            <div class="med-av">AM</div>
+            <div class="med-info">
+              <div class="med-name">António M.</div>
+              <div class="med-zone">CAOP C · Seg–Sex 7h–17h</div>
+            </div>
+            <div class="med-on"></div>
+          </div>
+          <div class="mediador-item">
+            <div class="med-av">CJ</div>
+            <div class="med-info">
+              <div class="med-name">Clara J.</div>
+              <div class="med-zone">Capalanga · Seg–Sáb 8h–16h</div>
+            </div>
+            <div class="med-on"></div>
+          </div>
+          <div class="mediador-item">
+            <div class="med-av">JA</div>
+            <div class="med-info">
+              <div class="med-name">João António</div>
+              <div class="med-zone">Boa-Fé · Ter–Sáb 9h–17h</div>
+            </div>
+            <div class="med-on med-off"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  OP1NA1 · Sistema Integrado de Participação Cidadã · Administração Municipal dos Mulenvos · Luanda, Angola<br>
+  <a href="#">Termos de uso</a> · <a href="#">Privacidade</a> · <a href="/login">Acesso institucional</a> · v1.0
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  <span id="toast-msg">Copiado!</span>
+</div>
+
+<script>
+/* ── STATE ── */
+const state = {
+  step: 1,
+  tipo: 'reclamacao',
+  bairro: null,
+  anonimo: false,
+  termsAccepted: false,
+  gpsCoords: null,
+  files: []
+};
+
+/* ── ANIMATE STATS ON LOAD ── */
+function animateCounter(el, target, duration, suffix) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start) + (suffix || '');
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCounter(document.getElementById('stat-resolved'), 714, 1200);
+    animateCounter(document.getElementById('stat-open'), 389, 1000);
+    animateCounter(document.getElementById('stat-time'), 38, 900, 'h');
+    animateCounter(document.getElementById('stat-mediators'), 3, 600);
+  }, 300);
+});
+
+/* ── CHANNEL TABS ── */
+const channelMessages = {
+  whatsapp: '📱 WhatsApp: envie "OLÁ" para +244 923 000 000 e siga as instruções do assistente.',
+  sms: '📨 SMS: envie a descrição do problema para +244 923 000 001.',
+  ussd: '📟 USSD: marque *123# no seu telemóvel e siga o menu.',
+  portal: null
+};
+
+function selectChannel(btn, ch) {
+  document.querySelectorAll('.ch-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const banner = document.getElementById('channel-banner');
+  const text   = document.getElementById('channel-banner-text');
+  if (ch !== 'portal' && channelMessages[ch]) {
+    text.textContent = channelMessages[ch];
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+/* ── STEP NAVIGATION ── */
+function goStep(n) {
+  state.step = n;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  document.querySelector('#step-' + n + '.step-panel').classList.add('fade-in');
+
+  document.querySelectorAll('.step-item').forEach(item => {
+    const s = parseInt(item.dataset.step);
+    item.classList.remove('active','done');
+    if (s === n) item.classList.add('active');
+    else if (s < n) item.classList.add('done');
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── TYPE SELECT ── */
+function selectType(el) {
+  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.tipo = el.dataset.type;
+}
+
+/* ── BAIRRO SELECT ── */
+function selectBairro(el) {
+  document.querySelectorAll('.bairro-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.bairro = el.dataset.bairro;
+  document.getElementById('bairro-err').classList.remove('show');
+}
+
+/* ── GPS ── */
+function getGPS() {
+  const btn = document.getElementById('gps-btn');
+  const lbl = document.getElementById('gps-label');
+  btn.style.opacity = '0.7';
+  lbl.textContent = 'A obter localização...';
+
+  if (!navigator.geolocation) {
+    lbl.textContent = 'GPS não disponível neste dispositivo.';
+    btn.style.opacity = '1';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      state.gpsCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      btn.classList.add('got');
+      btn.style.opacity = '1';
+      lbl.textContent = `GPS obtido: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+      showToast('Localização GPS capturada com sucesso!');
+    },
+    () => {
+      lbl.textContent = 'Não foi possível obter GPS. Seleccione o bairro manualmente.';
+      btn.style.opacity = '1';
+    }
+  );
+}
+
+/* ── FILE UPLOAD ── */
+function handleFiles(input) {
+  const files = Array.from(input.files);
+  const previews = document.getElementById('upload-previews');
+  previews.innerHTML = '';
+  state.files = files.slice(0, 3);
+
+  state.files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'preview-thumb-wrap';
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'preview-thumb';
+      const rm = document.createElement('button');
+      rm.className = 'preview-remove';
+      rm.textContent = '×';
+      rm.onclick = () => { wrap.remove(); };
+      wrap.appendChild(img);
+      wrap.appendChild(rm);
+      previews.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('upload-area').addEventListener('dragover', (e) => { e.preventDefault(); document.getElementById('upload-area').classList.add('drag-over'); });
+  document.getElementById('upload-area').addEventListener('dragleave', () => { document.getElementById('upload-area').classList.remove('drag-over'); });
+}
+
+/* ── CHAR COUNT ── */
+function updateCharCount(el, countId, max) {
+  const len = el.value.length;
+  const counter = document.getElementById(countId);
+  counter.textContent = len + ' / ' + max;
+  counter.className = 'char-count' + (len > max * 0.9 ? ' near' : '') + (len >= max ? ' over' : '');
+}
+
+/* ── FIELD VALIDATION ── */
+function validateField(el) {
+  const id = el.id;
+  const errEl = document.getElementById(id + '-err');
+  if (errEl) {
+    const valid = el.value && el.value.trim().length > 0;
+    el.classList.toggle('err', !valid);
+    errEl.classList.toggle('show', !valid);
+    return valid;
+  }
+  return true;
+}
+
+function validateStep2() {
+  const catOk  = document.getElementById('categoria').value !== '';
+  const descOk = document.getElementById('descricao').value.trim().length >= 20;
+
+  document.getElementById('categoria').classList.toggle('err', !catOk);
+  document.getElementById('categoria-err').classList.toggle('show', !catOk);
+  document.getElementById('descricao').classList.toggle('err', !descOk);
+  document.getElementById('descricao-err').classList.toggle('show', !descOk);
+
+  if (catOk && descOk) goStep(3);
+}
+
+function validateStep3() {
+  if (!state.bairro && !state.gpsCoords) {
+    document.getElementById('bairro-err').classList.add('show');
+    return;
+  }
+  buildConfirm();
+  goStep(4);
+}
+
+/* ── BUILD CONFIRM ── */
+const typeLabels = {
+  reclamacao: '⚠️ Reclamação',
+  sugestao: '💡 Sugestão',
+  denuncia: '🔍 Denúncia',
+  solicitacao: '📋 Solicitação',
+  elogio: '👏 Elogio',
+  urgente: '🚨 Urgente'
+};
+
+function buildConfirm() {
+  document.getElementById('cf-tipo').textContent    = typeLabels[state.tipo] || state.tipo;
+  document.getElementById('cf-cat').textContent     = document.getElementById('categoria').value || '—';
+  document.getElementById('cf-desc').textContent    = document.getElementById('descricao').value || '—';
+  document.getElementById('cf-bairro').textContent  = state.bairro || (state.gpsCoords ? 'Localização GPS' : '—');
+  document.getElementById('cf-ref').textContent     = document.getElementById('referencia').value || '—';
+  const nome = document.getElementById('nome').value;
+  const tel  = document.getElementById('telefone').value;
+  document.getElementById('cf-contact').textContent = state.anonimo ? 'Anónimo' : [nome, tel].filter(Boolean).join(' · ') || 'Anónimo';
+
+  const imgRow = document.getElementById('cf-img-row');
+  const imgCont = document.getElementById('cf-images');
+  const thumbs = document.querySelectorAll('#upload-previews .preview-thumb');
+  imgCont.innerHTML = '';
+  if (thumbs.length > 0) {
+    imgRow.style.display = 'flex';
+    thumbs.forEach(img => {
+      const cl = document.createElement('img');
+      cl.src = img.src;
+      cl.className = 'confirm-thumb';
+      imgCont.appendChild(cl);
+    });
+  } else {
+    imgRow.style.display = 'none';
+  }
+}
+
+/* ── ANON TOGGLE ── */
+function toggleAnon() {
+  state.anonimo = !state.anonimo;
+  document.getElementById('anon-toggle').classList.toggle('on', state.anonimo);
+  buildConfirm();
+}
+
+/* ── TERMS ── */
+function toggleTerms() {
+  state.termsAccepted = !state.termsAccepted;
+  document.getElementById('terms-cb').classList.toggle('on', state.termsAccepted);
+  document.getElementById('terms-err').classList.remove('show');
+}
+
+/* ── SUBMIT ── */
+function submitForm() {
+  if (!state.termsAccepted) {
+    document.getElementById('terms-err').classList.add('show');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading');
+
+  // Simulate API call
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const dateStr = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
+    const rand = String(Math.floor(Math.random() * 9000) + 1000);
+    const ticketId = `MUL-${dateStr}-${rand}`;
+    state.ticketId = ticketId;
+    document.getElementById('success-ticket-id').textContent = ticketId;
+    showSuccess();
+  }, 2200);
+}
+
+/* ── SUCCESS ── */
+function showSuccess() {
+  document.getElementById('step-bar').style.opacity = '0.3';
+  document.getElementById('step-bar').style.pointerEvents = 'none';
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('success-screen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetForm() {
+  document.getElementById('success-screen').classList.remove('show');
+  document.getElementById('step-bar').style.opacity = '1';
+  document.getElementById('step-bar').style.pointerEvents = '';
+  document.getElementById('categoria').value = '';
+  document.getElementById('descricao').value = '';
+  document.getElementById('nome').value = '';
+  document.getElementById('telefone').value = '';
+  document.getElementById('referencia').value = '';
+  document.getElementById('upload-previews').innerHTML = '';
+  document.getElementById('desc-count').textContent = '0 / 800';
+  document.querySelectorAll('.bairro-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelector('.type-opt[data-type="reclamacao"]').classList.add('selected');
+  state.tipo = 'reclamacao'; state.bairro = null; state.anonimo = false;
+  state.termsAccepted = false; state.gpsCoords = null;
+  document.getElementById('anon-toggle').classList.remove('on');
+  document.getElementById('terms-cb').classList.remove('on');
+  document.getElementById('gps-btn').classList.remove('got');
+  document.getElementById('gps-label').textContent = 'Usar a minha localização GPS';
+  goStep(1);
+}
+
+/* ── TRACK TICKET ── */
+function focusTrack() {
+  document.getElementById('track-input').focus();
+  document.getElementById('track-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function trackTicket() {
+  const val = document.getElementById('track-input').value.trim();
+  if (!val) return;
+  const card = document.getElementById('tsc');
+  card.classList.add('show');
+
+  document.getElementById('tsc-id').textContent = val.toUpperCase();
+
+  const demos = [
+    { desc: 'Falta de água na rua principal', steps: [
+      { label: 'Pedido recebido', done: true, time: 'Ontem 09:14' },
+      { label: 'Em triagem (IA)', done: true, time: 'Ontem 09:15' },
+      { label: 'Atribuído ao técnico', done: true, time: 'Ontem 11:30' },
+      { label: 'Em progresso', done: false, current: true, time: 'Hoje 08:00' },
+      { label: 'Resolvido', done: false, time: '—' }
+    ]},
+    { desc: 'Recolha de lixo — em falta há 3 dias', steps: [
+      { label: 'Pedido recebido', done: true, time: '2 dias atrás 14:22' },
+      { label: 'Em triagem (IA)', done: true, time: '2 dias atrás 14:22' },
+      { label: 'Atribuído ao técnico', done: true, time: '2 dias atrás 16:10' },
+      { label: 'Em progresso', done: true, time: 'Ontem 09:00' },
+      { label: 'Resolvido', done: false, current: true, time: 'Hoje' }
+    ]}
+  ];
+
+  const demo = demos[Math.floor(Math.random() * demos.length)];
+  document.getElementById('tsc-desc').textContent = demo.desc;
+
+  const tl = document.getElementById('tsc-timeline');
+  tl.innerHTML = '';
+
+  demo.steps.forEach((step, i) => {
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tl-line-wrap';
+
+    const dot = document.createElement('div');
+    dot.className = 'tl-dot' + (step.done ? ' done' : step.current ? ' current' : '');
+    wrap.appendChild(dot);
+
+    if (i < demo.steps.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'tl-connector' + (step.done ? ' done' : '');
+      wrap.appendChild(conn);
+    }
+
+    const content = document.createElement('div');
+    content.className = 'tl-content';
+    content.innerHTML = `<div class="tl-status ${step.done ? 'done' : step.current ? 'current' : ''}">${step.label}</div><div class="tl-time">${step.time}</div>`;
+
+    item.appendChild(wrap);
+    item.appendChild(content);
+    tl.appendChild(item);
+  });
+}
+
+/* ── COPY / SHARE ── */
+function copyTicket() {
+  if (state.ticketId) {
+    navigator.clipboard.writeText(state.ticketId).then(() => showToast('Número copiado: ' + state.ticketId));
+  }
+}
+
+function shareWhatsApp() {
+  const id = state.ticketId || 'MUL-...';
+  const msg = encodeURIComponent(`O meu pedido ao OP1NA1 — Mulenvos: ${id}\nAcompanhe em op1na1.mulenvos.ao`);
+  window.open('https://wa.me/?text=' + msg, '_blank');
+}
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
