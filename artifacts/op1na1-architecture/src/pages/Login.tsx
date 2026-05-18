@@ -1,5 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "@/lib/auth";
+import { ApiError } from "@/lib/api";
+import LanguageToggle from "@/components/LanguageToggle";
 
 // ─── Design tokens ───────────────────────────────────────────────
 const T = {
@@ -119,6 +123,8 @@ const ROLES: { id: Role; label: string; icon: string }[] = [
 // ─── Main component ──────────────────────────────────────────────
 export default function Login() {
   const [, navigate] = useLocation();
+  const auth = useAuth();
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useParticleCanvas(canvasRef);
 
@@ -135,11 +141,10 @@ export default function Login() {
 
   // Kick off redirect bar fill after success
   useEffect(() => {
-    if (loginState === "success") {
-      const t1 = setTimeout(() => setRedirectPct(100), 100);
-      const t2 = setTimeout(() => navigate("/admin-dashboard"), 2800);
-      return () => { clearTimeout(t1); clearTimeout(t2); };
-    }
+    if (loginState !== "success") return;
+    const t1 = setTimeout(() => setRedirectPct(100), 100);
+    const t2 = setTimeout(() => navigate("/admin-dashboard"), 2800);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [loginState, navigate]);
 
   function validate() {
@@ -154,25 +159,28 @@ export default function Login() {
     return ok;
   }
 
-  function handleLogin() {
+  async function handleLogin() {
     if (!validate()) return;
     setErrorMsg(""); setLoginState("loading");
-    setTimeout(() => {
-      if (email === "admin@mulenvos.ao" && password === "op1na1") {
-        setLoginState("success");
+    try {
+      await auth.login(email.trim().toLowerCase(), password);
+      setLoginState("success");
+    } catch (e) {
+      if (e instanceof ApiError) {
+        if (e.status === 401) {
+          setErrorMsg(t("auth.errorInvalid"));
+        } else if (e.status === 403) {
+          setErrorMsg(t("auth.errorForbidden"));
+        } else {
+          setErrorMsg(e.message);
+        }
+      } else if (e instanceof Error) {
+        setErrorMsg(e.message || t("auth.errorNetwork"));
       } else {
-        setErrorMsg("Credenciais inválidas. Tente: admin@mulenvos.ao / op1na1");
-        setLoginState("error");
+        setErrorMsg(t("auth.errorNetwork"));
       }
-    }, 1800);
-  }
-
-  function handleAlt(provider: string) {
-    setLoginState("loading");
-    setTimeout(() => {
-      setErrorMsg(`${provider} SSO não configurado neste ambiente de demonstração.`);
       setLoginState("error");
-    }, 1000);
+    }
   }
 
   function clearFieldErrors() {
@@ -198,8 +206,6 @@ export default function Login() {
         @keyframes lp-spin      { to{transform:rotate(360deg)} }
         .lp-role-opt { cursor:pointer; transition:border-color .16s,background .16s; }
         .lp-role-opt:hover { border-color:${T.bdr2} !important; }
-        .lp-alt-btn { cursor:pointer; transition:border-color .14s,color .14s; font-family:${T.sans}; }
-        .lp-alt-btn:hover { border-color:${T.bdr2} !important; color:${T.text} !important; }
         .lp-input { width:100%; background:${T.surface}; border:1px solid ${T.bdr}; border-radius:8px; padding:11px 12px 11px 38px; color:${T.text}; font-family:${T.sans}; font-size:13px; outline:none; transition:border-color .15s,box-shadow .15s; box-sizing:border-box; }
         .lp-input::placeholder { color:${T.muted2}; }
         .lp-input:focus { border-color:rgba(0,196,154,.5) !important; box-shadow:0 0 0 3px rgba(0,196,154,.08) !important; }
@@ -213,6 +219,21 @@ export default function Login() {
         .lp-ch-ussd { border-color:rgba(247,184,79,.2)!important;  color:#f7b84f!important; }
         .lp-ch-web  { border-color:rgba(0,196,154,.2)!important;   color:${T.accent}!important; }
       `}</style>
+
+      {/* Back to portal link */}
+      <div style={{ position: "fixed", top: 16, left: 20, zIndex: 20, display: "flex", gap: 8, alignItems: "center" }}>
+        <button
+          onClick={() => navigate("/citizen-portal")}
+          aria-label={`${t("auth.backToCitizenPortal")} — OP1NA1`}
+          style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: T.mono, fontSize: 9, color: T.muted, background: "rgba(14,20,25,0.8)", border: `1px solid ${T.bdr2}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", backdropFilter: "blur(8px)", letterSpacing: "0.06em", transition: "all .15s" }}
+          onMouseOver={e => (e.currentTarget.style.color = T.accent)}
+          onMouseOut={e => (e.currentTarget.style.color = T.muted)}
+        >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          {t("auth.backToCitizenPortal")}
+        </button>
+        <LanguageToggle style={{ background: "rgba(14,20,25,0.8)", padding: "3px 6px", borderRadius: 20, backdropFilter: "blur(8px)" }} />
+      </div>
 
       {/* Canvas particle background */}
       <canvas ref={canvasRef} style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }} />
@@ -344,7 +365,7 @@ export default function Login() {
           <div style={{ position: "absolute", top: 0, right: 0, width: 200, height: 200, background: "radial-gradient(circle at top right,rgba(0,196,154,.06),transparent 70%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, width: 180, height: 180, background: "radial-gradient(circle at bottom left,rgba(79,163,247,.04),transparent 70%)", pointerEvents: "none" }} />
 
-          <div style={{ width: "100%", maxWidth: 360, animation: "lp-form-in 0.6s cubic-bezier(.4,0,.2,1) both" }}>
+          <div id="main-content" style={{ width: "100%", maxWidth: 360, animation: "lp-form-in 0.6s cubic-bezier(.4,0,.2,1) both" }}>
 
             {/* SUCCESS STATE */}
             {isSuccess && (
@@ -359,9 +380,9 @@ export default function Login() {
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
-                <div style={{ fontFamily: T.display, fontSize: 22, fontWeight: 300, color: T.accent }}>Acesso autorizado</div>
+                <div style={{ fontFamily: T.display, fontSize: 22, fontWeight: 300, color: T.accent }}>{t("auth.successTitle")}</div>
                 <div style={{ fontFamily: T.mono, fontSize: 11, color: T.muted, lineHeight: 1.6 }}>
-                  Bem-vindo ao OP1NA1.<br />A redirecionar para o seu painel...
+                  {t("auth.successMessage").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
                 </div>
                 <div style={{ width: "100%", height: 3, background: T.bdr, borderRadius: 10, overflow: "hidden" }}>
                   <div style={{
@@ -377,24 +398,34 @@ export default function Login() {
             {!isSuccess && (
               <>
                 <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 12 }}>
-                  Painel de controlo · OP1NA1
+                  {t("auth.breadcrumb")}
                 </div>
-                <div style={{ fontFamily: T.display, fontSize: 28, fontWeight: 300, letterSpacing: "-0.02em", color: T.text, lineHeight: 1.2, marginBottom: 6 }}>
-                  Iniciar sessão
-                </div>
-                <div style={{ fontSize: 13, color: T.muted, marginBottom: 32, lineHeight: 1.5 }}>
-                  Seleccione o seu perfil e introduza as credenciais.
-                </div>
+                <h1 style={{ fontFamily: T.display, fontSize: 28, fontWeight: 300, letterSpacing: "-0.02em", color: T.text, lineHeight: 1.2, marginBottom: 6, margin: "0 0 6px" }}>
+                  {t("auth.title")}
+                </h1>
+                <p style={{ fontSize: 13, color: T.muted, marginBottom: 32, lineHeight: 1.5 }}>
+                  {t("auth.subtitle")}
+                </p>
 
-                {/* Role selector */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 24 }}>
+                {/* Role selector — radiogroup for WCAG */}
+                <div
+                  role="radiogroup"
+                  aria-label={t("auth.roles.admin")}
+                  style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 24 }}
+                >
                   {ROLES.map(r => {
                     const active = role === r.id;
+                    const label = t(`auth.roles.${r.id}`, r.label);
                     return (
                       <div
                         key={r.id}
                         className="lp-role-opt"
+                        role="radio"
+                        aria-checked={active}
+                        tabIndex={active ? 0 : -1}
                         onClick={() => setRole(r.id)}
+                        onKeyDown={e => (e.key === "Enter" || e.key === " ") && setRole(r.id)}
+                        aria-label={label}
                         style={{
                           display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
                           padding: "10px 8px", borderRadius: 8, position: "relative", overflow: "hidden",
@@ -404,72 +435,91 @@ export default function Login() {
                         }}
                       >
                         {active && (
-                          <span style={{ position: "absolute", top: 4, right: 7, fontSize: 8, color: T.accent, fontFamily: T.mono }}>✓</span>
+                          <span aria-hidden="true" style={{ position: "absolute", top: 4, right: 7, fontSize: 8, color: T.accent, fontFamily: T.mono }}>✓</span>
                         )}
-                        <span style={{ fontSize: 18, lineHeight: 1 }}>{r.icon}</span>
+                        <span aria-hidden="true" style={{ fontSize: 18, lineHeight: 1 }}>{r.icon}</span>
                         <span style={{ fontFamily: T.mono, fontSize: 9, color: active ? T.accent : T.muted, letterSpacing: "0.06em", textAlign: "center" }}>
-                          {r.label}
+                          {label}
                         </span>
                       </div>
                     );
                   })}
                 </div>
 
-                {/* Error banner */}
-                {isError && errorMsg && (
-                  <div style={{
-                    display: "flex", alignItems: "center", gap: 8,
-                    padding: "10px 12px", background: "rgba(247,111,111,.06)",
-                    border: "1px solid rgba(247,111,111,.2)", borderRadius: 7,
-                    marginBottom: 16, fontFamily: T.mono, fontSize: 10, color: T.danger,
-                    animation: "lp-shake 0.4s ease",
-                  }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
-                    {errorMsg}
-                  </div>
-                )}
+                {/* Error banner — aria-live so screen readers announce it */}
+                <div
+                  role="alert"
+                  aria-live="assertive"
+                  aria-atomic="true"
+                  style={{ minHeight: 0 }}
+                >
+                  {isError && errorMsg && (
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 8,
+                      padding: "10px 12px", background: "rgba(247,111,111,.06)",
+                      border: "1px solid rgba(247,111,111,.2)", borderRadius: 7,
+                      marginBottom: 16, fontFamily: T.mono, fontSize: 10, color: T.danger,
+                      animation: "lp-shake 0.4s ease",
+                    }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                      {errorMsg}
+                    </div>
+                  )}
+                </div>
 
                 {/* Fields */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
 
                   {/* Email */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                      Endereço de email
-                    </div>
+                    <label
+                      htmlFor="login-email"
+                      style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.1em", textTransform: "uppercase" }}
+                    >
+                      {t("auth.emailLabel")}
+                    </label>
                     <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="1.8" style={{ position: "absolute", left: 12, pointerEvents: "none", flexShrink: 0 }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="1.8" style={{ position: "absolute", left: 12, pointerEvents: "none", flexShrink: 0 }} aria-hidden="true">
                         <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 7L2 7" />
                       </svg>
                       <input
+                        id="login-email"
                         type="email"
                         className={`lp-input${emailErr ? " lp-input-err" : ""}`}
-                        placeholder="utilizador@mulenvos.ao"
+                        placeholder={t("auth.emailPlaceholder")}
                         autoComplete="email"
+                        aria-describedby={emailErr ? "email-error" : undefined}
+                        aria-invalid={!!emailErr}
                         value={email}
                         onChange={e => { setEmail(e.target.value); clearFieldErrors(); }}
                         onKeyDown={e => e.key === "Enter" && handleLogin()}
                       />
                     </div>
-                    {emailErr && <div style={{ fontFamily: T.mono, fontSize: 9, color: T.danger, letterSpacing: "0.04em" }}>{emailErr}</div>}
+                    {emailErr && <div id="email-error" role="alert" style={{ fontFamily: T.mono, fontSize: 9, color: T.danger, letterSpacing: "0.04em" }}>{emailErr}</div>}
                   </div>
 
                   {/* Password */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                      Palavra-passe
-                    </div>
+                    <label
+                      htmlFor="login-password"
+                      style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.1em", textTransform: "uppercase" }}
+                    >
+                      {t("auth.passwordLabel")}
+                    </label>
                     <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="1.8" style={{ position: "absolute", left: 12, pointerEvents: "none" }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="1.8" style={{ position: "absolute", left: 12, pointerEvents: "none" }} aria-hidden="true">
                         <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
                       </svg>
                       <input
+                        id="login-password"
                         type={showPass ? "text" : "password"}
                         className={`lp-input${passErr ? " lp-input-err" : ""}`}
-                        placeholder="••••••••••"
+                        placeholder={t("auth.passwordPlaceholder")}
                         autoComplete="current-password"
+                        aria-describedby={passErr ? "pass-error" : undefined}
+                        aria-invalid={!!passErr}
                         value={password}
                         onChange={e => { setPassword(e.target.value); clearFieldErrors(); }}
                         onKeyDown={e => e.key === "Enter" && handleLogin()}
@@ -478,7 +528,7 @@ export default function Login() {
                         type="button"
                         onClick={() => setShowPass(v => !v)}
                         style={{ position: "absolute", right: 12, background: "none", border: "none", cursor: "pointer", color: T.muted2, padding: 2, lineHeight: 0 }}
-                        aria-label="Mostrar palavra-passe"
+                        aria-label={showPass ? t("auth.hidePassword") : t("auth.showPassword")}
                       >
                         {showPass ? (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -492,7 +542,7 @@ export default function Login() {
                         )}
                       </button>
                     </div>
-                    {passErr && <div style={{ fontFamily: T.mono, fontSize: 9, color: T.danger, letterSpacing: "0.04em" }}>{passErr}</div>}
+                    {passErr && <div id="pass-error" role="alert" style={{ fontFamily: T.mono, fontSize: 9, color: T.danger, letterSpacing: "0.04em" }}>{passErr}</div>}
                   </div>
                 </div>
 
@@ -517,13 +567,13 @@ export default function Login() {
                     </div>
                     Manter sessão
                   </label>
-                  <a href="#" className="lp-forgot" style={{
+                  <button type="button" className="lp-forgot" onClick={() => alert(t("auth.forgotContact"))} style={{
                     fontFamily: T.mono, fontSize: 9, color: T.accent, cursor: "pointer",
-                    letterSpacing: "0.06em", textDecoration: "none",
+                    letterSpacing: "0.06em", textDecoration: "none", background: "none", border: "none",
                     borderBottom: "1px solid rgba(0,196,154,.3)", paddingBottom: 1, transition: "border-color .14s",
                   }}>
-                    Recuperar acesso
-                  </a>
+                    {t("auth.forgotAccess")}
+                  </button>
                 </div>
 
                 {/* Security note */}
@@ -536,7 +586,7 @@ export default function Login() {
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
                   </svg>
                   <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted, letterSpacing: "0.04em", lineHeight: 1.6 }}>
-                    Ligação encriptada TLS 1.3 · JWT + refresh token httpOnly · Rate limit: 5 tentativas / 15 min · Sessão auditada
+                    {t("auth.securityNote")}
                   </div>
                 </div>
 
@@ -566,43 +616,8 @@ export default function Login() {
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   )}
-                  {isLoading ? "A autenticar..." : "Entrar no sistema"}
+                  {isLoading ? t("auth.submitting") : t("auth.submitButton")}
                 </button>
-
-                {/* OR divider */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                  <div style={{ flex: 1, height: 1, background: T.bdr }} />
-                  <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.1em" }}>ou aceder via</div>
-                  <div style={{ flex: 1, height: 1, background: T.bdr }} />
-                </div>
-
-                {/* Alt login */}
-                <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
-                  <button
-                    className="lp-alt-btn"
-                    onClick={() => handleAlt("Microsoft")}
-                    style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: 9, borderRadius: 7, border: `1px solid ${T.bdr}`, background: T.surface, fontSize: 12, color: T.muted }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M11.4 2H2v9.4h9.4V2Z" fill="#f25022" /><path d="M22 2h-9.4v9.4H22V2Z" fill="#7fba00" />
-                      <path d="M11.4 12.6H2V22h9.4v-9.4Z" fill="#00a4ef" /><path d="M22 12.6h-9.4V22H22v-9.4Z" fill="#ffb900" />
-                    </svg>
-                    Microsoft SSO
-                  </button>
-                  <button
-                    className="lp-alt-btn"
-                    onClick={() => handleAlt("Google")}
-                    style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: 9, borderRadius: 7, border: `1px solid ${T.bdr}`, background: T.surface, fontSize: 12, color: T.muted }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09Z" fill="#4285f4" />
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" fill="#34a853" />
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62Z" fill="#fbbc05" />
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53Z" fill="#ea4335" />
-                    </svg>
-                    Google
-                  </button>
-                </div>
 
                 {/* Footer */}
                 <div style={{ textAlign: "center", fontFamily: T.mono, fontSize: 9, color: T.muted2, letterSpacing: "0.06em", lineHeight: 1.7 }}>

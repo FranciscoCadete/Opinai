@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#080c10"/>
+  <!-- OP1NA1 logotype mark: stylised "O" with inner accent -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#00c49a" stroke-width="36"/>
+  <circle cx="256" cy="256" r="80"  fill="#00c49a" opacity="0.9"/>
+  <!-- Thin cross lines suggesting omni-channel connectivity -->
+  <line x1="256" y1="76"  x2="256" y2="436" stroke="#00c49a" stroke-width="8" stroke-opacity="0.25"/>
+  <line x1="76"  y1="256" x2="436" y2="256" stroke="#00c49a" stroke-width="8" stroke-opacity="0.25"/>
+</svg>

@@ -1,0 +1,19 @@
+{
+  "_meta": { "status": "em desenvolvimento", "coverage": "0%" },
+  "lang": {
+    "pt": "Português",
+    "kmb": "Kimbundu",
+    "umb": "Umbundu"
+  },
+  "common": {
+    "loading": "A carregar…",
+    "skipToMain": "Saltar para o conteúdo principal"
+  },
+  "auth": {
+    "title": "Ukwendela omu cisita",
+    "submitButton": "Ukwendela",
+    "submitting": "A ukwendela…",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Senha"
+  }
+}

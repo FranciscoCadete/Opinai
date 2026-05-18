@@ -1,0 +1,214 @@
+{
+  "lang": {
+    "pt": "Português",
+    "kmb": "Kimbundu",
+    "umb": "Umbundu"
+  },
+  "common": {
+    "loading": "A carregar…",
+    "error": "Erro",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Fechar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "back": "Voltar",
+    "next": "Seguinte",
+    "previous": "Anterior",
+    "yes": "Sim",
+    "no": "Não",
+    "submit": "Submeter",
+    "skipToMain": "Saltar para o conteúdo principal",
+    "unknown": "Desconhecido"
+  },
+  "auth": {
+    "title": "Iniciar sessão",
+    "subtitle": "Seleccione o seu perfil e introduza as credenciais.",
+    "breadcrumb": "Painel de controlo · OP1NA1",
+    "emailLabel": "Endereço de email",
+    "emailPlaceholder": "utilizador@mulenvos.ao",
+    "passwordLabel": "Palavra-passe",
+    "passwordPlaceholder": "••••••••••",
+    "rememberSession": "Manter sessão",
+    "forgotAccess": "Recuperar acesso",
+    "forgotContact": "Contacte o administrador do sistema: admin@mulenvos.ao",
+    "submitButton": "Entrar no sistema",
+    "submitting": "A autenticar…",
+    "showPassword": "Mostrar palavra-passe",
+    "hidePassword": "Ocultar palavra-passe",
+    "securityNote": "Ligação encriptada TLS 1.3 · JWT + refresh token httpOnly · Rate limit: 5 tentativas / 15 min · Sessão auditada",
+    "successTitle": "Acesso autorizado",
+    "successMessage": "Bem-vindo ao OP1NA1.\nA redirecionar para o seu painel…",
+    "errorInvalid": "Credenciais inválidas.",
+    "errorForbidden": "Esta conta não tem acesso institucional.",
+    "errorNetwork": "Erro de rede. Tente novamente.",
+    "backToCitizenPortal": "Portal do Cidadão",
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gestor",
+      "technician": "Técnico",
+      "analyst": "Analista"
+    },
+    "roleSelect": "Seleccionar perfil {{role}}"
+  },
+  "nav": {
+    "logout": "Terminar sessão",
+    "adminDashboard": "Dashboard Admin",
+    "userManagement": "Utilizadores",
+    "auditCenter": "Auditoria",
+    "channelConfig": "Canais",
+    "citizenPortal": "Portal do Cidadão"
+  },
+  "dashboard": {
+    "title": "Dashboard Admin",
+    "liveFeed": "em directo",
+    "connecting": "a ligar…",
+    "disconnected": "desligado",
+    "totalMonth": "TOTAL DO MÊS",
+    "resolved": "RESOLVIDO",
+    "inProgress": "EM ABERTO",
+    "critical": "CRÍTICAS P5",
+    "avgResponse": "TEMPO MÉDIO RESPOSTA",
+    "target": "Meta",
+    "byBairro": "Ocorrências por bairro",
+    "volumeTab": "VOLUME",
+    "resolutionTab": "RESOLUÇÃO",
+    "estratoA": "Estrato A — Consolidado",
+    "estratoB": "Estrato B — Em consolidação",
+    "estratoC": "Estrato C — Crítico",
+    "overallStatus": "Estado geral",
+    "pctResolved": "resolvido",
+    "lastUpdate": "Última actualização",
+    "sseConnected": "em directo",
+    "sseReconnecting": "a reconectar…"
+  },
+  "requests": {
+    "title": "Pedidos",
+    "search": "Pesquisar pedidos…",
+    "all": "Todos",
+    "status": {
+      "received": "Recebido",
+      "triaged": "Triado",
+      "assigned": "Atribuído",
+      "in_progress": "Em progresso",
+      "resolved": "Resolvido",
+      "rejected": "Rejeitado"
+    },
+    "priority": {
+      "low": "Baixa",
+      "normal": "Normal",
+      "high": "Alta",
+      "urgent": "Urgente"
+    },
+    "type": {
+      "reclamacao": "Reclamação",
+      "sugestao": "Sugestão",
+      "denuncia": "Denúncia",
+      "solicitacao": "Solicitação",
+      "elogio": "Elogio",
+      "outro": "Outro"
+    },
+    "channel": {
+      "portal": "Portal",
+      "whatsapp": "WhatsApp",
+      "sms": "SMS",
+      "messenger": "Messenger",
+      "ussd": "USSD"
+    },
+    "columns": {
+      "ticketId": "Referência",
+      "description": "Descrição",
+      "status": "Estado",
+      "priority": "Prioridade",
+      "channel": "Canal",
+      "bairro": "Bairro",
+      "contact": "Contacto",
+      "assignedTo": "Atribuído a",
+      "createdAt": "Data",
+      "actions": "Acções"
+    },
+    "anonymous": "Anónimo",
+    "unassigned": "Por atribuir",
+    "noResults": "Nenhum pedido encontrado.",
+    "updateSuccess": "Pedido actualizado.",
+    "updateError": "Erro ao actualizar pedido."
+  },
+  "users": {
+    "title": "Gestão de Utilizadores",
+    "addUser": "Novo utilizador",
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gestor",
+      "technician": "Técnico",
+      "citizen": "Cidadão"
+    },
+    "columns": {
+      "name": "Nome",
+      "email": "Email",
+      "role": "Perfil",
+      "municipality": "Município",
+      "createdAt": "Data criação",
+      "actions": "Acções"
+    },
+    "noResults": "Nenhum utilizador encontrado.",
+    "createSuccess": "Utilizador criado.",
+    "updateSuccess": "Utilizador actualizado.",
+    "deleteSuccess": "Utilizador eliminado.",
+    "deleteConfirm": "Tem a certeza que pretende eliminar este utilizador? Esta acção é irreversível.",
+    "selfDeleteError": "Não pode eliminar a sua própria conta."
+  },
+  "audit": {
+    "title": "Centro de Auditoria",
+    "exportCsv": "Exportar CSV",
+    "exportJson": "Exportar JSON",
+    "columns": {
+      "action": "Acção",
+      "actor": "Actor",
+      "entity": "Entidade",
+      "date": "Data"
+    },
+    "noResults": "Nenhum registo de auditoria encontrado.",
+    "actions": {
+      "user.created": "Utilizador criado",
+      "user.updated": "Utilizador actualizado",
+      "user.deleted": "Utilizador eliminado",
+      "request.submitted": "Pedido submetido",
+      "request.updated": "Pedido actualizado",
+      "auth.login": "Login",
+      "auth.logout": "Logout",
+      "audit.exported": "Auditoria exportada"
+    }
+  },
+  "citizen": {
+    "title": "Portal do Cidadão",
+    "tagline": "A sua voz chega à Administração.",
+    "description": "Reporte problemas, faça sugestões e acompanhe as respostas — pelo canal que preferir.",
+    "submitRequest": "Submeter Pedido",
+    "trackRequest": "Consultar Pedido",
+    "stats": "Estatísticas",
+    "channels": "Canais & Contactos",
+    "accessInstitutional": "Acesso Institucional →",
+    "tabs": {
+      "submeter": "Submeter Pedido",
+      "consultar": "Consultar Pedido",
+      "estatisticas": "Estatísticas",
+      "canais": "Canais & Contactos",
+      "documentos": "Documentos Públicos",
+      "informacoes": "Informações",
+      "municipal": "Portal Municipal"
+    }
+  },
+  "errors": {
+    "required": "Campo obrigatório.",
+    "invalidEmail": "Introduza um email válido.",
+    "passwordTooShort": "A palavra-passe é obrigatória.",
+    "networkError": "Erro de rede. Tente novamente.",
+    "serverError": "Erro interno. Contacte o suporte.",
+    "notFound": "Página não encontrada.",
+    "unauthorized": "Sem permissão para aceder a esta página."
+  }
+}

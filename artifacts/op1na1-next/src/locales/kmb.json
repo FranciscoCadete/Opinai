@@ -1,0 +1,19 @@
+{
+  "_meta": { "status": "em desenvolvimento", "coverage": "0%" },
+  "lang": {
+    "pt": "Português",
+    "kmb": "Kimbundu",
+    "umb": "Umbundu"
+  },
+  "common": {
+    "loading": "A carregar…",
+    "skipToMain": "Saltar para o conteúdo principal"
+  },
+  "auth": {
+    "title": "Dyota mu sistema",
+    "submitButton": "Dyota",
+    "submitting": "A dyota…",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Senha"
+  }
+}

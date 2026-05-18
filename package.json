@@ -6,11 +6,37 @@
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\" --ignore-path .gitignore",
+    "test:unit": "vitest run --workspace vitest.workspace.ts --project op1na1-next --project api-zod --coverage",
+    "test:unit:watch": "vitest --workspace vitest.workspace.ts --project op1na1-next --project api-zod",
+    "test:integration": "vitest run --workspace vitest.workspace.ts --project integration",
+    "test:integration:watch": "vitest --workspace vitest.workspace.ts --project integration",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test": "pnpm test:unit && pnpm test:integration"
   },
   "private": true,
+  "pnpm": {
+    "overrides": {
+      "react-icons": "file:C:/tmp/react-icons"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "typescript": "~5.9.2",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "vitest": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@playwright/test": "^1.50.1",
+    "eslint": "^9.30.0",
+    "typescript-eslint": "^8.35.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "@next/eslint-plugin-next": "^15.3.4"
   }
 }

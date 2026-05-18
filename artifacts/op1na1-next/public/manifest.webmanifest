@@ -1,0 +1,67 @@
+{
+  "name": "OP1NA1 — Opinar para Ajudar",
+  "short_name": "OP1NA1",
+  "description": "Plataforma omnicanal de gestão de pedidos cidadãos do Município dos Mulenvos",
+  "start_url": "/citizen-portal",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#00c49a",
+  "background_color": "#080c10",
+  "lang": "pt-AO",
+  "dir": "ltr",
+  "categories": ["government", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/portal-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Portal do Cidadão no telemóvel"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Novo pedido",
+      "short_name": "Novo",
+      "description": "Submeter um novo pedido ao município",
+      "url": "/citizen-portal?action=new",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Consultar pedido",
+      "short_name": "Consultar",
+      "description": "Verificar o estado de um pedido existente",
+      "url": "/citizen-portal?action=status",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

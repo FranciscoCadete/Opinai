@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sem ligação — OP1NA1</title>
+  <meta name="theme-color" content="#00c49a">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', Arial, sans-serif;
+      background: #080c10;
+      color: #e8edf4;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: #00c49a;
+      letter-spacing: -0.03em;
+      margin-bottom: 40px;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #e8edf4;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7d96;
+      max-width: 340px;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .hint {
+      margin-top: 32px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #3a4c5c;
+      letter-spacing: 0.06em;
+    }
+
+    button {
+      margin-top: 28px;
+      padding: 12px 28px;
+      background: #00c49a;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    button:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="logo">OP1NA1</div>
+
+  <svg class="icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <circle cx="32" cy="32" r="30" stroke="#6b7d96" stroke-width="2"/>
+    <path d="M20 44 C20 30, 44 30, 44 44" stroke="#6b7d96" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <line x1="16" y1="16" x2="48" y2="48" stroke="#f76f6f" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+
+  <h1>Sem ligação à internet</h1>
+  <p>Não foi possível carregar esta página. Verifique a sua ligação e tente novamente.</p>
+  <p>Os pedidos submetidos anteriormente foram guardados e serão enviados automaticamente quando a ligação for restaurada.</p>
+
+  <button onclick="location.reload()">Tentar novamente</button>
+
+  <p class="hint">OP1NA1 · Município dos Mulenvos · Angola</p>
+</body>
+</html>

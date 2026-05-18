@@ -260,7 +260,7 @@ export default function ChannelConfig() {
 
   // Saved toast
   const [saved,     setSaved]     = useState(false);
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Simulate random status fluctuation every 30s
   useEffect(() => {

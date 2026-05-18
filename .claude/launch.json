@@ -1,0 +1,44 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "OP1NA1 Architecture Portal",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "C:\\Users\\Francisco Cadete\\Downloads\\GovTech-Omni-Channel\\GovTech-Omni-Channel\\artifacts\\op1na1-architecture\\node_modules\\vite\\bin\\vite.js",
+        "--config",
+        "C:\\Users\\Francisco Cadete\\Downloads\\GovTech-Omni-Channel\\GovTech-Omni-Channel\\artifacts\\op1na1-architecture\\vite.config.ts",
+        "--host",
+        "0.0.0.0"
+      ],
+      "cwd": "C:\\Users\\Francisco Cadete\\Downloads\\GovTech-Omni-Channel\\GovTech-Omni-Channel\\artifacts\\op1na1-architecture",
+      "port": 8080,
+      "env": {
+        "PORT": "8080",
+        "BASE_PATH": "/"
+      }
+    },
+    {
+      "name": "Mockup Sandbox",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@workspace/mockup-sandbox", "run", "dev"],
+      "cwd": "C:\\Users\\Francisco Cadete\\Downloads\\GovTech-Omni-Channel\\GovTech-Omni-Channel",
+      "port": 8082,
+      "env": {
+        "PORT": "8082",
+        "BASE_PATH": "/"
+      }
+    },
+    {
+      "name": "API Server (Express)",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@workspace/api-server", "run", "dev"],
+      "cwd": "C:\\Users\\Francisco Cadete\\Downloads\\GovTech-Omni-Channel\\GovTech-Omni-Channel",
+      "port": 8083,
+      "env": {
+        "PORT": "8083",
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}

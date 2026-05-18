@@ -11,6 +11,8 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine,
 } from "recharts";
+import { listAdminAuditLog } from "@/lib/api";
+import { useTranslation } from "react-i18next";
 
 // ─── Types ────────────────────────────────────────────────────────
 type Severity = "INFO" | "WARN" | "CRITICAL";
@@ -18,7 +20,7 @@ type BackupStatus = "Concluído" | "Falhou" | "Em curso";
 type ServiceStatus = "online" | "offline" | "degradado";
 
 interface AuditEntry {
-  id: number; ts: string; actor: string; ip: string;
+  id: string | number; ts: string; actor: string; ip: string;
   action: string; resource: string; severity: Severity;
   before: string; after: string; expanded: boolean;
 }
@@ -226,7 +228,7 @@ const GDPR_STATUS_STYLE: Record<GdprRequest["status"], string> = {
 function gauge(pct: number, color: string) {
   return (
     <div className="relative w-20 h-20">
-      <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+      <svg aria-hidden="true" viewBox="0 0 36 36" className="w-full h-full -rotate-90">
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="currentColor" strokeWidth="3.2" className="text-secondary dark:text-zinc-700" />
         <circle cx="18" cy="18" r="15.9" fill="none" strokeWidth="3.2"
           stroke={color} strokeDasharray={`${pct} ${100 - pct}`} strokeLinecap="round" className="transition-all duration-700" />
@@ -254,15 +256,35 @@ function CodeBlock({ code, language = "bash" }: { code: string; language?: strin
 
 // ════════════════════════════════════════════════════════════════
 export default function AuditCenter() {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<"auditoria"|"saude"|"backups"|"rgpd">("auditoria");
 
-  // ── Audit log state ──────────────────────────────────────────────
-  const [auditLog, setAuditLog]     = useState<AuditEntry[]>(AUDIT_SEED);
+  const [auditLog, setAuditLog]     = useState<AuditEntry[]>([]);
   const [auditSearch, setAuditSearch]    = useState("");
   const [auditSev, setAuditSev]         = useState<Severity|"">("");
   const [auditAction, setAuditAction]   = useState("");
   const [auditPage, setAuditPage]       = useState(1);
   const AUDIT_PER_PAGE = 8;
+
+  useEffect(() => {
+    if (tab !== "auditoria") return;
+    listAdminAuditLog().then(res => {
+      if (!res.items) return;
+      const mapped = res.items.map((r): AuditEntry => ({
+        id: r.id,
+        ts: new Date(r.createdAt).toLocaleString("pt-AO", { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit", second:"2-digit" }).replace(",", ""),
+        actor: r.actorEmail || r.actorName || "system",
+        ip: r.ipAddress || "—",
+        action: r.action,
+        resource: `${r.entityType}:${r.entityId}`,
+        severity: "INFO",
+        before: "",
+        after: r.payload ? JSON.stringify(r.payload) : "",
+        expanded: false
+      }));
+      setAuditLog([...mapped, ...AUDIT_SEED]);
+    }).catch(console.error);
+  }, [tab]);
 
   // ── System health state ──────────────────────────────────────────
   const [cpu,      setCpu]      = useState(34);
@@ -387,12 +409,12 @@ export default function AuditCenter() {
   ] as const;
 
   return (
-    <div className="flex flex-col gap-4">
+    <main id="main-content" className="flex flex-col gap-4">
 
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <ShieldCheck size={20} className="text-primary" />
+          <ShieldCheck size={20} className="text-primary" aria-hidden="true" />
           <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Auditoria & Controlo de Integridade</h1>
           <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">ADMIN</span>
         </div>
@@ -402,15 +424,17 @@ export default function AuditCenter() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 flex-wrap bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit">
+      <div role="tablist" aria-label="Secções de auditoria" className="flex gap-1 flex-wrap bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit">
         {TABS.map(t => {
           const Icon = t.icon;
           return (
             <button key={t.id} onClick={() => setTab(t.id)}
+              role="tab"
+              aria-selected={tab === t.id}
               className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
                 tab === t.id ? "bg-card dark:bg-zinc-900 text-foreground shadow-sm border border-border dark:border-zinc-700"
                              : "text-muted-foreground hover:text-foreground")}>
-              <Icon size={13} /> <span className="hidden sm:inline">{t.label}</span>
+              <Icon size={13} aria-hidden="true" /> <span className="hidden sm:inline">{t.label}</span>
             </button>
           );
         })}
@@ -432,19 +456,22 @@ export default function AuditCenter() {
 
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2 bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl px-4 py-3">
-            <Filter size={13} className="text-muted-foreground" />
+            <Filter size={13} className="text-muted-foreground" aria-hidden="true" />
             <div className="relative flex-1 min-w-44">
-              <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <input value={auditSearch} onChange={e => { setAuditSearch(e.target.value); setAuditPage(1); }}
                 placeholder="Actor, acção, recurso, IP…"
+                aria-label="Pesquisar registos de auditoria"
                 className="w-full pl-7 pr-3 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
             </div>
             <select value={auditSev} onChange={e => { setAuditSev(e.target.value as Severity|""); setAuditPage(1); }}
+              aria-label="Filtrar por severidade"
               className="py-1.5 px-2 rounded-lg border border-border bg-background text-sm focus:outline-none cursor-pointer">
               <option value="">Todas severidades</option>
               {(["INFO","WARN","CRITICAL"] as Severity[]).map(s => <option key={s} value={s}>{s}</option>)}
             </select>
             <select value={auditAction} onChange={e => { setAuditAction(e.target.value); setAuditPage(1); }}
+              aria-label="Filtrar por acção"
               className="py-1.5 px-2 rounded-lg border border-border bg-background text-sm focus:outline-none cursor-pointer">
               <option value="">Todas acções</option>
               {uniqueActions.map(a => <option key={a} value={a}>{a}</option>)}
@@ -458,7 +485,7 @@ export default function AuditCenter() {
           {/* Table */}
           <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table aria-label="Log de auditoria" className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-secondary/50 dark:bg-zinc-800/60">
                     {["","Timestamp","Actor","IP","Acção","Recurso","Sev.",""].map((h, i) => (
@@ -469,7 +496,7 @@ export default function AuditCenter() {
                 <tbody className="divide-y divide-border dark:divide-zinc-800">
                   {pagedAudit.map(e => (
                     <Fragment key={e.id}>
-                      <tr className="hover:bg-secondary/20 transition-colors cursor-pointer" onClick={() => toggleExpand(e.id)}>
+                      <tr className="hover:bg-secondary/20 transition-colors cursor-pointer" onClick={() => toggleExpand(Number(e.id))}>
                         <td className="px-3 py-2.5 text-muted-foreground">
                           {e.expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                         </td>
@@ -486,7 +513,7 @@ export default function AuditCenter() {
                           </span>
                         </td>
                         <td className="px-3 py-2.5">
-                          <Lock size={11} className="text-zinc-400" title="Imutável" />
+                          <span aria-label="Imutável"><Lock size={11} className="text-zinc-400" aria-hidden="true" /></span>
                         </td>
                       </tr>
                       {e.expanded && (e.before || e.after) && (
@@ -899,6 +926,6 @@ export default function AuditCenter() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

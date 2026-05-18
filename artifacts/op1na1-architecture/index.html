@@ -1,24 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>OP1NA1 Architecture Portal</title>
-    <meta name="description" content="OP1NA1 Architecture Portal — built on Replit. Update this description to reflect the app." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OP1NA1 — Sistema Integrado · Mulenvos · Luanda</title>
+    <meta name="description" content="Plataforma omnicanal de participação cidadã e inteligência territorial para a Administração Municipal dos Mulenvos, Luanda, Angola." />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="OP1NA1 Architecture Portal" />
-    <meta property="og:description" content="OP1NA1 Architecture Portal — built on Replit. Update this description to reflect the app." />
+    <meta property="og:title" content="OP1NA1 — Sistema Integrado Municipal" />
+    <meta property="og:description" content="Plataforma omnicanal de participação cidadã para a Administração Municipal dos Mulenvos." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="OP1NA1 Architecture Portal" />
-    <meta name="twitter:description" content="OP1NA1 Architecture Portal — built on Replit. Update this description to reflect the app." />
+    <meta name="twitter:title" content="OP1NA1 — Sistema Integrado Municipal" />
+    <meta name="twitter:description" content="Plataforma omnicanal de participação cidadã para a Administração Municipal dos Mulenvos." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <style>
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        padding: 8px 16px;
+        background: #00c49a;
+        color: #05120e;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 9999;
+        border-radius: 0 0 6px 0;
+        text-decoration: none;
+        transition: top 0s;
+      }
+      .skip-link:focus {
+        top: 0;
+        outline: 3px solid #05120e;
+        outline-offset: 2px;
+      }
+      :focus-visible {
+        outline: 2px solid #00c49a;
+        outline-offset: 2px;
+      }
+    </style>
   </body>
 </html>

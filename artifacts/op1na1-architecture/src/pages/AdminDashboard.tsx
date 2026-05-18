@@ -1,4 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useLocation } from "wouter";
+import { useAuth } from "@/lib/auth";
+import {
+  listAdminRequests,
+  type AdminRequestRow,
+} from "@/lib/api";
+import { useRealtimeEvents } from "@/lib/useRealtimeEvents";
+import { useTranslation } from "react-i18next";
 
 // ─── Design tokens (scoped to this page) ────────────────────────
 const T = {
@@ -155,6 +163,7 @@ function CardBtn({ active, onClick, children }: { active?: boolean; onClick?: ()
   return (
     <button
       onClick={onClick}
+      aria-pressed={active ?? false}
       style={{
         fontFamily: T.mono, fontSize: 9, color: active ? T.accent : T.muted,
         border: `1px solid ${active ? "rgba(0,196,154,0.3)" : T.bdr}`,
@@ -168,11 +177,18 @@ function CardBtn({ active, onClick, children }: { active?: boolean; onClick?: ()
   );
 }
 
-function AnimatedBar({ estrato, val, maxVal, mounted }: { estrato: string; val: number; maxVal: number; mounted: boolean }) {
+function AnimatedBar({ estrato, val, maxVal, mounted, label }: { estrato: string; val: number; maxVal: number; mounted: boolean; label?: string }) {
   const pct = (val / maxVal) * 100;
   const color = ESTRATOS[estrato as keyof typeof ESTRATOS] || T.muted;
   return (
-    <div style={{ flex: 1, height: 6, background: T.srf2, borderRadius: 10, overflow: "hidden" }}>
+    <div
+      role="progressbar"
+      aria-valuenow={val}
+      aria-valuemin={0}
+      aria-valuemax={maxVal}
+      aria-label={label}
+      style={{ flex: 1, height: 6, background: T.srf2, borderRadius: 10, overflow: "hidden" }}
+    >
       <div style={{
         height: "100%", borderRadius: 10, background: color,
         width: mounted ? `${pct}%` : "0%",
@@ -183,15 +199,137 @@ function AnimatedBar({ estrato, val, maxVal, mounted }: { estrato: string; val: 
 }
 
 // ─── Main page ───────────────────────────────────────────────────
+type LiveTicket = {
+  id: string;
+  desc: string;
+  bairro: string;
+  cat: string;
+  catType: string;
+  canal: string;
+  prio: string;
+  prioColor: string;
+  status: string;
+  statusCls: string;
+  tecnico: string;
+  data: string;
+  actions: string[];
+};
+
+const PRIORITY_LABEL: Record<AdminRequestRow["priority"], { label: string; color: string }> = {
+  urgent: { label: "P5", color: T.danger },
+  high:   { label: "P4", color: T.warn },
+  normal: { label: "P3", color: T.accent2 },
+  low:    { label: "P2", color: T.muted },
+};
+
+const STATUS_LABEL: Record<
+  AdminRequestRow["status"],
+  { label: string; cls: string }
+> = {
+  received:    { label: "Recebido",     cls: "triagem" },
+  triaged:     { label: "Triagem",      cls: "triagem" },
+  assigned:    { label: "Atribuído",    cls: "progresso" },
+  in_progress: { label: "Em progresso", cls: "progresso" },
+  resolved:    { label: "Resolvido",    cls: "resolvido" },
+  rejected:    { label: "Rejeitado",    cls: "critico" },
+};
+
+const TYPE_TO_CAT: Record<string, { cat: string; catType: string }> = {
+  reclamacao:  { cat: "Reclamação",   catType: "infra" },
+  sugestao:    { cat: "Sugestão",     catType: "amb"   },
+  denuncia:    { cat: "Denúncia",     catType: "segur" },
+  solicitacao: { cat: "Solicitação",  catType: "infra" },
+  elogio:      { cat: "Elogio",       catType: "amb"   },
+  urgente:     { cat: "Urgente",      catType: "saude" },
+};
+
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+function timeAgo(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(ms / 60000);
+  if (min < 1) return "agora";
+  if (min < 60) return `há ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `há ${h}h`;
+  const d = Math.floor(h / 24);
+  return `há ${d}d`;
+}
+
+function mapToLiveTicket(r: AdminRequestRow): LiveTicket {
+  const prio = PRIORITY_LABEL[r.priority];
+  const status = STATUS_LABEL[r.status];
+  const cat = TYPE_TO_CAT[r.type] ?? { cat: r.category, catType: "infra" };
+  return {
+    id: r.ticketId,
+    desc: r.description.length > 70 ? r.description.slice(0, 67) + "…" : r.description,
+    bairro: r.bairroName ?? "—",
+    cat: cat.cat,
+    catType: cat.catType,
+    canal: r.channel,
+    prio: prio.label,
+    prioColor: prio.color,
+    status: status.label,
+    statusCls: status.cls,
+    tecnico: r.assignedToName ?? "— não atribuído",
+    data: formatDate(r.createdAt),
+    actions: r.status === "resolved" ? ["Ver"] : ["Atribuir", "Ver"],
+  };
+}
+
 export default function AdminDashboard() {
+  const { t } = useTranslation();
+  const [, navigate] = useLocation();
+  const auth = useAuth();
   const [crisisVisible, setCrisisVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [bairroMode, setBairroMode] = useState<"volume"|"resolucao"|"sla">("volume");
   const [ticketFilter, setTicketFilter] = useState<"todos"|"criticos"|"pendentes">("todos");
-  const [countdown, setCountdown] = useState(30);
-  const [feedCd, setFeedCd] = useState(30);
   const [lastUpdate, setLastUpdate] = useState(() => new Date());
   const [slaBarMounted, setSlaBarMounted] = useState(false);
+  const [liveTickets, setLiveTickets] = useState<LiveTicket[]>([]);
+  const [liveFeed, setLiveFeed] = useState<typeof FEED_ITEMS>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
+
+  const refreshTickets = useCallback(async () => {
+    try {
+      const [criticalRes, recentRes] = await Promise.all([
+        listAdminRequests({ priority: "urgent", pageSize: 8 }),
+        listAdminRequests({ pageSize: 12 }),
+      ]);
+      const tickets = recentRes.items.map(mapToLiveTicket);
+      setLiveTickets(tickets);
+      const feed = criticalRes.items.slice(0, 6).map((r) => {
+        const cat = TYPE_TO_CAT[r.type] ?? { cat: r.category, catType: "infra" };
+        return {
+          id: r.ticketId,
+          prio: r.priority === "urgent" ? 5 : r.priority === "high" ? 4 : 3,
+          desc: r.description.length > 80 ? r.description.slice(0, 77) + "…" : r.description,
+          cat: cat.cat,
+          catType: cat.catType,
+          bairro: r.bairroName ?? "—",
+          estrato: "B" as const,
+          canal: r.channel,
+          ago: timeAgo(r.createdAt),
+        };
+      });
+      setLiveFeed(feed);
+      setLoadError(null);
+      setUsingFallback(false);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Erro a carregar dados";
+      setLoadError(msg);
+      if (liveTickets.length === 0) {
+        setLiveTickets(TICKETS as LiveTicket[]);
+        setLiveFeed(FEED_ITEMS);
+        setUsingFallback(true);
+      }
+    }
+  }, [liveTickets.length]);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 120);
@@ -200,26 +338,49 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCountdown(c => {
-        if (c <= 1) { setLastUpdate(new Date()); return 30; }
-        return c - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    refreshTickets();
+  }, [refreshTickets]);
 
+  // SSE real-time updates — replaces 30s polling
+  const { status: sseStatus, lastEventAt } = useRealtimeEvents(
+    {
+      onNewRequest: (row) => {
+        // Prepend to live list and refresh full data
+        setLiveTickets(prev => [mapToLiveTicket(row), ...prev.slice(0, 19)]);
+        setLastUpdate(new Date());
+        refreshTickets();
+      },
+      onUpdatedRequest: (row) => {
+        // Patch existing ticket in place
+        setLiveTickets(prev =>
+          prev.map(t => t.id === row.ticketId ? mapToLiveTicket(row) : t),
+        );
+        setLastUpdate(new Date());
+      },
+    },
+    !!auth.user,
+  );
+
+  // Safety-net full refresh every 60s (handles missed events / stats drift)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setFeedCd(c => c <= 1 ? 30 : c - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    const id = setInterval(() => {
+      refreshTickets();
+      setLastUpdate(new Date());
+    }, 60_000);
+    return () => clearInterval(id);
+  }, [refreshTickets]);
+
+  async function handleLogout() {
+    await auth.logout();
+    navigate("/login");
+  }
 
   const bairroData = bairroMode === "volume" ? BAIRROS : bairroMode === "resolucao" ? BAIRRO_RES : BAIRRO_SLA;
   const bairroMax  = Math.max(...bairroData.map(b => b.val));
 
-  const filteredTickets = TICKETS.filter(t => {
+  const ticketsSource = liveTickets.length > 0 ? liveTickets : (TICKETS as LiveTicket[]);
+  const feedSource = liveFeed.length > 0 ? liveFeed : FEED_ITEMS;
+  const filteredTickets = ticketsSource.filter(t => {
     if (ticketFilter === "criticos")  return t.prio === "P5";
     if (ticketFilter === "pendentes") return t.status !== "Resolvido";
     return true;
@@ -232,7 +393,51 @@ export default function AdminDashboard() {
   });
 
   return (
-    <div style={{ fontFamily: T.sans, color: T.text, fontSize: 14, lineHeight: 1.5 }}>
+    <main id="main-content" style={{ fontFamily: T.sans, color: T.text, fontSize: 14, lineHeight: 1.5 }}>
+
+      {/* ── Session bar (logged-in user + logout) ───────────── */}
+      <header style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "10px 24px", borderBottom: `1px solid ${T.bdr}`,
+        background: T.surface, gap: 12, flexWrap: "wrap",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: T.mono, fontSize: 11, color: T.muted, letterSpacing: "0.04em" }}>
+          {auth.user ? (
+            <>
+              <span style={{ color: T.text, fontWeight: 500 }}>{auth.user.name}</span>
+              <span style={{ padding: "2px 8px", borderRadius: 10, background: "rgba(0,196,154,0.08)", color: T.accent, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                {auth.user.role}
+              </span>
+              <span style={{ color: T.muted2 }}>{auth.user.email}</span>
+            </>
+          ) : (
+            <span>sem sessão (modo demonstração)</span>
+          )}
+          {usingFallback && (
+            <span style={{ padding: "2px 8px", borderRadius: 10, background: "rgba(247,184,79,0.08)", color: T.warn, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              dados demo
+            </span>
+          )}
+          {loadError && !usingFallback && (
+            <span style={{ padding: "2px 8px", borderRadius: 10, background: "rgba(247,111,111,0.08)", color: T.danger, fontSize: 9, letterSpacing: "0.04em" }}>
+              {loadError}
+            </span>
+          )}
+        </div>
+        {auth.user && (
+          <button
+            onClick={handleLogout}
+            aria-label="Terminar sessão"
+            style={{
+              fontFamily: T.mono, fontSize: 10, color: T.muted, letterSpacing: "0.06em",
+              padding: "6px 14px", borderRadius: 6,
+              border: `1px solid ${T.bdr2}`, background: "transparent", cursor: "pointer",
+            }}
+          >
+            Terminar sessão
+          </button>
+        )}
+      </header>
 
       {/* ── Global style injection ──────────────────────────── */}
       <style>{`
@@ -271,14 +476,19 @@ export default function AdminDashboard() {
 
       {/* ── Crisis banner ──────────────────────────────────── */}
       {crisisVisible && (
-        <div style={{
-          display: "flex", alignItems: "center", gap: 12,
-          background: "rgba(247,111,111,0.08)", borderRadius: 10,
-          padding: "12px 16px", marginBottom: 24,
-          border: "1px solid rgba(247,111,111,0.25)",
-          animation: "db-pulse-border 2s ease-in-out infinite",
-          ...fadeStyle(0.05),
-        }}>
+        <div
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          style={{
+            display: "flex", alignItems: "center", gap: 12,
+            background: "rgba(247,111,111,0.08)", borderRadius: 10,
+            padding: "12px 16px", marginBottom: 24,
+            border: "1px solid rgba(247,111,111,0.25)",
+            animation: "db-pulse-border 2s ease-in-out infinite",
+            ...fadeStyle(0.05),
+          }}
+        >
           <div style={{
             width: 8, height: 8, borderRadius: "50%", background: T.danger, flexShrink: 0,
             animation: "db-pulse-dot 1.5s ease-in-out infinite",
@@ -290,6 +500,7 @@ export default function AdminDashboard() {
           <button
             className="db-dismiss"
             onClick={() => setCrisisVisible(false)}
+            aria-label="Dispensar alerta de crise"
             style={{
               fontFamily: T.mono, fontSize: 10, color: T.muted, cursor: "pointer",
               padding: "4px 8px", borderRadius: 4, border: `1px solid ${T.bdr}`,
@@ -365,7 +576,7 @@ export default function AdminDashboard() {
                 <div style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, width: 110, flexShrink: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                   {b.name}
                 </div>
-                <AnimatedBar estrato={b.estrato} val={b.val} maxVal={bairroMax} mounted={mounted} />
+                <AnimatedBar estrato={b.estrato} val={b.val} maxVal={bairroMax} mounted={mounted} label={b.name} />
                 <div style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, width: 28, textAlign: "right", flexShrink: 0 }}>
                   {b.val}{bairroMode === "sla" || bairroMode === "resolucao" ? "%" : ""}
                 </div>
@@ -379,11 +590,15 @@ export default function AdminDashboard() {
           <CardHeader title="Estado geral" dot={T.accent2} />
           <div style={{ padding: 20 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <div style={{
-                width: 110, height: 110, borderRadius: "50%",
-                background: `conic-gradient(${T.accent} 0deg 207deg, ${T.accent2} 207deg 261deg, ${T.warn} 261deg 316deg, ${T.danger} 316deg 360deg)`,
-                display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
-              }}>
+              <div
+                role="img"
+                aria-label="Gráfico circular: 57% resolvido, 12,4% em progresso, 18,8% em triagem, 11,5% críticas P5"
+                style={{
+                  width: 110, height: 110, borderRadius: "50%",
+                  background: `conic-gradient(${T.accent} 0deg 207deg, ${T.accent2} 207deg 261deg, ${T.warn} 261deg 316deg, ${T.danger} 316deg 360deg)`,
+                  display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
+                }}
+              >
                 <div style={{
                   position: "absolute", width: 68, height: 68, background: T.surface, borderRadius: "50%",
                 }} />
@@ -418,12 +633,16 @@ export default function AdminDashboard() {
         {/* Real-time feed */}
         <div style={card()}>
           <CardHeader title="Feed em tempo real" dot={T.warn}>
-            <span style={{ fontFamily: T.mono, fontSize: 9, color: T.muted2 }}>
-              Actualizar em {feedCd}s
+            <span
+              role="status"
+              aria-live="polite"
+              style={{ fontFamily: T.mono, fontSize: 9, color: sseStatus === "open" ? T.accent : T.muted2 }}
+            >
+              {sseStatus === "open" ? "● em directo" : sseStatus === "connecting" ? "○ a ligar…" : "○ desligado"}
             </span>
           </CardHeader>
           <div>
-            {FEED_ITEMS.map((f) => {
+            {feedSource.map((f) => {
               const dot = prioDot[f.prio];
               return (
                 <div
@@ -470,7 +689,14 @@ export default function AdminDashboard() {
               <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>
                 SLA global este mês
               </div>
-              <div style={{ height: 4, background: T.srf3, borderRadius: 10, marginBottom: 20, overflow: "hidden" }}>
+              <div
+                role="progressbar"
+                aria-valuenow={78}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="SLA global: 78%"
+                style={{ height: 4, background: T.srf3, borderRadius: 10, marginBottom: 20, overflow: "hidden" }}
+              >
                 <div style={{
                   height: "100%",
                   background: `linear-gradient(90deg, ${T.accent}, ${T.accent2})`,
@@ -557,7 +783,7 @@ export default function AdminDashboard() {
           <CardBtn>Exportar CSV</CardBtn>
         </CardHeader>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+          <table aria-label="Tickets recentes — todos os bairros" style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr>
                 {["ID","Descrição","Bairro","Categoria","Canal","Prio","Estado","Técnico","Criado","Acções"].map(h => (
@@ -624,10 +850,10 @@ export default function AdminDashboard() {
         }} />
         <span>
           Sistema operacional · Última actualização:{" "}
-          {lastUpdate.toLocaleString("pt-AO")} · Próxima em {countdown}s
+          {(lastEventAt ?? lastUpdate).toLocaleString("pt-AO")} · SSE {sseStatus === "open" ? "✓ em directo" : "a reconectar…"}
         </span>
         <span style={{ marginLeft: "auto" }}>n=390 · 10 bairros · 3 estratos · Mulenvos</span>
       </div>
-    </div>
+    </main>
   );
 }

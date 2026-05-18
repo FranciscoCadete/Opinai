@@ -5,7 +5,7 @@ import {
   Lock, ClipboardList, BellRing, Smartphone, Users, Cpu, Siren,
   BarChart3, Menu, X, Search, ChevronDown, Globe2, Server,
   FlaskConical, UserCog, SlidersHorizontal, ShieldCheck, MapPin,
-  ChevronRight, Sun, Moon,
+  ChevronRight, Sun, Moon, LogIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,12 +18,43 @@ const C = {
 } as const;
 
 // ─── Navigation structure ───────────────────────────────────────
-const NAV = [
+// Citizen-facing tabs (public)
+const NAV_CITIZEN = [
   {
-    label: "Home",
-    href:  "/overview",
+    label: "Início",
+    href:  "/citizen-portal",
     items: [] as { href: string; label: string; icon: React.ElementType }[],
   },
+  {
+    label: "Serviços",
+    items: [
+      { href: "/citizen-portal#submeter",    label: "Submeter Pedido",       icon: Smartphone },
+      { href: "/citizen-portal#consultar",   label: "Consultar Pedido",      icon: Search },
+      { href: "/citizen-portal#canais",      label: "Canais de Contacto",    icon: Globe2 },
+      { href: "/citizen-portal#canais",      label: "Mediadores no Terreno", icon: Users },
+      { href: "/citizen-portal#documentos",  label: "Documentos Públicos",   icon: ClipboardList },
+      { href: "/citizen-portal#municipal",   label: "Portal Municipal",      icon: MapPin },
+    ],
+  },
+  {
+    label: "Estatísticas",
+    href:  "/citizen-portal#estatisticas",
+    items: [] as { href: string; label: string; icon: React.ElementType }[],
+  },
+  {
+    label: "Informações",
+    href:  "/citizen-portal#informacoes",
+    items: [] as { href: string; label: string; icon: React.ElementType }[],
+  },
+  {
+    label: "Acesso Institucional",
+    href:  "/login",
+    items: [] as { href: string; label: string; icon: React.ElementType }[],
+  },
+];
+
+// Technical section (IT only) — all backend/architecture docs
+const NAV_TECH = [
   {
     label: "Plataforma",
     items: [
@@ -70,6 +101,12 @@ const NAV = [
       { href: "/admin-dashboard", label: "Dashboard Admin",    icon: BarChart3 },
     ],
   },
+];
+
+// Legacy NAV alias for search
+const NAV = [
+  { label: "Home", href: "/overview", items: [] as { href: string; label: string; icon: React.ElementType }[] },
+  ...NAV_TECH,
 ];
 
 const ALL_ITEMS = NAV.flatMap(s => s.items);
@@ -164,11 +201,17 @@ export default function Layout({ children }: { children: ReactNode }) {
   const menuRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isActive = (href: string) =>
-    href === "/overview" ? location === "/" || location === "/overview" : location === href;
+  const pathOf = (href: string) => href.split("#")[0];
+  const isActive = (href: string) => {
+    const path = pathOf(href);
+    if (path === "/overview") return location === "/overview";
+    if (path === "/citizen-portal") return location === "/" || location === "/citizen-portal";
+    return location === path;
+  };
 
   const currentSection = NAV.find(s => s.items.some(i => isActive(i.href)));
   const currentItem    = ALL_ITEMS.find(i => isActive(i.href));
+  const isCitizenPortal = location === "/citizen-portal";
 
   // ⌘K shortcut
   useEffect(() => {
@@ -198,7 +241,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
 
           {/* Logo */}
-          <Link href="/overview">
+          <Link href="/citizen-portal">
             <div className="flex items-center gap-3 cursor-pointer select-none">
               <LogoMark size={38} />
               <div className="flex items-baseline gap-[3px]">
@@ -255,26 +298,36 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-11 flex items-center gap-0.5">
 
-          {NAV.map((section) => {
-            const isOpen   = openMenu === section.label;
-            const hasItems = section.items.length > 0;
-            const isHome   = section.label === "Home";
-            const sectionActive = isHome
-              ? isActive("/overview")
+          {/* ── CITIZEN TABS ── */}
+          {NAV_CITIZEN.map((section) => {
+            const isOpen     = openMenu === section.label;
+            const hasItems   = section.items.length > 0;
+            const isSimple   = !hasItems && !!section.href;
+            const sectionActive = isSimple
+              ? isActive(section.href!)
               : section.items.some(i => isActive(i.href));
+            const isInstitutional = section.label === "Acesso Institucional";
 
             return (
               <div key={section.label} className="relative">
-                {isHome ? (
-                  <Link href="/overview">
+                {isSimple ? (
+                  <Link href={section.href!}>
                     <div
-                      className="flex items-center gap-1 px-3.5 h-11 text-[13px] font-semibold cursor-pointer transition-all select-none"
-                      style={{
+                      className="flex items-center gap-1.5 px-3.5 h-11 text-[13px] font-semibold cursor-pointer transition-all select-none"
+                      style={isInstitutional ? {
+                        color: C.black,
+                        background: "rgba(0,0,0,0.10)",
+                        borderLeft: `2px solid rgba(0,0,0,0.15)`,
+                        marginLeft: 4,
+                        fontSize: 12,
+                        letterSpacing: "0.01em",
+                      } : {
                         color: sectionActive ? C.white : C.black,
                         background: sectionActive ? C.red : undefined,
                       }}
                     >
-                      Home
+                      {isInstitutional && <LogIn size={12} />}
+                      {section.label}
                     </div>
                   </Link>
                 ) : (
@@ -288,10 +341,8 @@ export default function Layout({ children }: { children: ReactNode }) {
                     onMouseLeave={startClose}
                   >
                     {section.label}
-                    {hasItems && <ChevronDown size={11} className={cn("transition-transform mt-0.5", isOpen && "rotate-180")} />}
-
-                    {/* Dropdown */}
-                    {isOpen && hasItems && (
+                    <ChevronDown size={11} className={cn("transition-transform mt-0.5", isOpen && "rotate-180")} />
+                    {isOpen && (
                       <div
                         className="absolute top-full left-0 min-w-[210px] bg-white dark:bg-zinc-900 shadow-xl rounded-b-xl border border-zinc-100 dark:border-zinc-800 overflow-hidden z-50"
                         onMouseEnter={cancelClose}
@@ -301,7 +352,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                           const Icon = item.icon;
                           const active = isActive(item.href);
                           return (
-                            <Link key={item.href} href={item.href}>
+                            <Link key={item.label} href={item.href}>
                               <div
                                 className="flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors"
                                 style={{
@@ -310,16 +361,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                                 }}
                                 onClick={() => setOpenMenu(null)}
                               >
-                                <div
-                                  className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                                  style={{ background: active ? `${C.yellow}25` : "#f4f4f5" }}
-                                >
+                                <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                                  style={{ background: active ? `${C.yellow}25` : "#f4f4f5" }}>
                                   <Icon size={13} style={{ color: active ? C.red : "#71717a" }} />
                                 </div>
-                                <span
-                                  className="text-[12.5px] font-medium"
-                                  style={{ color: active ? C.black : "#3f3f46" }}
-                                >
+                                <span className="text-[12.5px] font-medium" style={{ color: active ? C.black : "#3f3f46" }}>
                                   {item.label}
                                 </span>
                               </div>
@@ -334,15 +380,83 @@ export default function Layout({ children }: { children: ReactNode }) {
             );
           })}
 
+          {/* ── DIVIDER ── */}
+          <div className="w-px h-5 bg-black/20 mx-1" />
+
+          {/* ── ÁREA TÉCNICA (IT only) ── */}
+          <div className="relative">
+            <div
+              className="relative flex items-center gap-1.5 px-3.5 h-11 text-[12px] font-semibold cursor-pointer transition-all select-none"
+              style={{
+                color: openMenu === "__tech__" ? C.white : "rgba(0,0,0,0.55)",
+                background: openMenu === "__tech__" ? "rgba(0,0,0,0.18)" : undefined,
+              }}
+              onMouseEnter={() => { cancelClose(); setOpenMenu("__tech__"); }}
+              onMouseLeave={startClose}
+            >
+              <Lock size={10} />
+              Área Técnica
+              <ChevronDown size={11} className={cn("transition-transform mt-0.5", openMenu === "__tech__" && "rotate-180")} />
+
+              {openMenu === "__tech__" && (
+                <div
+                  className="absolute top-full right-0 w-[620px] bg-white dark:bg-zinc-900 shadow-2xl rounded-b-xl border border-zinc-100 dark:border-zinc-800 overflow-hidden z-50"
+                  onMouseEnter={cancelClose}
+                  onMouseLeave={startClose}
+                  style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0 }}
+                >
+                  {/* Header */}
+                  <div className="col-span-3 px-5 py-3 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-2"
+                    style={{ background: "#fafafa" }}>
+                    <Lock size={11} className="text-zinc-400" />
+                    <span className="text-[11px] font-semibold text-zinc-500 tracking-wide uppercase" style={{ fontFamily: "'DM Mono',monospace" }}>
+                      Documentação técnica — acesso restrito a TI
+                    </span>
+                    <div className="flex-1" />
+                    <Link href="/login">
+                      <span className="text-[10px] font-medium px-2.5 py-1 rounded-full cursor-pointer transition-colors"
+                        style={{ background: C.red, color: "#fff" }}
+                        onClick={() => setOpenMenu(null)}>
+                        Entrar
+                      </span>
+                    </Link>
+                  </div>
+                  {NAV_TECH.map((section) => (
+                    <div key={section.label} className="py-2">
+                      <div className="px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-400"
+                        style={{ fontFamily: "'DM Mono',monospace" }}>
+                        {section.label}
+                      </div>
+                      {section.items.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.href);
+                        return (
+                          <Link key={item.href} href={item.href}>
+                            <div className="flex items-center gap-2.5 px-4 py-2 cursor-pointer transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                              style={{ borderLeft: active ? `3px solid ${C.yellow}` : "3px solid transparent" }}
+                              onClick={() => setOpenMenu(null)}>
+                              <Icon size={12} style={{ color: active ? C.red : "#a1a1aa", flexShrink: 0 }} />
+                              <span className="text-[12px]" style={{ color: active ? C.black : "#52525b" }}>{item.label}</span>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="flex-1" />
 
-          {/* Contato button — vermelho */}
+          {/* Submeter Pedido button */}
           <Link href="/citizen-portal">
             <div
               className="px-5 h-7 flex items-center text-[12.5px] font-bold text-white rounded-full cursor-pointer transition-all hover:opacity-90 select-none shadow-sm"
               style={{ background: C.red, letterSpacing: "0.01em" }}
             >
-              Contato
+              Submeter Pedido
             </div>
           </Link>
         </div>
@@ -353,46 +467,66 @@ export default function Layout({ children }: { children: ReactNode }) {
       ══════════════════════════════════════════════════ */}
       {mobileOpen && (
         <div className="md:hidden bg-white dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800 shadow-lg overflow-y-auto max-h-[70vh]">
-          {NAV.map((section) => (
-            <div key={section.label}>
-              {section.label === "Home" ? (
-                <Link href="/overview">
-                  <div className="px-5 py-3 text-sm font-semibold border-b border-zinc-50 dark:border-zinc-800 text-zinc-800 dark:text-zinc-100"
+          {/* Citizen section */}
+          <div className="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 pt-4"
+            style={{ fontFamily: "'DM Mono',monospace" }}>
+            Para o Cidadão
+          </div>
+          {NAV_CITIZEN.map((section) => {
+            if (!section.items?.length && section.href) {
+              return (
+                <Link key={section.label} href={section.href}>
+                  <div className="flex items-center gap-3 px-5 py-2.5 text-sm cursor-pointer"
+                    style={{ color: isActive(section.href) ? C.red : "#52525b", fontWeight: isActive(section.href) ? 600 : 400 }}
                     onClick={() => setMobileOpen(false)}>
-                    Home
-                  </div>
-                </Link>
-              ) : (
-                <>
-                  <div className="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 pt-4"
-                    style={{ fontFamily: "'DM Mono',monospace" }}>
                     {section.label}
                   </div>
-                  {section.items.map((item) => {
-                    const Icon = item.icon;
-                    const active = isActive(item.href);
-                    return (
-                      <Link key={item.href} href={item.href}>
-                        <div
-                          className="flex items-center gap-3 px-5 py-2.5 text-sm cursor-pointer"
-                          style={{ color: active ? C.red : "#52525b", fontWeight: active ? 600 : 400 }}
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          <Icon size={14} style={{ color: active ? C.red : "#a1a1aa" }} />
-                          {item.label}
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </>
-              )}
-            </div>
-          ))}
+                </Link>
+              );
+            }
+            return section.items.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.href);
+              return (
+                <Link key={item.label} href={item.href}>
+                  <div className="flex items-center gap-3 px-5 py-2.5 text-sm cursor-pointer"
+                    style={{ color: active ? C.red : "#52525b", fontWeight: active ? 600 : 400 }}
+                    onClick={() => setMobileOpen(false)}>
+                    <Icon size={14} style={{ color: active ? C.red : "#a1a1aa" }} />
+                    {item.label}
+                  </div>
+                </Link>
+              );
+            });
+          })}
+
+          {/* Technical section */}
+          <div className="px-5 py-2 mt-2 border-t border-zinc-100 dark:border-zinc-800 text-[10px] font-bold uppercase tracking-widest text-zinc-400 pt-4 flex items-center gap-2"
+            style={{ fontFamily: "'DM Mono',monospace" }}>
+            <Lock size={9} className="text-zinc-400" /> Área Técnica
+          </div>
+          {NAV_TECH.flatMap((section) =>
+            section.items.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.href);
+              return (
+                <Link key={item.href} href={item.href}>
+                  <div className="flex items-center gap-3 px-5 py-2 text-sm cursor-pointer"
+                    style={{ color: active ? C.red : "#71717a", fontWeight: active ? 600 : 400 }}
+                    onClick={() => setMobileOpen(false)}>
+                    <Icon size={13} style={{ color: active ? C.red : "#a1a1aa" }} />
+                    {item.label}
+                  </div>
+                </Link>
+              );
+            })
+          )}
+
           <div className="p-4">
             <Link href="/citizen-portal">
               <div className="w-full text-center py-2.5 text-sm font-bold text-white rounded-full"
                 style={{ background: C.red }} onClick={() => setMobileOpen(false)}>
-                Contato
+                Submeter Pedido
               </div>
             </Link>
           </div>
@@ -404,22 +538,31 @@ export default function Layout({ children }: { children: ReactNode }) {
       ══════════════════════════════════════════════════ */}
       <div className="bg-white dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800/60">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-9 flex items-center gap-1.5">
-          <Link href="/overview">
+          <Link href="/citizen-portal">
             <span className="text-[12px] cursor-pointer transition-colors hover:opacity-70"
               style={{ color: C.red }}>
               Início
             </span>
           </Link>
-          {currentSection && (
+          {isCitizenPortal ? (
             <>
               <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
-              <span className="text-[12px] text-zinc-400 dark:text-zinc-500">{currentSection.label}</span>
+              <span className="text-[12px] text-zinc-600 dark:text-zinc-300 font-medium">Portal do Cidadão</span>
             </>
-          )}
-          {currentItem && currentItem.label !== "Overview" && (
+          ) : (
             <>
-              <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
-              <span className="text-[12px] text-zinc-600 dark:text-zinc-300 font-medium">{currentItem.label}</span>
+              {currentSection && (
+                <>
+                  <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
+                  <span className="text-[12px] text-zinc-400 dark:text-zinc-500">{currentSection.label}</span>
+                </>
+              )}
+              {currentItem && currentItem.label !== "Overview" && (
+                <>
+                  <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
+                  <span className="text-[12px] text-zinc-600 dark:text-zinc-300 font-medium">{currentItem.label}</span>
+                </>
+              )}
             </>
           )}
         </div>

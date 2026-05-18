@@ -2,6 +2,7 @@ import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, RequireAuth } from "@/lib/auth";
 import NotFound from "@/pages/not-found";
 import Layout from "@/components/layout";
 import Overview from "@/pages/Overview";
@@ -33,7 +34,7 @@ function PortalRoutes() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={Overview} />
+        <Route path="/">{() => <Redirect to="/citizen-portal" />}</Route>
         <Route path="/overview" component={Overview} />
         <Route path="/c4-architecture" component={C4Architecture} />
         <Route path="/erd-schema" component={ERDSchema} />
@@ -48,12 +49,36 @@ function PortalRoutes() {
         <Route path="/crisis-detection" component={CrisisDetection} />
         <Route path="/mobile-submit" component={MobileSubmitForm} />
         <Route path="/municipality-config" component={MunicipalityConfig} />
-        <Route path="/admin-dashboard"  component={AdminDashboard} />
+        <Route path="/admin-dashboard">
+          {() => (
+            <RequireAuth minRole="technician">
+              <AdminDashboard />
+            </RequireAuth>
+          )}
+        </Route>
         <Route path="/deployment-guide" component={DeploymentGuide} />
         <Route path="/testing-strategy" component={TestingStrategy} />
-        <Route path="/user-management"  component={UserManagement} />
-        <Route path="/channel-config"   component={ChannelConfig} />
-        <Route path="/audit-center"     component={AuditCenter} />
+        <Route path="/user-management">
+          {() => (
+            <RequireAuth minRole="manager">
+              <UserManagement />
+            </RequireAuth>
+          )}
+        </Route>
+        <Route path="/channel-config">
+          {() => (
+            <RequireAuth minRole="manager">
+              <ChannelConfig />
+            </RequireAuth>
+          )}
+        </Route>
+        <Route path="/audit-center">
+          {() => (
+            <RequireAuth minRole="manager">
+              <AuditCenter />
+            </RequireAuth>
+          )}
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </Layout>
@@ -73,12 +98,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

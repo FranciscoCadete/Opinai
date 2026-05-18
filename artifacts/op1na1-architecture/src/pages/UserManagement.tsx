@@ -1,10 +1,19 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   Search, Plus, Filter, UserCog, ChevronLeft, ChevronRight,
   Edit2, Ban, CheckCircle, Trash2, Download, ClipboardList,
   X, ChevronDown, Shield, Eye, EyeOff,
 } from "lucide-react";
+import { listAdminUsers, createAdminUser, updateAdminUser, deleteAdminUser, type UserRole } from "@/lib/api";
+import { useTranslation } from "react-i18next";
+
+const PROFILE_TO_ROLE: Record<Profile, UserRole> = {
+  Admin: "admin", Gestor: "manager", Analista: "technician", Técnico: "technician", Cidadão: "citizen"
+};
+const ROLE_TO_PROFILE: Record<string, Profile> = {
+  admin: "Admin", manager: "Gestor", technician: "Técnico", citizen: "Cidadão"
+};
 
 // ─── Domain constants ────────────────────────────────────────────
 const PROFILES = ["Admin", "Gestor", "Analista", "Técnico", "Cidadão"] as const;
@@ -19,7 +28,7 @@ type Status  = typeof STATUSES[number];
 type Bairro  = typeof BAIRROS[number];
 
 interface User {
-  id: number;
+  id: string | number;
   name: string;
   email: string;
   phone: string;
@@ -32,7 +41,7 @@ interface User {
 }
 
 interface AuditEntry {
-  id: number;
+  id: string | number;
   ts: string;
   actor: string;
   action: string;
@@ -120,9 +129,10 @@ let nextAuditId = SEED_AUDIT.length + 1;
 
 // ════════════════════════════════════════════════════════════════
 export default function UserManagement() {
-  const [users,    setUsers]    = useState<User[]>(SEED_USERS);
+  const { t } = useTranslation();
+  const [users,    setUsers]    = useState<User[]>([]);
   const [audit,    setAudit]    = useState<AuditEntry[]>(SEED_AUDIT);
-  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [selected, setSelected] = useState<Set<string | number>>(new Set());
 
   // Filters
   const [search,       setSearch]       = useState("");
@@ -136,7 +146,7 @@ export default function UserManagement() {
 
   // Form modal
   const [showForm,  setShowForm]  = useState(false);
-  const [editId,    setEditId]    = useState<number | null>(null);
+  const [editId,    setEditId]    = useState<string | number | null>(null);
   const [form,      setForm]      = useState(emptyForm());
   const [formError, setFormError] = useState("");
   const [showPass,  setShowPass]  = useState(false);
@@ -149,7 +159,26 @@ export default function UserManagement() {
   const [showBulkMenu,  setShowBulkMenu]  = useState(false);
 
   // Confirm delete
-  const [deleteTarget, setDeleteTarget]  = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget]  = useState<string | number | null>(null);
+
+  useEffect(() => {
+    listAdminUsers().then(res => {
+      if (!res.items) return;
+      const mapped = res.items.map(r => ({
+        id: r.id,
+        name: r.name,
+        email: r.email,
+        phone: "—",
+        nif: "—",
+        profile: ROLE_TO_PROFILE[r.role] || "Cidadão",
+        neighborhoods: [] as Bairro[],
+        status: "Activo" as Status,
+        createdAt: new Date(r.createdAt).toLocaleDateString("pt-AO"),
+        lastActivity: "—"
+      }));
+      setUsers([...mapped, ...SEED_USERS]);
+    }).catch(console.error);
+  }, []);
 
   // ── Derived ──────────────────────────────────────────────────────
   const filtered = useMemo(() => {
@@ -217,29 +246,40 @@ export default function UserManagement() {
     return "";
   }
 
-  function saveForm() {
+  async function saveForm() {
     const err = validateForm();
     if (err) { setFormError(err); return; }
 
-    if (editId === null) {
-      const newUser: User = {
-        ...form,
-        id: nextId++,
-        createdAt: new Date().toLocaleDateString("pt-AO"),
-        lastActivity: "—",
-      };
-      setUsers(prev => [newUser, ...prev]);
-      addAudit("Criou utilizador", form.name, `Perfil: ${form.profile}, ${form.neighborhoods.length} bairro(s) atribuído(s)`, "create");
-    } else {
-      const prev = users.find(u => u.id === editId)!;
-      setUsers(prev2 => prev2.map(u => u.id === editId ? { ...u, ...form } : u));
-      const changes: string[] = [];
-      if (prev.profile !== form.profile) changes.push(`Perfil: ${prev.profile} → ${form.profile}`);
-      if (prev.status  !== form.status)  changes.push(`Status: ${prev.status} → ${form.status}`);
-      if (JSON.stringify([...prev.neighborhoods].sort()) !== JSON.stringify([...form.neighborhoods].sort())) changes.push("Bairros actualizados");
-      addAudit("Editou utilizador", form.name, changes.length ? changes.join("; ") : "Dados actualizados", "edit");
+    const role = PROFILE_TO_ROLE[form.profile] || "citizen";
+
+    try {
+      if (editId === null) {
+        const created = await createAdminUser({
+          email: form.email,
+          name: form.name,
+          password: "Password123!", // mock password for now
+          role,
+        });
+        const newUser: User = {
+          ...form,
+          id: created.id,
+          createdAt: new Date(created.createdAt).toLocaleDateString("pt-AO"),
+          lastActivity: "—",
+        };
+        setUsers(prev => [newUser, ...prev]);
+        addAudit("Criou utilizador", form.name, `Perfil: ${form.profile}`, "create");
+      } else {
+        await updateAdminUser(String(editId), {
+          name: form.name,
+          role,
+        });
+        setUsers(prev2 => prev2.map(u => u.id === editId ? { ...u, ...form } : u));
+        addAudit("Editou utilizador", form.name, "Dados actualizados", "edit");
+      }
+      setShowForm(false);
+    } catch (e) {
+      setFormError(e instanceof Error ? e.message : String(e));
     }
-    setShowForm(false);
   }
 
   function toggleStatus(u: User) {
@@ -249,20 +289,27 @@ export default function UserManagement() {
     addAudit(next === "Suspenso" ? "Suspendeu utilizador" : "Activou utilizador", u.name, `Status: ${u.status} → ${next}`, type);
   }
 
-  function confirmDelete(id: number) { setDeleteTarget(id); }
-  function executeDelete() {
+  function confirmDelete(id: string | number) { setDeleteTarget(id); }
+  async function executeDelete() {
     if (deleteTarget === null) return;
-    const u = users.find(x => x.id === deleteTarget);
-    if (u) addAudit("Removeu utilizador", u.name, "Eliminação permanente", "delete");
-    setUsers(prev => prev.filter(x => x.id !== deleteTarget));
-    setSelected(prev => { const s = new Set(prev); s.delete(deleteTarget); return s; });
-    setDeleteTarget(null);
+    try {
+      if (typeof deleteTarget === "string") {
+        await deleteAdminUser(deleteTarget);
+      }
+      const u = users.find(x => x.id === deleteTarget);
+      if (u) addAudit("Removeu utilizador", u.name, "Eliminação permanente", "delete");
+      setUsers(prev => prev.filter(x => x.id !== deleteTarget));
+      setSelected(prev => { const s = new Set(prev); s.delete(deleteTarget as any); return s; });
+      setDeleteTarget(null);
+    } catch (e) {
+      alert("Error deleting user: " + e);
+    }
   }
 
-  function toggleSelect(id: number) {
+  function toggleSelect(id: string | number) {
     setSelected(prev => {
       const s = new Set(prev);
-      s.has(id) ? s.delete(id) : s.add(id);
+      s.has(id as any) ? s.delete(id as any) : s.add(id as any);
       return s;
     });
   }
@@ -327,13 +374,13 @@ export default function UserManagement() {
 
   // ── Render ────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col gap-4 min-h-0">
+    <main id="main-content" className="flex flex-col gap-4 min-h-0">
 
       {/* ── Header ────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <UserCog size={20} className="text-primary" />
+            <UserCog aria-hidden="true" size={15} className="text-primary" />
             <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
               Gestão de Utilizadores
             </h1>
@@ -346,18 +393,18 @@ export default function UserManagement() {
         <div className="flex items-center gap-2">
           <button onClick={() => setShowAudit(true)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors">
-            <ClipboardList size={15} /> Log de Auditoria
+            <ClipboardList aria-hidden="true" size={15} /> Log de Auditoria
             <span className="ml-1 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
               {audit.length}
             </span>
           </button>
           <button onClick={exportCSV}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors">
-            <Download size={15} /> Exportar CSV
+            <Download aria-hidden="true" size={15} /> Exportar CSV
           </button>
           <button onClick={openCreate}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm">
-            <Plus size={15} /> Novo Utilizador
+            <Plus aria-hidden="true" size={15} /> Novo Utilizador
           </button>
         </div>
       </div>
@@ -379,12 +426,13 @@ export default function UserManagement() {
 
       {/* ── Filter bar ───────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2 bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl px-4 py-3">
-        <Filter size={14} className="text-muted-foreground shrink-0" />
+        <Filter aria-hidden="true" size={15} className="text-muted-foreground shrink-0" />
         <div className="relative flex-1 min-w-44">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search aria-hidden="true" size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={search} onChange={e => { setSearch(e.target.value); setPage(1); }}
             placeholder="Pesquisar nome, email ou NIF…"
+            aria-label="Pesquisar utilizadores por nome, email ou NIF"
             className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
@@ -394,6 +442,7 @@ export default function UserManagement() {
           { label: "Bairro",  value: filterBairro,  set: setFilterBairro,  opts: BAIRROS  },
         ] as const).map(f => (
           <select key={f.label} value={f.value}
+            aria-label={`Filtrar por ${f.label}`}
             onChange={e => { (f.set as (v: string) => void)(e.target.value); setPage(1); }}
             className="py-1.5 px-2 rounded-lg border border-border bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer">
             <option value="">Todos {f.label}s</option>
@@ -416,16 +465,16 @@ export default function UserManagement() {
           <div className="h-4 w-px bg-border mx-1" />
           <button onClick={bulkSuspend}
             className="flex items-center gap-1 text-xs font-medium text-red-600 dark:text-red-400 hover:underline">
-            <Ban size={12} /> Suspender
+            <Ban aria-hidden="true" size={15} /> Suspender
           </button>
           <button onClick={bulkActivate}
             className="flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400 hover:underline">
-            <CheckCircle size={12} /> Activar
+            <CheckCircle aria-hidden="true" size={15} /> Activar
           </button>
           <div className="relative">
             <button onClick={() => setShowBulkMenu(v => !v)}
               className="flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">
-              <Shield size={12} /> Mudar Perfil <ChevronDown size={11} />
+              <Shield aria-hidden="true" size={15} /> Mudar Perfil <ChevronDown aria-hidden="true" size={15} />
             </button>
             {showBulkMenu && (
               <div className="absolute top-6 left-0 z-50 bg-card dark:bg-zinc-800 border border-border rounded-xl shadow-xl py-1 min-w-32">
@@ -447,19 +496,20 @@ export default function UserManagement() {
       {/* ── Table ────────────────────────────────────────────────── */}
       <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table aria-label="Lista de utilizadores" className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-secondary/50 dark:bg-zinc-800/60">
                 <th className="px-3 py-3 w-10">
                   <input type="checkbox" checked={allOnPageSelected} onChange={toggleAll}
+                    aria-label="Seleccionar todos os utilizadores nesta página"
                     className="rounded border-border cursor-pointer accent-primary" />
                 </th>
                 <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Utilizador</th>
-                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Perfil</th>
+                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">{t("users.columns.role")}</th>
                 <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Bairros</th>
                 <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Status</th>
-                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Registo</th>
-                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">Última Actividade</th>
+                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">{t("users.columns.createdAt")}</th>
+                <th className="px-3 py-3 text-left font-semibold text-muted-foreground text-xs uppercase tracking-wider">{t("users.columns.actions")}</th>
                 <th className="px-3 py-3 text-center font-semibold text-muted-foreground text-xs uppercase tracking-wider">Acções</th>
               </tr>
             </thead>
@@ -478,6 +528,7 @@ export default function UserManagement() {
                 )}>
                   <td className="px-3 py-3 w-10">
                     <input type="checkbox" checked={selected.has(u.id)} onChange={() => toggleSelect(u.id)}
+                      aria-label={`Seleccionar utilizador ${u.name}`}
                       className="rounded border-border cursor-pointer accent-primary" />
                   </td>
 
@@ -539,22 +590,22 @@ export default function UserManagement() {
                   {/* Actions */}
                   <td className="px-3 py-3">
                     <div className="flex items-center justify-center gap-1">
-                      <button onClick={() => openEdit(u)} title="Editar"
+                      <button aria-label={t("common.edit")} onClick={() => openEdit(u)} title="Editar"
                         className="p-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 transition-colors">
-                        <Edit2 size={13} />
+                        <Edit2 aria-hidden="true" size={15} />
                       </button>
-                      <button onClick={() => toggleStatus(u)}
+                      <button aria-label={u.status === "Activo" ? "Suspender" : "Activar"} onClick={() => toggleStatus(u)}
                         title={u.status === "Activo" ? "Suspender" : "Activar"}
                         className={cn("p-1.5 rounded-lg transition-colors",
                           u.status === "Activo"
                             ? "hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400"
                             : "hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600 dark:text-green-400"
                         )}>
-                        {u.status === "Activo" ? <Ban size={13} /> : <CheckCircle size={13} />}
+                        {u.status === "Activo" ? <Ban aria-hidden="true" size={15} /> : <CheckCircle aria-hidden="true" size={15} />}
                       </button>
-                      <button onClick={() => confirmDelete(u.id)} title="Eliminar"
+                      <button aria-label={t("common.delete")} onClick={() => confirmDelete(u.id)} title="Eliminar"
                         className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors">
-                        <Trash2 size={13} />
+                        <Trash2 aria-hidden="true" size={15} />
                       </button>
                     </div>
                   </td>
@@ -571,8 +622,9 @@ export default function UserManagement() {
           </p>
           <div className="flex items-center gap-1">
             <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+              aria-label="Página anterior"
               className="p-1.5 rounded-lg border border-border hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
-              <ChevronLeft size={14} />
+              <ChevronLeft aria-hidden="true" size={15} />
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
               <button key={p} onClick={() => setPage(p)}
@@ -583,8 +635,9 @@ export default function UserManagement() {
               </button>
             ))}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+              aria-label="Próxima página"
               className="p-1.5 rounded-lg border border-border hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
-              <ChevronRight size={14} />
+              <ChevronRight aria-hidden="true" size={15} />
             </button>
           </div>
         </div>
@@ -596,12 +649,17 @@ export default function UserManagement() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowForm(false)} />
-          <div className="relative bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            className="relative bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto"
+          >
 
             {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-border dark:border-zinc-700 sticky top-0 bg-card dark:bg-zinc-900 z-10">
               <div>
-                <h2 className="text-lg font-bold text-foreground">
+                <h2 id="modal-title" className="text-lg font-bold text-foreground">
                   {editId === null ? "Criar Utilizador" : "Editar Utilizador"}
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
@@ -609,15 +667,16 @@ export default function UserManagement() {
                 </p>
               </div>
               <button onClick={() => setShowForm(false)}
+                aria-label="Fechar diálogo"
                 className="p-2 rounded-lg hover:bg-secondary transition-colors">
-                <X size={16} />
+                <X aria-hidden="true" size={15} />
               </button>
             </div>
 
             {/* Form body */}
             <div className="px-6 py-5 space-y-4">
               {formError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-lg px-3 py-2">
+                <div role="alert" aria-live="assertive" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-lg px-3 py-2">
                   {formError}
                 </div>
               )}
@@ -756,20 +815,20 @@ export default function UserManagement() {
             {/* Drawer header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border dark:border-zinc-700">
               <div className="flex items-center gap-2">
-                <ClipboardList size={16} className="text-primary" />
+                <ClipboardList aria-hidden="true" size={15} className="text-primary" />
                 <h3 className="font-bold text-foreground">Log de Auditoria</h3>
                 <span className="text-xs bg-secondary text-muted-foreground px-2 py-0.5 rounded-full font-medium">{audit.length} entradas</span>
               </div>
               <button onClick={() => setShowAudit(false)}
                 className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
-                <X size={15} />
+                <X aria-hidden="true" size={15} />
               </button>
             </div>
 
             {/* Search */}
             <div className="px-5 py-3 border-b border-border dark:border-zinc-700">
               <div className="relative">
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Search aria-hidden="true" size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input value={auditSearch} onChange={e => setAuditSearch(e.target.value)}
                   placeholder="Pesquisar acção, utilizador…"
                   className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
@@ -813,6 +872,6 @@ export default function UserManagement() {
         </div>
       )}
 
-    </div>
+    </main>
   );
 }
