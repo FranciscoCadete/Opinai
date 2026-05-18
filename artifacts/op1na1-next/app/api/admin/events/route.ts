@@ -5,8 +5,8 @@ import { getSessionUser } from "@/lib/server/auth";
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 const ROLE_RANK: Record<string, number> = { citizen: 0, technician: 1, manager: 2, admin: 3 };
 
-// Edge runtime for SSE — zero cold start, streaming response support
-export const runtime = "edge";
+// Node.js runtime required — pg (postgres) uses fs/path/stream which Edge doesn't support
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   if (!DEMO_MODE) {

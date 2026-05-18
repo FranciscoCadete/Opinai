@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CitizenPortalClient } from "./CitizenPortalClient";
+import CitizenPortalClient from "./CitizenPortalClient";
 
 export const metadata: Metadata = {
   title: "Portal do Cidadão — OP1NA1",
