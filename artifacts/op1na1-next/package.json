@@ -33,7 +33,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "tailwindcss": "catalog:",
-    "@tailwindcss/vite": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
     "typescript": "^5.8.3",
     "fake-indexeddb": "catalog:"
   }
