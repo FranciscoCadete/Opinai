@@ -20,9 +20,6 @@
   },
   "private": true,
   "pnpm": {
-    "overrides": {
-      "react-icons": "file:C:/tmp/react-icons"
-    },
     "onlyBuiltDependencies": [
       "esbuild"
     ]
