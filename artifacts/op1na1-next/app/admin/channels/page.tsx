@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ChannelsClient } from "./ChannelsClient";
+import { ChannelsClient } from "../ChannelsClient";
 
 export const metadata: Metadata = { title: "Canais" };
 
