@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   // Production: import db and bcrypt
   try {
     const { db } = await import("@workspace/db");
-    const { users } = await import("@workspace/db/schema");
+    const { usersTable: users } = await import("@workspace/db/schema");
     const bcrypt = await import("bcryptjs");
     const { eq } = await import("drizzle-orm");
 

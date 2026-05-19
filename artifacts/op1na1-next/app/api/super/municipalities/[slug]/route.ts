@@ -30,7 +30,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { municipalities } = await import("@workspace/db/schema");
+    const { municipalitiesTable: municipalities } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const [row] = await db.select().from(municipalities).where(eq(municipalities.slug, slug as never)).limit(1);
@@ -68,7 +68,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { municipalities } = await import("@workspace/db/schema");
+    const { municipalitiesTable: municipalities } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const patch: Record<string, unknown> = { updatedAt: new Date() };
@@ -110,7 +110,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { municipalities } = await import("@workspace/db/schema");
+    const { municipalitiesTable: municipalities } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const [deleted] = await db.delete(municipalities)

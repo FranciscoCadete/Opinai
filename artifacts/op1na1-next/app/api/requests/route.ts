@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
     const { createRequestSchema } = await import("@workspace/api-zod");
 
     const parsed = createRequestSchema.safeParse(body);

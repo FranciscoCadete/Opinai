@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
     const { gte, and, sql } = await import("drizzle-orm");
 
     const days = period === "7d" ? 7 : period === "90d" ? 90 : 30;
@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
     // By bairro (top 10)
     const bairroMap = new Map<string, number>();
     for (const r of rows) {
-      const name = (r as Record<string, unknown>).bairroName as string ?? "Desconhecido";
+      const name = r.bairroId ?? "Desconhecido";
       bairroMap.set(name, (bairroMap.get(name) ?? 0) + 1);
     }
     const byBairro = Array.from(bairroMap.entries())

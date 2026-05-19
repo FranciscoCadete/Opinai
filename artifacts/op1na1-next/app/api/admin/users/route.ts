@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { users } = await import("@workspace/db/schema");
+    const { usersTable: users } = await import("@workspace/db/schema");
     const { sql, eq, ilike, and } = await import("drizzle-orm");
 
     const conditions = [];
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { users } = await import("@workspace/db/schema");
+    const { usersTable: users } = await import("@workspace/db/schema");
     const bcrypt = await import("bcryptjs");
 
     const { email, name, password, role, municipalityId } = body as Record<string, unknown>;

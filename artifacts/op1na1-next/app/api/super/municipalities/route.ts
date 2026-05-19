@@ -21,7 +21,7 @@ export async function GET() {
 
   try {
     const { db } = await import("@workspace/db");
-    const { municipalities } = await import("@workspace/db/schema");
+    const { municipalitiesTable: municipalities } = await import("@workspace/db/schema");
     const { desc } = await import("drizzle-orm");
 
     const rows = await db.select().from(municipalities).orderBy(desc(municipalities.createdAt));
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { municipalities } = await import("@workspace/db/schema");
+    const { municipalitiesTable: municipalities } = await import("@workspace/db/schema");
 
     const now = new Date();
     const [created] = await db.insert(municipalities).values({

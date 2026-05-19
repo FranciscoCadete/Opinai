@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
         // Production: poll DB every 2.5 s for ~8 s then close (browser reconnects)
         try {
           const { db } = await import("@workspace/db");
-          const { requests } = await import("@workspace/db/schema");
+          const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
           const { sql } = await import("drizzle-orm");
 
           let lastId = parseInt(lastEventId, 10) || 0;

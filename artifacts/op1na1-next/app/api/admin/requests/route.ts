@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
     const { sql, and, eq, ilike } = await import("drizzle-orm");
 
     const conditions = [];

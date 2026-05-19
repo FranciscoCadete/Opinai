@@ -28,7 +28,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const [row] = await db.select().from(requests).where(eq(requests.id, id as never)).limit(1);
@@ -72,7 +72,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests, auditLog } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests, auditLogTable: auditLog } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     // Fetch current row to detect status change for notifications
@@ -90,7 +90,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const patch: Record<string, unknown> = { updatedAt: now };
     if (status)           patch.status        = status;
     if (priority)         patch.priority      = priority;
-    if (assignedToId !== undefined) patch.assignedToId = assignedToId;
+    if (assignedToId !== undefined) patch.assignedTo = assignedToId;
     if (status === "resolved") patch.resolvedAt = now;
 
     const [updated] = await db.update(requests)
@@ -102,8 +102,6 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     if (session) {
       await db.insert(auditLog).values({
         actorUserId:  session.sub,
-        actorName:    session.name,
-        actorEmail:   session.email,
         action:       "request.updated",
         entityType:   "request",
         entityId:     id,
@@ -134,7 +132,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       ticketId: updated.ticketId,
       status: updated.status,
       priority: updated.priority,
-      assignedToId: updated.assignedToId,
+      assignedToId: updated.assignedTo,
       updatedAt: updated.updatedAt,
       resolvedAt: updated.resolvedAt,
     });
@@ -159,7 +157,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { requests } = await import("@workspace/db/schema");
+    const { citizenRequestsTable: requests } = await import("@workspace/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const [deleted] = await db.delete(requests).where(eq(requests.id, id as never)).returning({ id: requests.id });
