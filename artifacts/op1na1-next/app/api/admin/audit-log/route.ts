@@ -22,11 +22,11 @@ export async function GET(req: NextRequest) {
 
   try {
     const { db } = await import("@workspace/db");
-    const { auditLog } = await import("@workspace/db/schema");
+    const { auditLogTable } = await import("@workspace/db/schema");
     const { sql } = await import("drizzle-orm");
 
-    const [{ count }] = await db.select({ count: sql<number>`count(*)::int` }).from(auditLog);
-    const items = await db.select().from(auditLog)
+    const [{ count }] = await db.select({ count: sql<number>`count(*)::int` }).from(auditLogTable);
+    const items = await db.select().from(auditLogTable)
       .orderBy(sql`created_at desc`)
       .limit(pageSize).offset((page - 1) * pageSize);
 
