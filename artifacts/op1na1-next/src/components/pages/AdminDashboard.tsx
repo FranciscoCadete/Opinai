@@ -478,8 +478,24 @@ export default function AdminDashboard() {
         .db-card-btn:hover   { color: ${T.text} !important; border-color: ${T.bdr2} !important; }
         .db-dismiss:hover    { color: ${T.text} !important; border-color: ${T.bdr2} !important; }
         .db-icon-btn:hover   { background: ${T.srf3} !important; color: ${T.text} !important; }
+
+        /* ── Responsive layout ───────────────────────────────── */
+        .db-content-wrap { padding: 12px; }
+        .db-kpi-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 26px; }
+        .db-row-2col { display: grid; grid-template-columns: 1fr;           gap: 16px; margin-bottom: 16px; }
+        .db-row-11   { display: grid; grid-template-columns: 1fr;           gap: 16px; margin-bottom: 16px; }
+        @media (min-width: 640px) {
+          .db-kpi-grid { grid-template-columns: repeat(3,1fr); }
+        }
+        @media (min-width: 1024px) {
+          .db-content-wrap { padding: 24px; }
+          .db-kpi-grid { grid-template-columns: repeat(5,1fr); }
+          .db-row-2col { grid-template-columns: 2fr 1fr; }
+          .db-row-11   { grid-template-columns: 1fr 1fr; }
+        }
       `}</style>
 
+      <div className="db-content-wrap">
       {/* ── Crisis banner ──────────────────────────────────── */}
       {crisisVisible && (
         <div
@@ -519,10 +535,7 @@ export default function AdminDashboard() {
       )}
 
       {/* ── KPI grid ───────────────────────────────────────── */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 14,
-        marginBottom: 26, ...fadeStyle(0.12),
-      }}>
+      <div className="db-kpi-grid" style={{ ...fadeStyle(0.12) }}>
         {[
           { label: "Total do mês",         value: "1 247", delta: "↑ 18% vs mês anterior",   deltaUp: true,  strip: T.accent  },
           { label: "Resolvidas",            value: "714",   delta: "↑ 57,3% resolução",        deltaUp: true,  strip: T.accent2 },
@@ -559,7 +572,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* ── Row 1: Bairros (3) + Status donut (1) ─────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16, marginBottom: 16, ...fadeStyle(0.19) }}>
+      <div className="db-row-2col" style={{ ...fadeStyle(0.19) }}>
 
         {/* Bairro chart */}
         <div style={card()}>
@@ -634,7 +647,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* ── Row 2: Feed (1) + [SLA + Mediadores] (1) ─────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16, ...fadeStyle(0.26) }}>
+      <div className="db-row-11" style={{ ...fadeStyle(0.26) }}>
 
         {/* Real-time feed */}
         <div style={card()}>
@@ -860,6 +873,7 @@ export default function AdminDashboard() {
         </span>
         <span style={{ marginLeft: "auto" }}>n=390 · 10 bairros · 3 estratos · Mulenvos</span>
       </div>
+      </div>{/* /db-content-wrap */}
     </main>
   );
 }

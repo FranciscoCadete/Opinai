@@ -154,10 +154,16 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
           .admin-sidebar--open { left: 0 !important; }
           .sidebar-close-btn  { display: flex !important; }
           .mobile-topbar      { display: flex !important; }
+          /* ensure pages don't overflow horizontally on phones */
+          #main-content { overflow-x: hidden; }
         }
         @media (min-width: 769px) {
           .admin-sidebar { position: sticky !important; left: 0 !important; }
           .mobile-topbar { display: none !important; }
+        }
+        /* Prevent text overflow on very small phones */
+        @media (max-width: 400px) {
+          .admin-sidebar { width: 85vw !important; }
         }
       `}</style>
 
@@ -181,7 +187,7 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
               onClick={() => setSidebarOpen(true)}
               aria-label="Abrir menu"
               aria-expanded={sidebarOpen}
-              style={{ background: "transparent", border: "none", color: T.muted, cursor: "pointer", padding: 4, display: "flex" }}
+              style={{ background: "transparent", border: "none", color: T.muted, cursor: "pointer", padding: 8, display: "flex", borderRadius: 8, minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <line x1="3" y1="6"  x2="21" y2="6"  />
@@ -189,7 +195,7 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            <div style={{ fontFamily: T.display, fontSize: 18, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em" }}>OP1NA1</div>
+            <div style={{ fontFamily: T.display, fontSize: 18, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em", flex: 1, minWidth: 0 }}>OP1NA1</div>
           </div>
 
           {children}

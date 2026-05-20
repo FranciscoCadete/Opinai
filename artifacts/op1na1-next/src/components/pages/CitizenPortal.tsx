@@ -418,6 +418,33 @@ export default function CitizenPortal() {
         .cp-tab:hover { background:rgba(241,166,15,.08)!important; color:${C.ink}!important; }
         .cp-info-card:hover { border-color:${C.bdr2}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.06)!important; }
         .cp-channel-card:hover { border-color:${C.yellow}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(241,166,15,.1)!important; }
+
+        /* ── Responsive layout ────────────────────────────── */
+        /* Tab bar: scroll horizontal em mobile, centrado em desktop */
+        .cp-tabs-scroll {
+          overflow-x: auto;
+          justify-content: flex-start !important;
+          padding: 0 12px !important;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .cp-tabs-scroll::-webkit-scrollbar { display: none; }
+        .cp-tabs-scroll > button { flex-shrink: 0; }
+        @media (min-width: 640px) {
+          .cp-tabs-scroll {
+            justify-content: center !important;
+            overflow-x: visible;
+            padding: 0 !important;
+          }
+        }
+        /* Topbar em ecrãs muito pequenos */
+        @media (max-width: 479px) {
+          .cp-topbar-long   { display: none !important; }
+          .cp-topbar-short  { display: inline !important; }
+          .cp-topbar-track-label { display: none !important; }
+        }
+        .cp-topbar-short { display: none; }
       `}</style>
 
       {/* ── TOPBAR ──────────────────────────────────────────── */}
@@ -428,18 +455,19 @@ export default function CitizenPortal() {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "0 24px", height: 56,
       }}>
-        <div style={{ fontFamily: C.display, fontSize: 20, color: C.ink, letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.yellow, animation: "cp-blink 3s ease-in-out infinite" }} />
-          OP1NA1 — Portal do Cidadão
+        <div style={{ fontFamily: C.display, fontSize: 20, color: C.ink, letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.yellow, animation: "cp-blink 3s ease-in-out infinite", flexShrink: 0 }} />
+          <span className="cp-topbar-long">OP1NA1 — Portal do Cidadão</span>
+          <span className="cp-topbar-short">OP1NA1</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
             className="cp-topbar-track"
             onClick={() => switchTab("consultar")}
-            style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: C.mono, fontSize: 10, color: C.muted, border: `1px solid ${C.bdr2}`, borderRadius: 8, padding: "6px 12px", cursor: "pointer", background: C.white, transition: "all .15s", letterSpacing: "0.04em" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: C.mono, fontSize: 10, color: C.muted, border: `1px solid ${C.bdr2}`, borderRadius: 8, padding: "6px 12px", cursor: "pointer", background: C.white, transition: "all .15s", letterSpacing: "0.04em", flexShrink: 0 }}
           >
             <svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            Consultar pedido
+            <span className="cp-topbar-track-label">Consultar pedido</span>
           </button>
           <a href="/login" style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, padding: "6px 10px", cursor: "pointer", borderRadius: 6, border: "1px solid transparent", background: "none", transition: "all .15s", textDecoration: "none" }}>
             {t("citizen.accessInstitutional")}
@@ -464,7 +492,7 @@ export default function CitizenPortal() {
         </div>
 
         {/* ── TABS BAR (inside hero, bottom) ── */}
-        <div role="tablist" aria-label="Secções do portal" style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "center", gap: 4, paddingBottom: 0, flexWrap: "wrap" }}>
+        <div role="tablist" aria-label="Secções do portal" className="cp-tabs-scroll" style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "center", gap: 4, paddingBottom: 0 }}>
           {TABS.map(tab => {
             const active = activeTab === tab.id;
             const TabIcon = tab.Icon;
@@ -534,7 +562,7 @@ export default function CitizenPortal() {
             ))}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
             {/* By category */}
             <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "20px 22px" }}>
               <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Pedidos por Categoria</div>
@@ -645,7 +673,7 @@ export default function CitizenPortal() {
           <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Informações sobre o Sistema</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Tudo o que precisa de saber sobre o OP1NA1</p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16, marginBottom: 16 }}>
             {[
               { Icon: Target,        color: C.blue,   title: "O que é o OP1NA1?",          body: "O OP1NA1 (Opinar para Ajudar) é a plataforma oficial de participação cidadã do Município dos Mulenvos, Luanda. Permite reportar problemas, fazer sugestões e acompanhar a resolução de pedidos através de múltiplos canais." },
               { Icon: Clock,         color: C.yellow, title: "Qual o prazo de resposta?",   body: "Pedidos urgentes: até 4 horas. Pedidos normais: até 72 horas em dias úteis. Receberá notificações de actualização pelo canal que escolheu ao submeter." },
@@ -793,7 +821,7 @@ export default function CitizenPortal() {
               <div style={{ animation: "cp-fade-up .3s ease" }}>
                 <StepHeader icon={<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.yellow} strokeWidth="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>} title={t("citizen.step1.title")} sub="Escolha a opção que melhor descreve a sua situação" />
                 <div style={{ padding: 22 }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 20 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 8, marginBottom: 20 }}>
                     {TIPOS.map(t => {
                       const sel = tipo === t.id;
                       const isUrgent = t.id === "urgente";
