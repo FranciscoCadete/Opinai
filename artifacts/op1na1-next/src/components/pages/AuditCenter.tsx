@@ -8,10 +8,6 @@ import {
   ChevronDown, ChevronRight, FileText, Trash2, Info,
   Server, Wifi, Calendar, Hash, AlertOctagon,
 } from "lucide-react";
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, ReferenceLine,
-} from "recharts";
 import { listAdminAuditLog } from "@/lib/api";
 import { useTranslation } from "react-i18next";
 
@@ -236,6 +232,39 @@ function gauge(pct: number, color: string) {
       </svg>
       <span className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-foreground">{Math.round(pct)}%</span>
     </div>
+  );
+}
+
+function ApiLatencyChart({ data }: { data: { t: string; ms: number }[] }) {
+  const W = 460; const H = 180;
+  const pad = { top: 4, right: 44, bottom: 4, left: 36 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  const maxMs = 2200;
+  const xScale = (i: number) => pad.left + (i / Math.max(data.length - 1, 1)) * chartW;
+  const yScale = (ms: number) => pad.top + (1 - ms / maxMs) * chartH;
+  const points = data.map((d, i) => `${xScale(i).toFixed(1)},${yScale(d.ms).toFixed(1)}`).join(" ");
+  const yTicks = [0, 500, 1000, 1500, 2000];
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 180 }} aria-hidden="true">
+      {yTicks.map(v => (
+        <g key={v}>
+          <line x1={pad.left} y1={yScale(v)} x2={W - pad.right} y2={yScale(v)}
+            stroke="#374151" strokeOpacity={0.35} strokeDasharray="3 3" />
+          <text x={pad.left - 4} y={yScale(v)} textAnchor="end" dominantBaseline="middle"
+            fontSize={9} fill="#6b7280">{v}</text>
+        </g>
+      ))}
+      <line x1={pad.left} y1={yScale(2000)} x2={W - pad.right} y2={yScale(2000)}
+        stroke="#ef4444" strokeDasharray="4 2" strokeWidth={1.5} />
+      <text x={W - pad.right + 3} y={yScale(2000)} dominantBaseline="middle" fontSize={9} fill="#ef4444">SLA 2s</text>
+      <line x1={pad.left} y1={yScale(500)} x2={W - pad.right} y2={yScale(500)}
+        stroke="#f59e0b" strokeDasharray="4 2" strokeWidth={1} />
+      {data.length > 1 && (
+        <polyline points={points} fill="none" stroke="#CC0000" strokeWidth={2}
+          strokeLinejoin="round" strokeLinecap="round" />
+      )}
+    </svg>
   );
 }
 
@@ -620,17 +649,7 @@ export default function AuditCenter() {
                   <span className="text-muted-foreground">p95 <strong className={p95Ms>2000?"text-red-500":p95Ms>500?"text-amber-500":"text-green-500"}>{p95Ms}ms</strong></span>
                 </div>
               </div>
-              <ResponsiveContainer width="100%" height={180}>
-                <LineChart data={apiSamples} margin={{ top:4, right:4, bottom:0, left:-20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.3} />
-                  <XAxis dataKey="t" tick={false} stroke="#6b7280" />
-                  <YAxis tick={{ fontSize:10, fill:"#6b7280" }} stroke="#6b7280" />
-                  <Tooltip formatter={(v: number) => [`${v}ms`, "Latência"]} labelFormatter={() => ""} contentStyle={{ background:"#18181b", border:"1px solid #3f3f46", borderRadius:8, fontSize:11 }} />
-                  <ReferenceLine y={2000} stroke="#ef4444" strokeDasharray="4 2" label={{ value:"SLA 2s", position:"right", fontSize:10, fill:"#ef4444" }} />
-                  <ReferenceLine y={500} stroke="#f59e0b" strokeDasharray="4 2" />
-                  <Line type="monotone" dataKey="ms" stroke="#CC0000" strokeWidth={2} dot={false} isAnimationActive={false} />
-                </LineChart>
-              </ResponsiveContainer>
+              <ApiLatencyChart data={apiSamples} />
               <p className="text-[10px] text-muted-foreground text-center mt-1">SLA target &lt; 2.000ms (linha vermelha) · últimas 40s</p>
             </div>
           </div>
