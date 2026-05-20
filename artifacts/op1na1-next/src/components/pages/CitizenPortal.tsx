@@ -79,9 +79,18 @@ const RESOLVED = [
   { Icon: Zap,      color: C.yellow, desc: "Iluminação avariada — Mulenvos de Cima", meta: "Segurança · 24h" },
 ];
 const MEDIADORES = [
-  { initials: "AM", name: "António M.",  zone: "CAOP C · Seg–Sex 7h–17h",    online: true  },
-  { initials: "CJ", name: "Clara J.",    zone: "Capalanga · Seg–Sáb 8h–16h", online: true  },
-  { initials: "JA", name: "João António",zone: "Boa-Fé · Ter–Sáb 9h–17h",   online: false },
+  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",   online: true,  whatsapp: "+244923000010", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "+244923000011", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "+244923000012", facebook: "https://m.me/municipiomulenvos" },
+];
+
+// Mensagens dinâmicas rotativas (mobile-first)
+const DYNAMIC_MSGS = [
+  "Este mês, foram resolvidos 45 problemas de saneamento nos Mulenvos.",
+  "714 pedidos resolvidos em Maio. A sua participação conta!",
+  "Tempo médio de resposta: 38 horas. Juntos somos mais rápidos.",
+  "3 mediadores disponíveis agora mesmo para o ajudar presencialmente.",
+  "Sem internet? Marque *123# ou envie SMS para +244 923 000 001.",
 ];
 const CHANNELS = [
   { id: "portal",   label: "Portal",     icon: <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> },
@@ -216,8 +225,17 @@ export default function CitizenPortal() {
   const [channel, setChannel] = useState("portal");
 
   // Track
-  const [trackVal, setTrackVal]     = useState("");
-  const [trackResult, setTrackResult] = useState<typeof DEMO_TRACKS[0] | null>(null);
+  const [trackVal, setTrackVal]         = useState("");
+  const [trackPhone, setTrackPhone]     = useState("");
+  const [trackMode, setTrackMode]       = useState<"ticket"|"phone">("ticket");
+  const [trackResult, setTrackResult]   = useState<typeof DEMO_TRACKS[0] | null>(null);
+
+  // Offline / data-saver
+  const [dataSaver, setDataSaver]       = useState(false);
+  const [isOffline, setIsOffline]       = useState(false);
+
+  // Dynamic rotating message
+  const [dynMsgIdx, setDynMsgIdx]       = useState(0);
 
   // Stats (animated counters)
   const [stats, setStats] = useState({ resolved: 0, open: 0, time: "0h", mediators: 0 });
@@ -249,6 +267,25 @@ export default function CitizenPortal() {
     });
     const cleanup = () => timers.forEach(clearInterval);
     return cleanup;
+  }, []);
+
+  // Offline detection + data-saver via Network Information API
+  useEffect(() => {
+    const onOnline  = () => setIsOffline(false);
+    const onOffline = () => setIsOffline(true);
+    setIsOffline(!navigator.onLine);
+    window.addEventListener("online",  onOnline);
+    window.addEventListener("offline", onOffline);
+    // Auto-enable data saver on slow connections
+    const conn = (navigator as unknown as { connection?: { effectiveType?: string } }).connection;
+    if (conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") setDataSaver(true);
+    return () => { window.removeEventListener("online", onOnline); window.removeEventListener("offline", onOffline); };
+  }, []);
+
+  // Rotate dynamic message every 5s
+  useEffect(() => {
+    const id = setInterval(() => setDynMsgIdx(i => (i + 1) % DYNAMIC_MSGS.length), 5000);
+    return () => clearInterval(id);
   }, []);
 
   const showToast = useCallback((msg: string) => {
@@ -419,6 +456,33 @@ export default function CitizenPortal() {
         .cp-info-card:hover { border-color:${C.bdr2}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.06)!important; }
         .cp-channel-card:hover { border-color:${C.yellow}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(241,166,15,.1)!important; }
 
+        /* ── 3 Main CTAs ─────────────────────────────────── */
+        .cp-cta-grid { display:grid; grid-template-columns:1fr; gap:10px; padding:0 0 24px; position:relative; z-index:1; }
+        @media(min-width:480px){ .cp-cta-grid { grid-template-columns:repeat(3,1fr); } }
+        .cp-cta-btn { background:rgba(255,255,255,.06); border-radius:14px; padding:20px 16px; cursor:pointer; border:1px solid rgba(255,255,255,.1); transition:all .18s; text-align:left; display:flex; align-items:center; gap:14px; width:100%; }
+        @media(min-width:480px){ .cp-cta-btn { flex-direction:column; align-items:flex-start; gap:10px; } }
+        .cp-cta-btn:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.1); }
+        .cp-cta-btn:active { transform:none; }
+
+        /* ── Offline / data-saver banner ─────────────────── */
+        .cp-offline-bar { display:flex; align-items:center; gap:10px; padding:10px 20px; font-family:${C.mono}; font-size:11px; }
+        .cp-ds-toggle { cursor:pointer; background:none; border:1px solid currentColor; border-radius:4px; padding:2px 8px; font-family:${C.mono}; font-size:10px; opacity:.8; }
+        .cp-ds-toggle:hover { opacity:1; }
+
+        /* ── Mediator action buttons ─────────────────────── */
+        .cp-med-wa { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:8px; border:none; cursor:pointer; font-family:${C.sans}; font-size:12px; font-weight:500; transition:all .14s; }
+        .cp-med-wa:hover { opacity:.88; transform:translateY(-1px); }
+
+        /* ── Dynamic message fade ─────────────────────────── */
+        @keyframes cp-msg-fade { 0%{opacity:0;transform:translateY(4px)} 15%{opacity:1;transform:none} 85%{opacity:1} 100%{opacity:0} }
+        .cp-dyn-msg { animation:cp-msg-fade 5s ease forwards; }
+
+        /* ── Track mode tabs ──────────────────────────────── */
+        .cp-track-tab { padding:8px 16px; border-radius:8px 8px 0 0; cursor:pointer; font-family:${C.mono}; font-size:11px; border:none; transition:all .14s; }
+
+        /* ── Submeter two-column on large screens ────────── */
+        @media(min-width:900px){ .cp-submeter-grid { grid-template-columns: minmax(0,1fr) 320px !important; } }
+
         /* ── Responsive layout ────────────────────────────── */
         /* Tab bar: scroll horizontal em mobile, centrado em desktop */
         .cp-tabs-scroll {
@@ -486,9 +550,60 @@ export default function CitizenPortal() {
           <h1 style={{ fontFamily: C.display, fontSize: "clamp(26px,5vw,38px)", fontWeight: 300, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.025em", marginBottom: 10 }}>
             A sua voz chega à <em style={{ fontStyle: "italic", color: C.yellow }}>Administração.</em>
           </h1>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,.5)", lineHeight: 1.7, marginBottom: 24 }}>
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,.5)", lineHeight: 1.7, marginBottom: 28 }}>
             {t("citizen.description")}
           </p>
+
+          {/* ── 3 PRINCIPAIS ACÇÕES ─────────────────────────── */}
+          <div className="cp-cta-grid">
+            {[
+              {
+                id: "submeter", color: C.red, borderColor: "rgba(180,20,20,.45)",
+                icon: (
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(180,20,20,.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={C.red} strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </div>
+                ),
+                label: "Reportar Problema",
+                desc: "Fotos, voz ou texto — rápido e sem burocracia",
+              },
+              {
+                id: "consultar", color: C.blue, borderColor: "rgba(47,110,245,.45)",
+                icon: (
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(47,110,245,.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={C.blue} strokeWidth="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-2.91-8.72A2 2 0 0 1 4.7 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.91 9.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.34 1.85.574 2.81.7A2 2 0 0 1 22 17.3Z"/></svg>
+                  </div>
+                ),
+                label: "Acompanhar Pedido",
+                desc: "Veja o estado em tempo real pelo número de telefone",
+              },
+              {
+                id: "canais", color: "#25D366", borderColor: "rgba(37,211,102,.45)",
+                icon: (
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(37,211,102,.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+                  </div>
+                ),
+                label: "Falar com o Mediador",
+                desc: "Apoio humano presencial ou via WhatsApp no seu bairro",
+              },
+            ].map(cta => (
+              <button
+                key={cta.id}
+                className="cp-cta-btn"
+                onClick={() => switchTab(cta.id)}
+                style={{ borderColor: cta.borderColor }}
+                aria-label={cta.label}
+              >
+                {cta.icon}
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: "#fff", marginBottom: 3 }}>{cta.label}</div>
+                  <div style={{ fontFamily: C.mono, fontSize: 10, color: "rgba(255,255,255,.5)", lineHeight: 1.4 }}>{cta.desc}</div>
+                </div>
+                <svg style={{ marginLeft: "auto", flexShrink: 0, opacity: .5 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ── TABS BAR (inside hero, bottom) ── */}
@@ -537,6 +652,43 @@ export default function CitizenPortal() {
             <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2, letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center" }}>{s.label}</div>
           </div>
         ))}
+      </div>
+
+      {/* ── OFFLINE / DATA-SAVER BANNER ─────────────────── */}
+      {(isOffline || dataSaver) && (
+        <div className="cp-offline-bar" style={{ background: isOffline ? "rgba(180,20,20,.08)" : "rgba(241,166,15,.08)", color: isOffline ? C.red : C.yellow, borderBottom: `1px solid ${isOffline ? "rgba(180,20,20,.2)" : "rgba(241,166,15,.2)"}` }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            {isOffline
+              ? <><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></>
+              : <><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></>
+            }
+          </svg>
+          <span style={{ flex: 1 }}>
+            {isOffline
+              ? "Sem ligação à internet. Use SMS (+244 923 000 001) ou USSD (*123#) gratuitamente."
+              : "Modo Poupança de Dados activo — imagens e mapas desactivados."
+            }
+          </span>
+          {dataSaver && !isOffline && (
+            <button className="cp-ds-toggle" style={{ color: C.yellow }} onClick={() => setDataSaver(false)}>Desactivar</button>
+          )}
+          {!isOffline && !dataSaver && (
+            <button className="cp-ds-toggle" style={{ color: C.yellow }} onClick={() => setDataSaver(true)}>Modo Poupança</button>
+          )}
+        </div>
+      )}
+
+      {/* ── DYNAMIC MOBILE MESSAGE ───────────────────────── */}
+      <div style={{ background: C.ink, borderBottom: `1px solid rgba(255,255,255,.06)`, padding: "10px 20px", display: "flex", alignItems: "center", gap: 10, minHeight: 40, overflow: "hidden" }}>
+        <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green, flexShrink: 0, animation: "cp-blink 2s ease-in-out infinite" }} />
+        <div key={dynMsgIdx} className="cp-dyn-msg" style={{ fontFamily: C.mono, fontSize: 11, color: "rgba(255,255,255,.65)", letterSpacing: "0.02em", flex: 1 }}>
+          {DYNAMIC_MSGS[dynMsgIdx]}
+        </div>
+        {!dataSaver && !isOffline && (
+          <button className="cp-ds-toggle" style={{ color: "rgba(255,255,255,.4)", flexShrink: 0 }} onClick={() => setDataSaver(true)} title="Activar modo poupança de dados">
+            Poupar dados
+          </button>
+        )}
       </div>
 
       {/* ══ TAB: ESTATÍSTICAS ══ */}
@@ -644,24 +796,71 @@ export default function CitizenPortal() {
             ))}
           </div>
 
-          {/* Mediators */}
+          {/* Mediators — hybrid human support */}
           <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "20px 22px" }}>
-            <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Mediadores no Terreno</div>
-            <div style={{ fontSize: 13, color: C.muted, marginBottom: 16, lineHeight: 1.6 }}>Sem telemóvel ou internet? Um mediador pode registar o seu pedido presencialmente, gratuitamente.</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4, flexWrap: "wrap", gap: 8 }}>
+              <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase" }}>Mediadores Comunitários no Terreno</div>
+              <div style={{ fontFamily: C.mono, fontSize: 9, padding: "3px 10px", borderRadius: 10, background: C.greenL, color: C.green, border: `1px solid rgba(0,196,154,.2)` }}>
+                ● {MEDIADORES.filter(m => m.online).length} disponíveis agora
+              </div>
+            </div>
+            <div style={{ fontSize: 13, color: C.muted, marginBottom: 20, lineHeight: 1.6 }}>
+              Sem telemóvel ou internet? Um mediador do seu bairro regista o pedido <strong>presencialmente e gratuitamente</strong>. Contacte directamente via WhatsApp ou Messenger.
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 12 }}>
               {MEDIADORES.map(m => (
-                <div key={m.name} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", background: C.surface, borderRadius: C.radiusSm, border: `1px solid ${C.bdr}` }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(47,110,245,.1)", border: "1px solid rgba(47,110,245,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: C.mono, fontSize: 11, color: C.blue, flexShrink: 0 }}>{m.initials}</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: C.ink2 }}>{m.name}</div>
-                    <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2 }}>{m.zone}</div>
+                <div key={m.name} style={{ background: C.surface, borderRadius: C.radius, border: `1px solid ${m.online ? "rgba(0,196,154,.2)" : C.bdr}`, overflow: "hidden" }}>
+                  {/* Header */}
+                  <div style={{ padding: "14px 16px", display: "flex", alignItems: "center", gap: 10, borderBottom: `1px solid ${C.bdr}` }}>
+                    <div style={{ width: 42, height: 42, borderRadius: "50%", background: "rgba(47,110,245,.1)", border: `2px solid ${m.online ? "rgba(0,196,154,.3)" : C.bdr}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: C.mono, fontSize: 13, color: C.blue, flexShrink: 0, position: "relative" }}>
+                      {m.initials}
+                      {m.online && <span style={{ position: "absolute", bottom: 0, right: 0, width: 10, height: 10, borderRadius: "50%", background: C.green, border: `2px solid ${C.surface}` }} />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{m.name}</div>
+                      <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2, marginTop: 1 }}>{m.zone}</div>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: m.online ? C.green : C.muted2, boxShadow: m.online ? `0 0 0 2px ${C.greenL}` : undefined }} />
-                    <span style={{ fontFamily: C.mono, fontSize: 9, color: m.online ? C.green : C.muted2 }}>{m.online ? "Disponível" : "Offline"}</span>
+                  {/* Bairro tag */}
+                  <div style={{ padding: "8px 16px", borderBottom: `1px solid ${C.bdr}` }}>
+                    <span style={{ fontFamily: C.mono, fontSize: 9, padding: "2px 8px", borderRadius: 4, background: C.bg2, color: C.muted }}>📍 {m.bairro}</span>
+                  </div>
+                  {/* Action buttons */}
+                  <div style={{ padding: "12px 16px", display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <a
+                      href={`https://wa.me/${m.whatsapp.replace(/\D/g,"")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cp-med-wa"
+                      style={{ background: "#25D366", color: "#fff", flex: 1, justifyContent: "center", textDecoration: "none" }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+                      WhatsApp
+                    </a>
+                    <a
+                      href={m.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cp-med-wa"
+                      style={{ background: "#0084FF", color: "#fff", flex: 1, justifyContent: "center", textDecoration: "none" }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                      Messenger
+                    </a>
                   </div>
                 </div>
               ))}
+            </div>
+            {/* SMS/USSD fallback */}
+            <div style={{ marginTop: 16, padding: "14px 18px", background: C.bg, borderRadius: C.radiusSm, border: `1px solid ${C.bdr}`, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ fontSize: 20 }}>📟</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 500, color: C.ink2, marginBottom: 2 }}>Sem internet ou sem smartphone?</div>
+                <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted }}>SMS para <strong>+244 923 000 001</strong> · USSD <strong>*123#</strong> · Ambos gratuitos, funcionam em 2G</div>
+              </div>
+              <a href="tel:+244923000001" style={{ padding: "8px 16px", borderRadius: C.radiusSm, border: `1px solid ${C.bdr2}`, background: C.white, color: C.ink, fontSize: 12.5, fontWeight: 500, cursor: "pointer", fontFamily: C.sans, textDecoration: "none", flexShrink: 0 }}>
+                Ligar
+              </a>
             </div>
           </div>
         </div>
@@ -705,48 +904,136 @@ export default function CitizenPortal() {
       {/* ══ TAB: CONSULTAR PEDIDO ══ */}
       {activeTab === "consultar" && (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Consultar Pedido</h2>
-          <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Introduza o número do seu pedido para ver o estado actual</p>
+          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Acompanhar Pedido</h2>
+          <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 24, letterSpacing: "0.04em" }}>Sem necessidade de código — consulte pelo seu número de telefone ou pelo número do pedido</p>
 
-          <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "24px 28px", marginBottom: 16 }}>
-            <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-              <input
-                id="track-input"
-                type="text"
-                value={trackVal}
-                onChange={e => setTrackVal(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && doTrack()}
-                placeholder="Ex: MUL-20260509-1234"
-                style={{ flex: 1, background: C.surface, border: `1.5px solid ${C.bdr}`, borderRadius: C.radiusSm, padding: "12px 16px", fontFamily: C.mono, fontSize: 13, color: C.ink, outline: "none", letterSpacing: "0.04em" }}
-              />
-              <button className="cp-track-btn" onClick={doTrack} style={{ padding: "12px 20px", borderRadius: C.radiusSm, border: `1px solid ${C.bdr}`, background: C.ink, color: "#fff", fontSize: 13, cursor: "pointer", fontFamily: C.sans, flexShrink: 0, transition: "all .14s" }}>
-                Consultar
-              </button>
-            </div>
-            <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2, letterSpacing: "0.06em" }}>
-              O número do pedido foi enviado no momento da submissão pelo canal que escolheu.
-            </div>
+          {/* Mode selector */}
+          <div style={{ display: "flex", marginBottom: 0, gap: 4 }}>
+            {([["phone","📱 Número de telefone"],["ticket","🔖 Nº do pedido"]] as [string,string][]).map(([mode, label]) => (
+              <button
+                key={mode}
+                className="cp-track-tab"
+                onClick={() => setTrackMode(mode as "ticket"|"phone")}
+                style={{
+                  background: trackMode === mode ? C.white : C.bg2,
+                  color: trackMode === mode ? C.ink : C.muted,
+                  borderBottom: trackMode === mode ? `2px solid ${C.yellow}` : "2px solid transparent",
+                  fontWeight: trackMode === mode ? 500 : 400,
+                }}
+              >{label}</button>
+            ))}
           </div>
 
+          <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: `0 ${C.radiusSm}px ${C.radiusSm}px ${C.radiusSm}px`, padding: "24px 28px", marginBottom: 16 }}>
+            {trackMode === "phone" ? (
+              <>
+                <div style={{ fontSize: 13, color: C.muted, marginBottom: 12, lineHeight: 1.6 }}>
+                  Introduza o número de telefone que usou ao submeter o pedido. Verá os seus últimos pedidos.
+                </div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    type="tel"
+                    value={trackPhone}
+                    onChange={e => setTrackPhone(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") { setTrackResult(DEMO_TRACKS[0]); } }}
+                    placeholder="+244 9XX XXX XXX"
+                    style={{ flex: 1, background: C.surface, border: `1.5px solid ${C.bdr}`, borderRadius: C.radiusSm, padding: "12px 16px", fontFamily: C.mono, fontSize: 13, color: C.ink, outline: "none", letterSpacing: "0.04em" }}
+                  />
+                  <button className="cp-track-btn" onClick={() => { if (trackPhone.trim()) setTrackResult(DEMO_TRACKS[0]); }} style={{ padding: "12px 20px", borderRadius: C.radiusSm, border: "none", background: C.yellow, color: C.black, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: C.sans, flexShrink: 0, transition: "all .14s" }}>
+                    Ver pedidos
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                  <input
+                    id="track-input"
+                    type="text"
+                    value={trackVal}
+                    onChange={e => setTrackVal(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && doTrack()}
+                    placeholder="Ex: MUL-20260509-1234"
+                    style={{ flex: 1, background: C.surface, border: `1.5px solid ${C.bdr}`, borderRadius: C.radiusSm, padding: "12px 16px", fontFamily: C.mono, fontSize: 13, color: C.ink, outline: "none", letterSpacing: "0.04em" }}
+                  />
+                  <button className="cp-track-btn" onClick={doTrack} style={{ padding: "12px 20px", borderRadius: C.radiusSm, border: "none", background: C.ink, color: "#fff", fontSize: 13, cursor: "pointer", fontFamily: C.sans, flexShrink: 0, transition: "all .14s" }}>
+                    Consultar
+                  </button>
+                </div>
+                <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2, letterSpacing: "0.06em" }}>
+                  O número do pedido foi enviado no momento da submissão pelo canal que escolheu.
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Visual timeline — package-tracking style */}
           {trackResult && (
-            <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "24px 28px", animation: "cp-fade-up .3s ease" }}>
-              <div style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 6 }}>{trackVal.toUpperCase()}</div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: C.ink, marginBottom: 20 }}>{trackResult.desc}</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            <div style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, overflow: "hidden", animation: "cp-fade-up .3s ease" }}>
+              {/* Header */}
+              <div style={{ padding: "16px 24px", background: C.surface, borderBottom: `1px solid ${C.bdr}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, marginBottom: 2, letterSpacing: "0.06em" }}>{trackMode === "phone" ? trackPhone : trackVal.toUpperCase()}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: C.ink }}>{trackResult.desc}</div>
+                </div>
+                <div style={{ fontFamily: C.mono, fontSize: 9, padding: "4px 10px", borderRadius: 10, background: C.yellowL, color: C.yellowD, border: `1px solid rgba(241,166,15,.3)`, whiteSpace: "nowrap" }}>● Em progresso</div>
+              </div>
+
+              {/* Horizontal progress bar */}
+              <div style={{ padding: "20px 24px 8px" }}>
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+                  {trackResult.steps.map((s, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", flex: i < trackResult.steps.length - 1 ? 1 : undefined }}>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${s.done ? C.green : s.current ? C.yellow : C.bdr2}`, background: s.done ? C.green : s.current ? C.yellowL : C.white, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: s.current ? `0 0 0 5px ${C.yellowL}` : undefined, transition: "all .3s", zIndex: 1 }}>
+                          {s.done
+                            ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            : s.current
+                              ? <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.yellow, animation: "cp-blink 1.5s ease-in-out infinite" }} />
+                              : <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.bdr2 }} />
+                          }
+                        </div>
+                      </div>
+                      {i < trackResult.steps.length - 1 && (
+                        <div style={{ flex: 1, height: 2, background: s.done ? C.green : C.bdr2, margin: "0 4px", transition: "background .3s" }} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {/* Step labels */}
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  {trackResult.steps.map((s, i) => (
+                    <div key={i} style={{ textAlign: "center", flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: C.mono, fontSize: 8, color: s.done ? C.green : s.current ? C.yellowD : C.muted2, letterSpacing: "0.02em", textAlign: "center", padding: "0 2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Detail steps */}
+              <div style={{ padding: "16px 24px 24px", display: "flex", flexDirection: "column", gap: 0 }}>
                 {trackResult.steps.map((s, i) => (
-                  <div key={i} style={{ display: "flex", gap: 14, paddingBottom: i < trackResult.steps.length - 1 ? 16 : 0 }}>
+                  <div key={i} style={{ display: "flex", gap: 14, paddingBottom: i < trackResult.steps.length - 1 ? 14 : 0 }}>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 16, flexShrink: 0 }}>
-                      <div style={{ width: 12, height: 12, borderRadius: "50%", border: `2px solid ${s.done ? C.green : s.current ? C.yellow : C.bdr2}`, background: s.done ? C.green : C.white, zIndex: 1, flexShrink: 0, boxShadow: s.current ? `0 0 0 4px ${C.yellowL}` : undefined }} />
-                      {i < trackResult.steps.length - 1 && <div style={{ flex: 1, width: 2, background: s.done ? C.green : C.bdr2, minHeight: 20 }} />}
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.done ? C.green : s.current ? C.yellow : C.bdr2, flexShrink: 0, zIndex: 1 }} />
+                      {i < trackResult.steps.length - 1 && <div style={{ flex: 1, width: 1, background: s.done ? C.green : C.bdr2, minHeight: 18 }} />}
                     </div>
                     <div style={{ flex: 1, paddingBottom: 4 }}>
-                      <div style={{ fontSize: 13, fontWeight: 500, color: s.done || s.current ? C.ink : C.muted }}>{s.label}</div>
-                      <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted2, marginTop: 2 }}>{s.time}</div>
+                      <div style={{ fontSize: 12.5, fontWeight: 500, color: s.done || s.current ? C.ink : C.muted }}>{s.label}</div>
+                      <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted2, marginTop: 1 }}>{s.time}</div>
                     </div>
                     {s.current && <div style={{ alignSelf: "center", fontFamily: C.mono, fontSize: 8, padding: "3px 8px", borderRadius: 10, background: C.yellowL, color: C.yellowD, border: `1px solid rgba(241,166,15,.3)`, whiteSpace: "nowrap" }}>● Em curso</div>}
                     {s.done && <div style={{ alignSelf: "center", fontFamily: C.mono, fontSize: 8, padding: "3px 8px", borderRadius: 10, background: C.greenL, color: C.green, border: `1px solid rgba(0,196,154,.2)`, whiteSpace: "nowrap" }}>✓ Feito</div>}
                   </div>
                 ))}
+              </div>
+
+              {/* Share */}
+              <div style={{ padding: "14px 24px", borderTop: `1px solid ${C.bdr}`, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button className="cp-share-btn" onClick={() => { const msg = encodeURIComponent(`Pedido OP1NA1 ${trackVal}: ${trackResult?.desc} — Acompanhe em op1na1.gov.ao`); window.open(`https://wa.me/?text=${msg}`, "_blank"); }} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: C.radiusSm, border: `1px solid #25D366`, background: "rgba(37,211,102,.06)", color: "#25D366", fontSize: 12, cursor: "pointer", fontFamily: C.sans, transition: "all .14s", fontWeight: 500 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+                  Partilhar estado no WhatsApp
+                </button>
               </div>
             </div>
           )}
@@ -755,7 +1042,7 @@ export default function CitizenPortal() {
 
       {/* ══ TAB: SUBMETER PEDIDO ══ */}
       {(activeTab === "submeter") && (
-      <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, alignItems: "start" }}>
+      <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", display: "grid", gridTemplateColumns: "minmax(0,1fr)", gap: 20, alignItems: "start" }} className="cp-submeter-grid">
 
         {/* ── LEFT: FORM ── */}
         <div>
@@ -819,7 +1106,7 @@ export default function CitizenPortal() {
             {/* STEP 1: TIPO */}
             {!success && step === 1 && (
               <div style={{ animation: "cp-fade-up .3s ease" }}>
-                <StepHeader icon={<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.yellow} strokeWidth="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>} title={t("citizen.step1.title")} sub="Escolha a opção que melhor descreve a sua situação" />
+                <StepHeader icon={<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.yellow} strokeWidth="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>} title="O que deseja reportar hoje?" sub="Toque na categoria que melhor descreve a situação no seu bairro" />
                 <div style={{ padding: 22 }}>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 8, marginBottom: 20 }}>
                     {TIPOS.map(t => {
