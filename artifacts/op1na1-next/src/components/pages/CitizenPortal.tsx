@@ -79,9 +79,9 @@ const RESOLVED = [
   { Icon: Zap,      color: C.yellow, desc: "Iluminação avariada — Mulenvos de Cima", meta: "Segurança · 24h" },
 ];
 const MEDIADORES = [
-  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",   online: true,  whatsapp: "+244923000010", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "+244923000011", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "+244923000012", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",   online: true,  whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
 ];
 
 // Mensagens dinâmicas rotativas (mobile-first)
@@ -90,7 +90,7 @@ const DYNAMIC_MSGS = [
   "714 pedidos resolvidos em Maio. A sua participação conta!",
   "Tempo médio de resposta: 38 horas. Juntos somos mais rápidos.",
   "3 mediadores disponíveis agora mesmo para o ajudar presencialmente.",
-  "Sem internet? Marque *123# ou envie SMS para +244 923 000 001.",
+  "Sem internet? Marque *123# ou envie SMS para 958 746 812.",
 ];
 const CHANNELS = [
   { id: "portal",   label: "Portal",     icon: <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> },
@@ -99,8 +99,8 @@ const CHANNELS = [
   { id: "ussd",     label: "USSD *123#", icon: <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg> },
 ];
 const CHANNEL_MSG: Record<string,string> = {
-  whatsapp: "📱 WhatsApp: envie \"OLÁ\" para +244 923 000 000 e siga as instruções do assistente.",
-  sms:      "📨 SMS: envie a descrição do problema para +244 923 000 001.",
+  whatsapp: "📱 WhatsApp: envie \"OLÁ\" para 958 746 812 e siga as instruções do assistente.",
+  sms:      "📨 SMS: envie a descrição do problema para 958 746 812.",
   ussd:     "📟 USSD: marque *123# no seu telemóvel e siga o menu.",
 };
 const DEMO_TRACKS = [
@@ -120,10 +120,10 @@ const DEMO_TRACKS = [
   ]},
 ];
 
-function pad(n: number) { return String(n).padStart(2, "0"); }
 function genTicketId() {
-  const d = new Date();
-  return `MUL-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${Math.floor(Math.random()*9000)+1000}`;
+  // Short, memorable ticket code — easy to share via SMS/WhatsApp/call
+  const n = Math.floor(Math.random() * 900) + 100;
+  return `OP${n}`;
 }
 
 // ─── Tab definitions (static — moved inside component to use t()) ─
@@ -191,9 +191,15 @@ export default function CitizenPortal() {
 
   // Active tab (synced with URL hash)
   const [activeTab, setActiveTab] = useState("submeter");
-  const switchTab = useCallback((id: string) => {
+  const switchTab = useCallback((id: string, scroll = true) => {
     setActiveTab(id);
     window.history.replaceState(null, "", `#${id}`);
+    if (scroll) {
+      // Small delay so the new content renders before scrolling
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
   }, []);
 
   // Step
@@ -243,6 +249,9 @@ export default function CitizenPortal() {
   // Toast
   const [toast, setToast]       = useState({ msg: "", visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // Smooth scroll target — right before tab content
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Deep-link via URL hash (e.g. /citizen-portal#estatisticas)
   useEffect(() => {
@@ -456,6 +465,21 @@ export default function CitizenPortal() {
         .cp-info-card:hover { border-color:${C.bdr2}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.06)!important; }
         .cp-channel-card:hover { border-color:${C.yellow}!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(241,166,15,.1)!important; }
 
+        /* ── Category selection pulse ────────────────────── */
+        @keyframes cp-select-pop { 0%{transform:scale(1)} 35%{transform:scale(1.06)} 70%{transform:scale(.97)} 100%{transform:scale(1)} }
+        .cp-tipo-selected { animation: cp-select-pop .28s cubic-bezier(.34,1.56,.64,1) both; }
+
+        /* ── Mobile-only / desktop-only visibility ────────── */
+        .cp-mobile-only  { display: block; }
+        .cp-desktop-only { display: none; }
+        @media(min-width: 768px){
+          .cp-mobile-only  { display: none !important; }
+          .cp-desktop-only { display: block; }
+        }
+
+        /* ── Academic footer ──────────────────────────────── */
+        .cp-footer-academic { border-top: 1px solid rgba(255,255,255,.08); padding-top: 16px; text-align: center; }
+
         /* ── 3 Main CTAs ─────────────────────────────────── */
         .cp-cta-grid { display:grid; grid-template-columns:1fr; gap:10px; padding:0 0 24px; position:relative; z-index:1; }
         @media(min-width:480px){ .cp-cta-grid { grid-template-columns:repeat(3,1fr); } }
@@ -665,7 +689,7 @@ export default function CitizenPortal() {
           </svg>
           <span style={{ flex: 1 }}>
             {isOffline
-              ? "Sem ligação à internet. Use SMS (+244 923 000 001) ou USSD (*123#) gratuitamente."
+              ? "Sem ligação à internet. Use SMS (958 746 812) ou USSD (*123#) gratuitamente."
               : "Modo Poupança de Dados activo — imagens e mapas desactivados."
             }
           </span>
@@ -690,6 +714,9 @@ export default function CitizenPortal() {
           </button>
         )}
       </div>
+
+      {/* ── Smooth-scroll anchor (target of switchTab) ───── */}
+      <div ref={contentRef} style={{ scrollMarginTop: 60 }} />
 
       {/* ══ TAB: ESTATÍSTICAS ══ */}
       {activeTab === "estatisticas" && (
@@ -776,8 +803,8 @@ export default function CitizenPortal() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16, marginBottom: 28 }}>
             {[
-              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: "Envie \"OLÁ\" para iniciar", contact: "+244 923 000 000", how: "Assistente automático 24h/7d. Ideal para pedidos rápidos e acompanhamento." },
-              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: "Envie a descrição do problema", contact: "+244 923 000 001", how: "Sem internet necessária. Resposta em até 2 horas em dias úteis." },
+              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: "Envie \"OLÁ\" para iniciar", contact: "958 746 812", how: "Assistente automático 24h/7d. Ideal para pedidos rápidos e acompanhamento." },
+              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: "Envie a descrição do problema", contact: "958 746 812", how: "Sem internet necessária. Resposta em até 2 horas em dias úteis." },
               { Icon: Hash,          label: "USSD *123#",color: C.yellow,  desc: "Marque no seu telemóvel", contact: "*123#", how: "Funciona sem internet e sem saldo. Menu guiado simples." },
               { Icon: Monitor,       label: "Portal Web",color: C.green,   desc: "Este portal online", contact: "op1na1.gov.ao", how: "Formulário completo com acompanhamento em tempo real." },
               { Icon: Smartphone,    label: "App Móvel", color: "#8B5CF6", desc: "Android e iOS", contact: "Descarregar na loja", how: "App offline-first. Funciona em zonas com pouca conectividade." },
@@ -856,7 +883,7 @@ export default function CitizenPortal() {
               <div style={{ fontSize: 20 }}>📟</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 500, color: C.ink2, marginBottom: 2 }}>Sem internet ou sem smartphone?</div>
-                <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted }}>SMS para <strong>+244 923 000 001</strong> · USSD <strong>*123#</strong> · Ambos gratuitos, funcionam em 2G</div>
+                <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted }}>SMS para <strong>958 746 812</strong> · USSD <strong>*123#</strong> · Ambos gratuitos, funcionam em 2G</div>
               </div>
               <a href="tel:+244923000001" style={{ padding: "8px 16px", borderRadius: C.radiusSm, border: `1px solid ${C.bdr2}`, background: C.white, color: C.ink, fontSize: 12.5, fontWeight: 500, cursor: "pointer", fontFamily: C.sans, textDecoration: "none", flexShrink: 0 }}>
                 Ligar
@@ -1113,7 +1140,7 @@ export default function CitizenPortal() {
                       const sel = tipo === t.id;
                       const isUrgent = t.id === "urgente";
                       return (
-                        <div key={t.id} className="cp-type-opt" onClick={() => setTipo(t.id)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "16px 8px 14px", borderRadius: C.radiusSm, border: `1.5px solid ${sel ? (isUrgent ? C.red : C.yellow) : C.bdr}`, cursor: "pointer", background: sel ? (isUrgent ? "rgba(180,20,20,.05)" : C.yellowL) : C.surface, textAlign: "center", position: "relative", transition: "all .16s" }}>
+                        <div key={t.id} className={`cp-type-opt${sel ? " cp-tipo-selected" : ""}`} onClick={() => setTipo(t.id)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "16px 8px 14px", borderRadius: C.radiusSm, border: `2px solid ${sel ? (isUrgent ? C.red : C.yellow) : C.bdr}`, cursor: "pointer", background: sel ? (isUrgent ? "rgba(180,20,20,.07)" : C.yellowL) : C.surface, textAlign: "center", position: "relative", transition: "border-color .16s, background .16s", boxShadow: sel ? `0 0 0 3px ${isUrgent ? "rgba(180,20,20,.15)" : "rgba(241,166,15,.2)"}` : undefined }}>
                           {sel && <span style={{ position: "absolute", top: 6, right: 8, fontSize: 9, color: isUrgent ? C.red : C.yellow, fontFamily: C.mono }}>✓</span>}
                           <div style={{ width: 40, height: 40, borderRadius: C.radiusSm, background: `${t.color}14`, display: "flex", alignItems: "center", justifyContent: "center" }}><t.Icon size={22} color={t.color} /></div>
                           <span style={{ fontSize: 11, fontWeight: 500, color: C.ink2 }}>{t.name}</span>
@@ -1444,8 +1471,8 @@ export default function CitizenPortal() {
             ]},
             { label: t("citizen.footer.portals"), items: [
               { text: "Portal Municipal",  action: () => switchTab("municipal") },
-              { text: "Dashboard Admin",   action: () => router.push("/admin") },
-              { text: "Área Técnica (TI)", action: () => router.push("/") },
+              { text: "Dashboard Admin",   action: () => router.push("/admin"),  desktopOnly: true },
+              { text: "Área Técnica (TI)", action: () => router.push("/"),       desktopOnly: true },
             ]},
             { label: t("citizen.footer.legal"), items: [
               { text: "Termos de Uso",     action: () => switchTab("informacoes") },
@@ -1456,7 +1483,7 @@ export default function CitizenPortal() {
             <div key={col.label}>
               <div style={{ color: "rgba(255,255,255,.25)", fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", marginBottom: 8 }}>{col.label}</div>
               {col.items.map(item => (
-                <button key={item.text} onClick={item.action} className="cp-footer-link"
+                <button key={item.text} onClick={item.action} className={`cp-footer-link${(item as {desktopOnly?: boolean}).desktopOnly ? " cp-desktop-only" : ""}`}
                   style={{ display: "block", background: "none", border: "none", cursor: "pointer", fontFamily: C.mono, fontSize: 9, letterSpacing: "0.06em", marginBottom: 5, padding: 0, textAlign: "left" }}>
                   {item.text}
                 </button>
@@ -1464,9 +1491,36 @@ export default function CitizenPortal() {
             </div>
           ))}
         </div>
-        {/* Copyright bar */}
-        <div style={{ maxWidth: 980, margin: "0 auto", borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 16, textAlign: "center", color: "rgba(255,255,255,.25)" }}>
-          Copyright © 2025 OP1NA1 — Opinar para Ajudar · Administração Municipal dos Mulenvos · Luanda, Angola · v1.0
+        {/* Copyright + Academic attribution */}
+        <div className="cp-footer-academic" style={{ maxWidth: 980, margin: "0 auto" }}>
+          {/* Omnichannel contact */}
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(241,166,15,.08)", border: "1px solid rgba(241,166,15,.15)", borderRadius: 8, padding: "8px 16px", marginBottom: 16 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.yellow} strokeWidth="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-2.91-8.72A2 2 0 0 1 4.7 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.91 9.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.34 1.85.574 2.81.7A2 2 0 0 1 22 17.3Z"/></svg>
+            <span style={{ color: "rgba(255,255,255,.5)", fontSize: 9 }}>
+              Linha omnicanal (chamadas · SMS · WhatsApp):
+            </span>
+            <a href="tel:958746812" style={{ color: C.yellow, textDecoration: "none", fontWeight: 600, fontSize: 10, letterSpacing: "0.04em" }}>958 746 812</a>
+          </div>
+
+          {/* Academic block */}
+          <div style={{ color: "rgba(255,255,255,.18)", fontSize: 9, lineHeight: 2, letterSpacing: "0.06em" }}>
+            <div style={{ color: "rgba(255,255,255,.35)", fontSize: 10, marginBottom: 4 }}>
+              © 2026 OP1NA1 – Município dos Mulenvos
+            </div>
+            <div>Desenvolvido por <span style={{ color: "rgba(255,255,255,.4)" }}>Francisco Cadete</span></div>
+            <div>Faculdade de Ciências Sociais · Universidade Agostinho Neto</div>
+            <div style={{ marginTop: 4, color: "rgba(255,255,255,.12)" }}>
+              Estatística Social & Geodemografia aplicadas à Governação Digital Participativa
+            </div>
+          </div>
+
+          {/* Mobile-only: institutional login link */}
+          <div className="cp-mobile-only" style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,.06)" }}>
+            <button onClick={() => router.push("/login")} style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", borderRadius: 8, padding: "10px 20px", color: "rgba(255,255,255,.5)", fontFamily: C.mono, fontSize: 10, cursor: "pointer", letterSpacing: "0.06em", display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Acesso institucional (gestores e técnicos)
+            </button>
+          </div>
         </div>
       </footer>
 
