@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { ok, err } from "@/lib/server/response";
+import { sendSmsAT, buildAtConfirmationSms } from "@/lib/africastalking";
 import { sendSmsConfirmation, sendWhatsappConfirmation } from "@/lib/twilio";
 import { logChannelEvent, maskPhone } from "@/lib/channel-log";
 
@@ -13,20 +14,27 @@ function genTicketId(): string {
 
 /**
  * Fire-and-forget SMS/WhatsApp confirmation.
+ * Cadeia: WhatsApp → Twilio WA | SMS → Africa's Talking → Twilio SMS.
  * Never throws — a notification failure must not block the 201 response.
  */
 async function notifyAsync(
   phone:    string | undefined,
   channel:  string | undefined,
-  ticketId: string
+  ticketId: string,
 ): Promise<void> {
   if (!phone) return;
   try {
     if (channel === "whatsapp") {
       await sendWhatsappConfirmation(phone, ticketId);
-    } else {
-      await sendSmsConfirmation(phone, ticketId);
+      return;
     }
+    // SMS — Africa's Talking primário, Twilio como fallback
+    if (process.env.AT_API_KEY && process.env.AT_USERNAME) {
+      const result = await sendSmsAT(phone, buildAtConfirmationSms(ticketId));
+      if (result.ok) return;
+      console.warn("[requests] Africa's Talking falhou, fallback Twilio:", result.error);
+    }
+    await sendSmsConfirmation(phone, ticketId);
   } catch (e) {
     console.warn("[requests] SMS notification failed (non-fatal):", e);
   }
