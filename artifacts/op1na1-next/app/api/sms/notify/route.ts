@@ -1,17 +1,22 @@
 /**
  * POST /api/sms/notify
  *
- * Send a confirmation message to a citizen after their request is created.
- * Supports SMS and WhatsApp channels.
+ * Envia confirmação de pedido ao cidadão após submissão.
+ * Suporta dois canais:
+ *
+ *   sms       → SMSMobileAPI (primário, via dispositivo Android + SIM angolano)
+ *               fallback automático para Twilio SMS se SMSMobileAPI não estiver configurado
+ *   whatsapp  → Twilio WhatsApp
  *
  * Body: { to: string; ticketId: string; channel?: "sms" | "whatsapp" }
  *
- * Called internally (from /api/requests or from CitizenPortal form submit).
- * Not publicly documented — guarded by an internal secret if needed.
+ * Chamado internamente pelo /api/requests.
+ * Devolve 202 se o envio falhar — o pedido foi criado na mesma.
  */
 
 import { NextRequest } from "next/server";
-import { ok, err } from "@/lib/server/response";
+import { ok, err }     from "@/lib/server/response";
+import { notifySmsMobile }         from "@/lib/smsmobileapi";
 import {
   sendSmsConfirmation,
   sendWhatsappConfirmation,
@@ -37,26 +42,37 @@ export async function POST(req: NextRequest) {
     return err("Campos obrigatórios: to, ticketId", 422);
   }
 
-  // Basic E.164 guard — must start with +
+  // Formato E.164 obrigatório
   if (!to.startsWith("+") && !to.startsWith("whatsapp:")) {
     return err(
-      "Número de telefone deve estar em formato E.164 (ex: +244958746812)",
+      "Número em formato E.164 (ex: +244958746812)",
       422
     );
   }
 
   try {
     if (channel === "whatsapp") {
+      // ── WhatsApp → Twilio (única opção actual) ────────────────────────────
       await sendWhatsappConfirmation(to, ticketId);
-    } else {
-      await sendSmsConfirmation(to, ticketId);
-    }
+      return ok({ sent: true, provider: "twilio_whatsapp", channel, ticketId });
 
-    return ok({ sent: true, channel, ticketId }, 200);
+    } else {
+      // ── SMS → SMSMobileAPI (primário) com fallback para Twilio ────────────
+      const smsMobileKey = process.env.SMSMOBILE_API_KEY;
+
+      if (smsMobileKey) {
+        await notifySmsMobile(to, ticketId);
+        return ok({ sent: true, provider: "smsmobileapi", channel, ticketId });
+      }
+
+      // Fallback: Twilio SMS (se TWILIO_FROM_NUMBER configurado)
+      await sendSmsConfirmation(to, ticketId);
+      return ok({ sent: true, provider: "twilio_sms", channel, ticketId });
+    }
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("[sms/notify]", msg);
-    // Return 202 — the request was saved even if SMS failed
-    return ok({ sent: false, reason: msg }, 202);
+    // 202 → pedido salvo, mas notificação falhou
+    return ok({ sent: false, provider: "none", reason: msg }, 202);
   }
 }
