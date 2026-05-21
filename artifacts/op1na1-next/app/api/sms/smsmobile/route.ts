@@ -24,6 +24,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { classifyMessage, CATEGORY_LABELS, PRIORITY_LABELS } from "@/lib/classifier";
 import {
   sendSmsMobile,
   buildConfirmationSms,
@@ -127,6 +128,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ action: "status_sent", ticket });
   }
 
+  // ── Classificação automática da mensagem ─────────────────────────────────────
+  const clf      = classifyMessage(text);
+  const catLabel = CATEGORY_LABELS[clf.category];
+  const prioLabel = PRIORITY_LABELS[clf.priority];
+
   // ── Novo pedido via SMS ─────────────────────────────────────────────────────
   const ticketId = genTicketId();
 
@@ -139,9 +145,11 @@ export async function POST(req: NextRequest) {
         ticketId,
         channel:     "sms",
         phoneNumber: from,
-        description: text || "(pedido sem descrição — via SMS)",
+        description: clf.location
+          ? `[${catLabel}] ${text} — ${clf.location}`
+          : `[${catLabel}] ${text}`,
         status:      "received",
-        priority:    "normal",
+        priority:    clf.priority,
         createdAt:   now,
         updatedAt:   now,
       });
@@ -151,10 +159,22 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Resposta automática de confirmação
-  void sendSmsMobile(from, buildConfirmationSms(ticketId));
+  // Resposta automática com categoria detectada
+  const reply =
+    `OP1NA1: Pedido ${ticketId} recebido ✅\n` +
+    `Categoria: ${catLabel}\n` +
+    `Prioridade: ${prioLabel}\n` +
+    `Envie "${ticketId}" para acompanhar.`;
 
-  return NextResponse.json({ action: "ticket_created", ticketId }, { status: 201 });
+  void sendSmsMobile(from, reply);
+
+  return NextResponse.json({
+    action: "ticket_created",
+    ticketId,
+    category: clf.category,
+    priority: clf.priority,
+    location: clf.location,
+  }, { status: 201 });
 }
 
 // ── GET — health check (útil para testar o webhook manualmente) ───────────────

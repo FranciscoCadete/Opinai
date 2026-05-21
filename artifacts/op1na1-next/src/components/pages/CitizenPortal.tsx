@@ -230,6 +230,15 @@ export default function CitizenPortal() {
   // Channel
   const [channel, setChannel] = useState("portal");
 
+  // Canal 3 — channel-selector modal (Como pretende contactar?)
+  const [contactModal, setContactModal] = useState<{
+    name:  string;
+    phone: string;
+    open:  boolean;
+  } | null>(null);
+  const [selectedContactChannel, setSelectedContactChannel] =
+    useState<"chamada" | "sms" | "whatsapp" | null>(null);
+
   // Track
   const [trackVal, setTrackVal]         = useState("");
   const [trackPhone, setTrackPhone]     = useState("");
@@ -533,7 +542,138 @@ export default function CitizenPortal() {
           .cp-topbar-track-label { display: none !important; }
         }
         .cp-topbar-short { display: none; }
+
+        /* ── Canal 3: Channel selector modal ─────────────── */
+        @keyframes cp-modal-in { from{opacity:0;transform:translate(-50%,-48%) scale(.96)} to{opacity:1;transform:translate(-50%,-50%) scale(1)} }
+        .cp-modal-overlay { position:fixed; inset:0; background:rgba(8,12,16,.55); z-index:200; backdrop-filter:blur(4px); }
+        .cp-modal-box { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:${C.white}; border:1px solid ${C.bdr2}; border-radius:18px; width:min(92vw,440px); padding:32px 28px; z-index:201; animation:cp-modal-in .2s cubic-bezier(.34,1.2,.64,1) both; box-shadow:0 24px 60px rgba(0,0,0,.18); }
+        .cp-ch-opt { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:12px; border:1.5px solid ${C.bdr}; cursor:pointer; background:transparent; width:100%; transition:all .15s; text-align:left; }
+        .cp-ch-opt:hover { border-color:${C.yellow}; background:rgba(241,166,15,.04); transform:translateX(3px); }
+        .cp-ch-opt.selected { border-color:${C.yellow}; background:rgba(241,166,15,.08); }
+        .cp-ch-opt-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .cp-ch-action { margin-top:20px; padding:12px 20px; border-radius:10px; border:none; cursor:pointer; width:100%; font-family:${C.sans}; font-size:14px; font-weight:600; background:${C.yellow}; color:${C.black}; transition:all .15s; }
+        .cp-ch-action:hover { background:${C.yellowD}; transform:translateY(-1px); }
+        .cp-ch-action:disabled { opacity:.35; cursor:default; transform:none; }
+        .cp-contact-trigger { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:8px; border:1px solid ${C.bdr2}; cursor:pointer; font-family:${C.sans}; font-size:12px; font-weight:500; transition:all .14s; background:transparent; color:${C.ink}; }
+        .cp-contact-trigger:hover { border-color:${C.yellow}; color:${C.yellow}; }
       `}</style>
+
+      {/* ══ CANAL 3: Channel-selector modal ════════════════════ */}
+      {contactModal?.open && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="cp-modal-overlay"
+            onClick={() => { setContactModal(null); setSelectedContactChannel(null); }}
+            aria-hidden="true"
+          />
+          <div className="cp-modal-box" role="dialog" aria-modal="true" aria-labelledby="cp-modal-title">
+            {/* Header */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>
+                Contactar · {contactModal.name}
+              </div>
+              <div id="cp-modal-title" style={{ fontFamily: C.display, fontSize: 20, fontWeight: 300, color: C.ink, lineHeight: 1.2 }}>
+                Como pretende contactar?
+              </div>
+            </div>
+
+            {/* Options */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {([
+                {
+                  id: "chamada" as const,
+                  label: "Chamada Telefónica",
+                  sub:   "Fale directamente com um agente",
+                  color: C.green,
+                  bg:    C.greenL,
+                  icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.green} strokeWidth="2" aria-hidden="true">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5 19.79 19.79 0 0 1 1.62 2.84 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+                    </svg>
+                  ),
+                },
+                {
+                  id: "sms" as const,
+                  label: "SMS",
+                  sub:   "Envie o problema por mensagem de texto",
+                  color: C.blue,
+                  bg:    "rgba(47,110,245,.08)",
+                  icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.blue} strokeWidth="2" aria-hidden="true">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                  ),
+                },
+                {
+                  id: "whatsapp" as const,
+                  label: "WhatsApp",
+                  sub:   "Assistente automático guiado 24h/7d",
+                  color: "#25D366",
+                  bg:    "rgba(37,211,102,.08)",
+                  icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2" aria-hidden="true">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/>
+                    </svg>
+                  ),
+                },
+              ] as const).map(opt => (
+                <button
+                  key={opt.id}
+                  className={`cp-ch-opt${selectedContactChannel === opt.id ? " selected" : ""}`}
+                  onClick={() => setSelectedContactChannel(opt.id)}
+                  style={{ borderColor: selectedContactChannel === opt.id ? opt.color : undefined,
+                           background: selectedContactChannel === opt.id ? opt.bg : undefined }}
+                >
+                  <div className="cp-ch-opt-icon" style={{ background: opt.bg }}>
+                    {opt.icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{opt.label}</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted, marginTop: 2 }}>{opt.sub}</div>
+                  </div>
+                  {selectedContactChannel === opt.id && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill={opt.color} aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Action */}
+            <button
+              className="cp-ch-action"
+              disabled={!selectedContactChannel}
+              onClick={() => {
+                const phone = contactModal.phone.replace(/\D/g, "");
+                if (selectedContactChannel === "chamada") {
+                  window.open(`tel:+244${phone}`, "_self");
+                } else if (selectedContactChannel === "sms") {
+                  window.open(`sms:+244${phone}`, "_self");
+                } else if (selectedContactChannel === "whatsapp") {
+                  window.open(`https://wa.me/244${phone}?text=OL%C3%81%20OP1NA1`, "_blank", "noopener,noreferrer");
+                }
+                setContactModal(null);
+                setSelectedContactChannel(null);
+              }}
+            >
+              {selectedContactChannel === "chamada"  && "Ligar agora →"}
+              {selectedContactChannel === "sms"      && "Abrir SMS →"}
+              {selectedContactChannel === "whatsapp" && "Abrir WhatsApp →"}
+              {!selectedContactChannel               && "Seleccione um canal"}
+            </button>
+
+            {/* Dismiss */}
+            <button
+              onClick={() => { setContactModal(null); setSelectedContactChannel(null); }}
+              style={{ display: "block", width: "100%", marginTop: 10, padding: "8px", background: "none", border: "none", cursor: "pointer", fontFamily: C.mono, fontSize: 10, color: C.muted2, letterSpacing: "0.04em" }}
+            >
+              cancelar
+            </button>
+          </div>
+        </>
+      )}
 
       {/* ── TOPBAR ──────────────────────────────────────────── */}
       <header style={{
@@ -801,16 +941,35 @@ export default function CitizenPortal() {
           <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Canais de Contacto</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Escolha o canal mais conveniente para si</p>
 
+          {/* Canal 3 — decision banner */}
+          <div style={{ background: "linear-gradient(135deg,rgba(241,166,15,.08),rgba(0,196,154,.06))", border: `1px solid rgba(241,166,15,.2)`, borderRadius: C.radius, padding: "18px 22px", marginBottom: 20, display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontFamily: C.mono, fontSize: 9, color: C.yellow, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>Canal 3 — Decisão Assistida</div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: C.ink }}>Como pretende contactar?</div>
+              <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>Escolha o canal e o sistema orienta-o automaticamente.</div>
+            </div>
+            <button
+              className="cp-contact-trigger"
+              style={{ background: C.yellow, color: C.black, border: "none", fontWeight: 600, borderRadius: 10, padding: "10px 20px" }}
+              onClick={() => {
+                setSelectedContactChannel(null);
+                setContactModal({ name: "OP1NA1 – Mulenvos", phone: "958746812", open: true });
+              }}
+            >
+              Contactar agora →
+            </button>
+          </div>
+
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16, marginBottom: 28 }}>
             {[
-              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: "Envie \"OLÁ\" para iniciar", contact: "958 746 812", how: "Assistente automático 24h/7d. Ideal para pedidos rápidos e acompanhamento." },
-              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: "Envie a descrição do problema", contact: "958 746 812", how: "Sem internet necessária. Resposta em até 2 horas em dias úteis." },
-              { Icon: Hash,          label: "USSD *123#",color: C.yellow,  desc: "Marque no seu telemóvel", contact: "*123#", how: "Funciona sem internet e sem saldo. Menu guiado simples." },
-              { Icon: Monitor,       label: "Portal Web",color: C.green,   desc: "Este portal online", contact: "op1na1.gov.ao", how: "Formulário completo com acompanhamento em tempo real." },
-              { Icon: Smartphone,    label: "App Móvel", color: "#8B5CF6", desc: "Android e iOS", contact: "Descarregar na loja", how: "App offline-first. Funciona em zonas com pouca conectividade." },
-              { Icon: MessageCircle, label: "Messenger", color: "#0EA5E9", desc: "Facebook Messenger", contact: "@MunicipioMulenvos", how: "Para utilizadores do Facebook. Assistente automático integrado." },
+              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: "Envie \"OLÁ\" para iniciar", contact: "958 746 812", phone: "958746812", how: "Assistente automático guiado 24h/7d. Categorias, estado e confirmação.", actionable: true },
+              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: "Envie a descrição do problema", contact: "958 746 812", phone: "958746812", how: "Sem internet. Classificação automática por IA. Resposta em 2h.", actionable: true },
+              { Icon: Hash,          label: "USSD *123#",color: C.yellow,  desc: "Marque no seu telemóvel", contact: "*123#", phone: "", how: "Funciona sem internet e sem saldo. Menu guiado simples.", actionable: false },
+              { Icon: Monitor,       label: "Portal Web",color: C.green,   desc: "Este portal online", contact: "op1na1.gov.ao", phone: "", how: "Formulário completo com acompanhamento em tempo real.", actionable: false },
+              { Icon: Smartphone,    label: "App Móvel", color: "#8B5CF6", desc: "Android e iOS", contact: "Descarregar na loja", phone: "", how: "App offline-first. Funciona em zonas com pouca conectividade.", actionable: false },
+              { Icon: MessageCircle, label: "Messenger", color: "#0EA5E9", desc: "Facebook Messenger", contact: "@MunicipioMulenvos", phone: "", how: "Para utilizadores do Facebook. Assistente automático integrado.", actionable: false },
             ].map(ch => (
-              <div key={ch.label} className="cp-channel-card" style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "20px 22px", cursor: "default", transition: "all .18s" }}>
+              <div key={ch.label} className="cp-channel-card" style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "20px 22px", cursor: "default", transition: "all .18s", display: "flex", flexDirection: "column", gap: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                   <div style={{ width: 40, height: 40, borderRadius: C.radiusSm, background: `${ch.color}15`, border: `1px solid ${ch.color}30`, display: "flex", alignItems: "center", justifyContent: "center" }}><ch.Icon size={20} color={ch.color} /></div>
                   <div>
@@ -818,7 +977,20 @@ export default function CitizenPortal() {
                     <div style={{ fontFamily: C.mono, fontSize: 10, color: ch.color, letterSpacing: "0.04em" }}>{ch.contact}</div>
                   </div>
                 </div>
-                <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.6 }}>{ch.how}</div>
+                <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.6, flex: 1 }}>{ch.how}</div>
+                {ch.actionable && (
+                  <button
+                    className="cp-contact-trigger"
+                    style={{ marginTop: 14, width: "100%", justifyContent: "center" }}
+                    onClick={() => {
+                      setSelectedContactChannel(null);
+                      setContactModal({ name: ch.label, phone: ch.phone, open: true });
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+                    Contactar
+                  </button>
+                )}
               </div>
             ))}
           </div>
