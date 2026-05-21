@@ -30,6 +30,7 @@ import {
   buildConfirmationSms,
   buildStatusSms,
 } from "@/lib/smsmobileapi";
+import { logChannelEvent, maskPhone } from "@/lib/channel-log";
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
@@ -100,6 +101,8 @@ export async function POST(req: NextRequest) {
   const text  = message.trim();
   const lower = text.toLowerCase();
 
+  const t0 = Date.now();
+
   // ── Consulta de estado de pedido existente ──────────────────────────────────
   const trackMatch = lower.match(/(?:estado|acompanhar|ver|track)\s+(op\d+)|(op\d+)$/);
   if (trackMatch) {
@@ -125,12 +128,13 @@ export async function POST(req: NextRequest) {
     }
 
     void sendSmsMobile(from, buildStatusSms(ticket, status, previsao));
+    logChannelEvent({ channel: "sms", direction: "in", status: "ok", action: "status_query", ticketId: ticket, phoneTail: maskPhone(from), durationMs: Date.now() - t0 });
     return NextResponse.json({ action: "status_sent", ticket });
   }
 
   // ── Classificação automática da mensagem ─────────────────────────────────────
-  const clf      = classifyMessage(text);
-  const catLabel = CATEGORY_LABELS[clf.category];
+  const clf       = classifyMessage(text);
+  const catLabel  = CATEGORY_LABELS[clf.category];
   const prioLabel = PRIORITY_LABELS[clf.priority];
 
   // ── Novo pedido via SMS ─────────────────────────────────────────────────────
@@ -155,6 +159,7 @@ export async function POST(req: NextRequest) {
       });
     } catch (e) {
       console.error("[smsmobile/webhook] DB insert failed:", e);
+      logChannelEvent({ channel: "sms", direction: "in", status: "error", action: "db_insert_failed", ticketId, phoneTail: maskPhone(from), durationMs: Date.now() - t0, error: String(e) });
       // Continua — responde sempre ao cidadão
     }
   }
@@ -167,6 +172,8 @@ export async function POST(req: NextRequest) {
     `Envie "${ticketId}" para acompanhar.`;
 
   void sendSmsMobile(from, reply);
+
+  logChannelEvent({ channel: "sms", direction: "in", status: "ok", action: "ticket_created", ticketId, phoneTail: maskPhone(from), durationMs: Date.now() - t0 });
 
   return NextResponse.json({
     action: "ticket_created",

@@ -28,6 +28,7 @@ import {
 } from "@/lib/whatsapp-flow";
 
 import { classifyMessage, CATEGORY_LABELS, PRIORITY_LABELS } from "@/lib/classifier";
+import { logChannelEvent, maskPhone } from "@/lib/channel-log";
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
@@ -136,6 +137,7 @@ export async function POST(req: NextRequest) {
 
   const phone = from.replace("whatsapp:", "");
   const lower = body.toLowerCase();
+  const _t0   = Date.now();
 
   // ── Comandos globais (qualquer estado) ────────────────────────────────────
 
@@ -151,6 +153,7 @@ export async function POST(req: NextRequest) {
     const ticket = trackMatch[1].toUpperCase();
     const status = await lookupStatus(ticket);
     const label  = status ? (STATUS_LABELS[status] ?? status) : null;
+    logChannelEvent({ channel: "whatsapp", direction: "in", status: "ok", action: "status_query", ticketId: ticket, phoneTail: maskPhone(phone), durationMs: Date.now() - _t0 });
     if (label) return twiml(WA_MSG.statusFound(ticket, label));
     return twiml(WA_MSG.statusNotFound(ticket));
   }
@@ -212,6 +215,7 @@ export async function POST(req: NextRequest) {
     const prioLabel = PRIORITY_LABELS[clf.priority];
 
     await saveTicket(ticketId, phone, session.category ?? clf.category, body, clf.priority, clf.location);
+    logChannelEvent({ channel: "whatsapp", direction: "in", status: "ok", action: "ticket_created", ticketId, phoneTail: maskPhone(phone), durationMs: Date.now() - _t0 });
 
     resetSession(phone); // próxima mensagem reinicia fluxo
     return twiml(WA_MSG.confirmation(ticketId, catLabel, prioLabel));

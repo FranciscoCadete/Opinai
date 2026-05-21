@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { ok, err } from "@/lib/server/response";
 import { sendSmsConfirmation, sendWhatsappConfirmation } from "@/lib/twilio";
+import { logChannelEvent, maskPhone } from "@/lib/channel-log";
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
     const b        = body as Record<string, string> | null ?? {};
     // Best-effort SMS — won't throw even if Twilio not configured
     void notifyAsync(b["phone"] ?? b["phoneNumber"], b["channel"], ticketId);
+    logChannelEvent({ channel: "portal", direction: "in", status: "ok", action: "ticket_created", ticketId, phoneTail: maskPhone(b["phone"] ?? b["phoneNumber"]), durationMs: 0 });
     return ok({ ticketId, status: "received", priority: "normal", createdAt: now }, 201);
   }
 

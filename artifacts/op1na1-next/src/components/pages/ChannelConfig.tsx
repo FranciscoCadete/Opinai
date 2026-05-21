@@ -1,11 +1,26 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import {
   Radio, Wifi, WifiOff, AlertTriangle, Settings, Save, Plus,
   X, Eye, EyeOff, Clock, Zap, MessageSquare, Siren, Bell,
   CheckCircle2, ChevronDown, RotateCcw, Copy, Info,
+  Activity, RefreshCw, CheckCircle, XCircle, AlertCircle, MinusCircle,
+  ArrowDownLeft, ArrowUpRight,
 } from "lucide-react";
+import type { ChannelLogEntry } from "@/lib/channel-log";
+
+// Tipo local — espelha ChannelHealth do route (evita import server→client)
+interface ChannelHealth {
+  id:           string;
+  name:         string;
+  status:       "online" | "offline" | "degraded" | "unconfigured";
+  latencyMs:    number | null;
+  detail:       string;
+  lastActivity: string | null;
+  eventsOk:     number;
+  eventsErr:    number;
+}
 
 // ─── Types ───────────────────────────────────────────────────────
 type ChannelStatus = "online" | "offline" | "degradado";
@@ -239,7 +254,7 @@ function Dot({ status }: { status: ChannelStatus }) {
 
 // ════════════════════════════════════════════════════════════════
 export default function ChannelConfig() {
-  const [tab,       setTab]       = useState<"canais"|"sla"|"crise"|"templates">("canais");
+  const [tab,       setTab]       = useState<"canais"|"sla"|"crise"|"templates"|"diagnostico">("canais");
   const [channels,  setChannels]  = useState<Channel[]>(CHANNELS_INIT);
   const [sla,       setSla]       = useState<SLARow[]>(SLA_INIT);
   const [crisis,    setCrisis]    = useState<CrisisConfig>(CRISIS_INIT);
@@ -260,6 +275,42 @@ export default function ChannelConfig() {
   // Saved toast
   const [saved,     setSaved]     = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // ── Diagnóstico — estado ─────────────────────────────────────────────────────
+  const [diagHealth,    setDiagHealth]    = useState<ChannelHealth[] | null>(null);
+  const [diagLogs,      setDiagLogs]      = useState<ChannelLogEntry[]>([]);
+  const [diagCheckedAt, setDiagCheckedAt] = useState<string | null>(null);
+  const [diagLoading,   setDiagLoading]   = useState(false);
+  const [diagError,     setDiagError]     = useState<string | null>(null);
+
+  const fetchDiag = useCallback(async () => {
+    setDiagLoading(true);
+    setDiagError(null);
+    try {
+      const [hRes, lRes] = await Promise.all([
+        fetch("/api/admin/channels/health"),
+        fetch("/api/admin/channels/logs?limit=40"),
+      ]);
+      if (!hRes.ok) throw new Error(`Health: HTTP ${hRes.status}`);
+      const hData = await hRes.json() as { channels: ChannelHealth[]; checkedAt: string };
+      const lData = lRes.ok ? await lRes.json() as { entries: ChannelLogEntry[] } : { entries: [] };
+      setDiagHealth(hData.channels);
+      setDiagCheckedAt(hData.checkedAt);
+      setDiagLogs(lData.entries);
+    } catch (e) {
+      setDiagError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setDiagLoading(false);
+    }
+  }, []);
+
+  // Auto-fetch when tab activates; refresh every 30 s
+  useEffect(() => {
+    if (tab !== "diagnostico") return;
+    void fetchDiag();
+    const t = setInterval(() => { void fetchDiag(); }, 30_000);
+    return () => clearInterval(t);
+  }, [tab, fetchDiag]);
 
   // Simulate random latency drift every 30s
   useEffect(() => {
@@ -344,10 +395,11 @@ export default function ChannelConfig() {
   const currentTemplate = templates.find(t => t.event === selEvent);
 
   const TABS = [
-    { id: "canais",    label: "Canais Activos",    icon: Radio },
-    { id: "sla",       label: "SLA por Categoria", icon: Clock },
-    { id: "crise",     label: "Alertas de Crise",  icon: Siren },
-    { id: "templates", label: "Templates PT-AO",   icon: MessageSquare },
+    { id: "canais",      label: "Canais Activos",    icon: Radio },
+    { id: "sla",         label: "SLA por Categoria", icon: Clock },
+    { id: "crise",       label: "Alertas de Crise",  icon: Siren },
+    { id: "templates",   label: "Templates PT-AO",   icon: MessageSquare },
+    { id: "diagnostico", label: "Diagnóstico",        icon: Activity },
   ] as const;
 
   return (
@@ -826,6 +878,181 @@ export default function ChannelConfig() {
           </div>
         </div>
       )}
+
+      {/* ── TAB 5 — DIAGNÓSTICO ── */}
+      {tab === "diagnostico" && (() => {
+        const statusIcon = (s: ChannelHealth["status"]) => {
+          if (s === "online")        return <CheckCircle  size={16} className="text-green-500" />;
+          if (s === "degraded")      return <AlertCircle  size={16} className="text-amber-500" />;
+          if (s === "unconfigured")  return <MinusCircle  size={16} className="text-zinc-400" />;
+          return                            <XCircle      size={16} className="text-red-500" />;
+        };
+        const statusBadge = (s: ChannelHealth["status"]) => {
+          const base = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider";
+          if (s === "online")       return <span className={cn(base, "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400")}>Online</span>;
+          if (s === "degraded")     return <span className={cn(base, "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400")}>Degradado</span>;
+          if (s === "unconfigured") return <span className={cn(base, "bg-zinc-100 dark:bg-zinc-800 text-zinc-500")}>Não configurado</span>;
+          return                           <span className={cn(base, "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400")}>Offline</span>;
+        };
+        const dirIcon = (d: "in" | "out") =>
+          d === "in"
+            ? <ArrowDownLeft size={11} className="text-blue-500" />
+            : <ArrowUpRight  size={11} className="text-green-500" />;
+        const logStatusDot = (s: "ok" | "error" | "warn") => {
+          if (s === "ok")    return "bg-green-500";
+          if (s === "error") return "bg-red-500";
+          return "bg-amber-400";
+        };
+        const relTime = (iso: string) => {
+          const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+          if (diff < 60)   return `${Math.round(diff)}s atrás`;
+          if (diff < 3600) return `${Math.round(diff / 60)}min atrás`;
+          return new Date(iso).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
+        };
+
+        return (
+          <div className="flex flex-col gap-5">
+            {/* Header barra */}
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  Estado em tempo real dos canais de comunicação OP1NA1.
+                  {diagCheckedAt && <span className="ml-2 text-xs opacity-60">Verificado {relTime(diagCheckedAt)}</span>}
+                </p>
+              </div>
+              <button
+                onClick={() => { void fetchDiag(); }}
+                disabled={diagLoading}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors disabled:opacity-50"
+              >
+                <RefreshCw size={13} className={diagLoading ? "animate-spin" : ""} />
+                {diagLoading ? "A verificar…" : "Verificar agora"}
+              </button>
+            </div>
+
+            {/* Erro */}
+            {diagError && (
+              <div className="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm px-4 py-3 rounded-xl">
+                <AlertTriangle size={15} className="flex-shrink-0" />
+                {diagError}
+              </div>
+            )}
+
+            {/* Cards de saúde por canal */}
+            {diagLoading && !diagHealth ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                {[1,2,3,4,5].map(i => (
+                  <div key={i} className="h-28 bg-secondary/40 dark:bg-zinc-800/40 rounded-2xl animate-pulse" />
+                ))}
+              </div>
+            ) : diagHealth ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                {diagHealth.map(ch => (
+                  <div key={ch.id} className={cn(
+                    "bg-card dark:bg-zinc-900 border rounded-2xl p-4 flex flex-col gap-2 shadow-sm",
+                    ch.status === "online"       && "border-green-200 dark:border-green-900",
+                    ch.status === "degraded"     && "border-amber-200 dark:border-amber-900",
+                    ch.status === "offline"      && "border-red-200 dark:border-red-900",
+                    ch.status === "unconfigured" && "border-border dark:border-zinc-700 opacity-70",
+                  )}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {statusIcon(ch.status)}
+                        <span className="text-sm font-semibold text-foreground">{ch.name}</span>
+                      </div>
+                      {statusBadge(ch.status)}
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-snug">{ch.detail}</p>
+                    <div className="flex items-center justify-between mt-auto pt-1 border-t border-border dark:border-zinc-700/60">
+                      <span className="text-[10px] text-muted-foreground font-mono">
+                        {ch.latencyMs !== null ? `${ch.latencyMs} ms` : "—"}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">
+                        ✓ {ch.eventsOk} &nbsp; ✗ {ch.eventsErr}
+                        {ch.lastActivity && <span className="ml-1 opacity-60">· {relTime(ch.lastActivity)}</span>}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-sm text-muted-foreground text-center py-10">
+                Clique em <strong>Verificar agora</strong> para iniciar o diagnóstico.
+              </div>
+            )}
+
+            {/* Log de actividade */}
+            <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-3 border-b border-border dark:border-zinc-700">
+                <div className="flex items-center gap-2">
+                  <Activity size={14} className="text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">Log de Actividade</span>
+                  <span className="text-[10px] bg-secondary dark:bg-zinc-700 text-muted-foreground px-2 py-0.5 rounded-full font-mono">
+                    {diagLogs.length} entradas
+                  </span>
+                </div>
+                <span className="text-[10px] text-muted-foreground">Últimas 40 · auto-actualização 30 s</span>
+              </div>
+
+              {diagLogs.length === 0 ? (
+                <div className="text-center py-10 text-sm text-muted-foreground">
+                  {diagLoading
+                    ? "A carregar…"
+                    : "Nenhum evento registado ainda. Os eventos aparecem assim que chegarem mensagens nos canais."}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-border dark:border-zinc-700 text-muted-foreground text-[10px] uppercase tracking-wider">
+                        <th className="text-left px-4 py-2 font-medium">Hora</th>
+                        <th className="text-left px-4 py-2 font-medium">Canal</th>
+                        <th className="text-left px-4 py-2 font-medium">Dir</th>
+                        <th className="text-left px-4 py-2 font-medium">Acção</th>
+                        <th className="text-left px-4 py-2 font-medium">Ticket</th>
+                        <th className="text-left px-4 py-2 font-medium">Telef.</th>
+                        <th className="text-right px-4 py-2 font-medium">ms</th>
+                        <th className="text-center px-4 py-2 font-medium">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {diagLogs.map(e => (
+                        <tr key={e.id} className="border-b border-border/50 dark:border-zinc-700/50 hover:bg-secondary/30 dark:hover:bg-zinc-800/40 transition-colors">
+                          <td className="px-4 py-2 font-mono text-muted-foreground whitespace-nowrap">
+                            {new Date(e.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                          </td>
+                          <td className="px-4 py-2">
+                            <span className="font-mono text-[10px] bg-secondary dark:bg-zinc-700 text-foreground px-2 py-0.5 rounded">
+                              {e.channel}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2">{dirIcon(e.direction)}</td>
+                          <td className="px-4 py-2 text-muted-foreground">{e.action ?? "—"}</td>
+                          <td className="px-4 py-2 font-mono text-primary font-semibold">{e.ticketId ?? "—"}</td>
+                          <td className="px-4 py-2 font-mono text-muted-foreground">{e.phoneTail ?? "—"}</td>
+                          <td className="px-4 py-2 text-right font-mono text-muted-foreground">{e.durationMs}</td>
+                          <td className="px-4 py-2 text-center">
+                            <span className={cn("inline-block w-2 h-2 rounded-full", logStatusDot(e.status))} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Nota sobre serverless */}
+            <div className="flex items-start gap-2 text-xs text-muted-foreground bg-secondary/40 dark:bg-zinc-800/40 border border-border dark:border-zinc-700 rounded-xl px-4 py-3">
+              <Info size={13} className="flex-shrink-0 mt-0.5" />
+              <span>
+                O log é mantido em memória por instância serverless. Em Vercel, cada deploy ou cold start reinicia o buffer.
+                Para persistência total, activar a base de dados PostgreSQL e <code className="font-mono text-[10px] bg-secondary dark:bg-zinc-700 px-1 rounded">NEXT_PUBLIC_DEMO_MODE=false</code>.
+              </span>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* CHANNEL CONFIG MODAL */}
       {editCh && tmpCfg && (
