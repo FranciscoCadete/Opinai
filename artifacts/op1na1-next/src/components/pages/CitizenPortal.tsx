@@ -12,6 +12,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { submitRequest, trackRequest, ApiError } from "@/lib/api";
+import { DEMO_MODE } from "@/lib/demo";
 import {
   FileText, Search, BarChart3, Phone, FolderOpen, Info, Globe,
   AlertTriangle, Lightbulb, Eye, ClipboardList, ThumbsUp, AlertOctagon,
@@ -442,11 +443,28 @@ export default function CitizenPortal() {
       setTrackResult({ desc: tracked.description, steps });
     } catch (e) {
       if (e instanceof ApiError && e.status === 404) {
-        showToast("Pedido não encontrado.");
+        // Em demo mode, tickets gerados por WhatsApp/SMS não são persistidos —
+        // mostramos estado "recebido" realista em vez de ticket demo não relacionado.
+        if (DEMO_MODE && /^op\d+$/i.test(id)) {
+          const now = new Date().toLocaleString("pt-PT");
+          setTrackResult({
+            desc: `Pedido ${id.toUpperCase()} — Em processamento`,
+            steps: [
+              { label: "Pedido recebido",      done: true,  current: false, time: now },
+              { label: "Em triagem (IA)",      done: true,  current: false, time: now },
+              { label: "Atribuído ao técnico", done: false, current: true,  time: "—" },
+              { label: "Em progresso",         done: false, current: false, time: "—" },
+              { label: "Resolvido",            done: false, current: false, time: "—" },
+            ],
+          });
+        } else {
+          showToast("Pedido não encontrado.");
+          setTrackResult(null);
+        }
       } else {
         showToast("Erro de rede. Tente novamente.");
+        setTrackResult(null);
       }
-      setTrackResult(DEMO_TRACKS[0]);
     }
   }
 
