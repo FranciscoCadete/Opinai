@@ -19,7 +19,7 @@
  * Estado em memória (DEMO) com TTL 10 min.
  */
 
-import { INST_NUMBER_DISPLAY, APP_URL } from "@/lib/contact";
+import { INST_NUMBER_DISPLAY, APP_URL, FACEBOOK_PAGE } from "@/lib/contact";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 
@@ -107,7 +107,8 @@ export const WA_MSG = {
   mediatorInfo: () =>
     `*Mediadores Comunitários — OP1NA1* 👤\n\n` +
     `Os mediadores registam pedidos _presencialmente e gratuitamente_.\n\n` +
-    `📞 Contacto directo: *${INST_NUMBER_DISPLAY}*\n\n` +
+    `📞 Contacto directo: *${INST_NUMBER_DISPLAY}*\n` +
+    `📘 Facebook: ${FACEBOOK_PAGE}\n\n` +
     `Zonas disponíveis:\n` +
     `• CAOP C — Seg–Sex 7h–17h\n` +
     `• Capalanga — Seg–Sáb 8h–16h\n` +

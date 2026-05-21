@@ -79,9 +79,9 @@ const RESOLVED = [
   { Icon: Zap,      color: C.yellow, desc: "Iluminação avariada — Mulenvos de Cima", meta: "Segurança · 24h" },
 ];
 const MEDIADORES = [
-  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",    online: true,  whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",    online: true,  whatsapp: "244958746812", facebook: "https://www.facebook.com/luanda.municipiomulenvos" },
+  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "244958746812", facebook: "https://www.facebook.com/luanda.municipiomulenvos" },
+  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "244958746812", facebook: "https://www.facebook.com/luanda.municipiomulenvos" },
 ];
 
 // Mensagens dinâmicas rotativas (mobile-first)
@@ -1127,7 +1127,7 @@ export default function CitizenPortal() {
               { Icon: Hash,          label: "USSD *123#",color: C.yellow,  desc: "Marque no seu telemóvel", contact: "*123#", phone: "", how: "Funciona sem internet e sem saldo. Menu guiado simples.", actionable: false },
               { Icon: Monitor,       label: "Portal Web",color: C.green,   desc: "Este portal online", contact: "op1na1.gov.ao", phone: "", how: "Formulário completo com acompanhamento em tempo real.", actionable: false },
               { Icon: Smartphone,    label: "App Móvel", color: "#8B5CF6", desc: "Android e iOS", contact: "Descarregar na loja", phone: "", how: "App offline-first. Funciona em zonas com pouca conectividade.", actionable: false },
-              { Icon: MessageCircle, label: "Messenger", color: "#0EA5E9", desc: "Facebook Messenger", contact: "@MunicipioMulenvos", phone: "", how: "Para utilizadores do Facebook. Assistente automático integrado.", actionable: false },
+              { Icon: MessageCircle, label: "Messenger", color: "#0EA5E9", desc: "Facebook Messenger", contact: "fb.com/luanda.municipiomulenvos", phone: "", href: "https://www.facebook.com/luanda.municipiomulenvos", how: "Para utilizadores do Facebook. Assistente automático integrado.", actionable: true },
             ].map(ch => (
               <div key={ch.label} className="cp-channel-card" style={{ background: C.white, border: `1px solid ${C.bdr}`, borderRadius: C.radius, padding: "20px 22px", cursor: "default", transition: "all .18s", display: "flex", flexDirection: "column", gap: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -1138,34 +1138,53 @@ export default function CitizenPortal() {
                   </div>
                 </div>
                 <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.6, flex: 1 }}>{ch.how}</div>
-                {ch.actionable && (
-                  <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
-                    {/* Canal directo — deep link institucional */}
-                    <a
-                      href={ch.label === "WhatsApp" ? INST.wa : INST.sms}
-                      target={ch.label === "WhatsApp" ? "_blank" : "_self"}
-                      rel="noopener noreferrer"
-                      className="cp-contact-trigger"
-                      style={{ flex: 1, justifyContent: "center", textDecoration: "none",
-                               background: ch.label === "WhatsApp" ? "#25D366" : C.blue,
-                               color: "#fff", border: "none", fontWeight: 600, borderRadius: 8 }}
-                    >
-                      {ch.label === "WhatsApp" ? "Abrir WhatsApp →" : "Abrir SMS →"}
-                    </a>
-                    {/* Ou usar selector de canal */}
-                    <button
-                      className="cp-contact-trigger"
-                      style={{ flexShrink: 0 }}
-                      title="Escolher canal de contacto"
-                      onClick={() => {
-                        setSelectedContactChannel(null);
-                        setContactModal({ name: ch.label, phone: INST.bare, open: true });
-                      }}
-                    >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                    </button>
-                  </div>
-                )}
+                {ch.actionable && (() => {
+                  // Messenger: direct link only, no channel-picker
+                  if ("href" in ch && ch.href) {
+                    return (
+                      <div style={{ marginTop: 14 }}>
+                        <a
+                          href={(ch as { href: string }).href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="cp-contact-trigger"
+                          style={{ width: "100%", justifyContent: "center", textDecoration: "none",
+                                   background: "#0EA5E9", color: "#fff", border: "none",
+                                   fontWeight: 600, borderRadius: 8 }}
+                        >
+                          Abrir Facebook →
+                        </a>
+                      </div>
+                    );
+                  }
+                  // WhatsApp / SMS — deep link + channel picker
+                  return (
+                    <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
+                      <a
+                        href={ch.label === "WhatsApp" ? INST.wa : INST.sms}
+                        target={ch.label === "WhatsApp" ? "_blank" : "_self"}
+                        rel="noopener noreferrer"
+                        className="cp-contact-trigger"
+                        style={{ flex: 1, justifyContent: "center", textDecoration: "none",
+                                 background: ch.label === "WhatsApp" ? "#25D366" : C.blue,
+                                 color: "#fff", border: "none", fontWeight: 600, borderRadius: 8 }}
+                      >
+                        {ch.label === "WhatsApp" ? "Abrir WhatsApp →" : "Abrir SMS →"}
+                      </a>
+                      <button
+                        className="cp-contact-trigger"
+                        style={{ flexShrink: 0 }}
+                        title="Escolher canal de contacto"
+                        onClick={() => {
+                          setSelectedContactChannel(null);
+                          setContactModal({ name: ch.label, phone: INST.bare, open: true });
+                        }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                      </button>
+                    </div>
+                  );
+                })()}
               </div>
             ))}
           </div>

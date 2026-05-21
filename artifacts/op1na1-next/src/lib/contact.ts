@@ -45,6 +45,19 @@ export const SMS_DEEPLINK =
  */
 export const CALL_DEEPLINK = `tel:${INST_NUMBER_E164}`;
 
+// ── Redes sociais institucionais ──────────────────────────────────────────────
+
+/**
+ * Página oficial do Município dos Mulenvos no Facebook.
+ * Utilizado em: cards de mediadores, canal Messenger, contexto Web.
+ */
+export const FACEBOOK_PAGE = "https://www.facebook.com/luanda.municipiomulenvos";
+
+/**
+ * Messenger directo via m.me (redireciona para a página de Facebook acima).
+ */
+export const MESSENGER_DEEPLINK = "https://m.me/luanda.municipiomulenvos";
+
 // ── URLs da aplicação ──────────────────────────────────────────────────────────
 
 export const APP_URL =
