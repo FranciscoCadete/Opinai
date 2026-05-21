@@ -553,6 +553,148 @@ export default function CitizenPortal() {
         }
         .cp-topbar-short { display: none; }
 
+        /* ══ SISTEMA DE TIPOGRAFIA FLUIDA ═══════════════════
+           Escala responsiva baseada em clamp(min, vw, max).
+           Garante legibilidade universal sem media queries
+           por elemento. Aplica-se como classes utilitárias.
+        ═══════════════════════════════════════════════════ */
+        .cp-t-xs   { font-size: clamp(8px,  1.6vw, 10px); }
+        .cp-t-sm   { font-size: clamp(10px, 1.9vw, 12px); }
+        .cp-t-base { font-size: clamp(12px, 2.3vw, 14px); }
+        .cp-t-md   { font-size: clamp(13px, 2.6vw, 15px); }
+        .cp-t-lg   { font-size: clamp(16px, 3.2vw, 20px); }
+        .cp-t-xl   { font-size: clamp(20px, 4vw,   26px); }
+        .cp-t-2xl  { font-size: clamp(24px, 5vw,   36px); }
+        .cp-t-3xl  { font-size: clamp(28px, 6vw,   44px); }
+
+        /* ══ LAYOUT DE DUAS COLUNAS (desktop ≥ 1024px) ══════
+           Implementa o Painel de Contexto Institucional Dinâmico.
+           Em mobile: coluna única, sem painel lateral.
+        ═══════════════════════════════════════════════════ */
+        .cp-content-wrapper {
+          display: flex;
+          align-items: flex-start;
+          max-width: 1340px;
+          margin: 0 auto;
+          gap: 0;
+        }
+        .cp-main-col {
+          flex: 1;
+          min-width: 0;
+        }
+        .cp-context-panel {
+          display: none; /* colapsado em mobile */
+        }
+        @media (min-width: 1024px) {
+          .cp-context-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 288px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 68px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            padding: 24px 20px 24px 0;
+            scrollbar-width: none;
+          }
+          .cp-context-panel::-webkit-scrollbar { display: none; }
+        }
+        .cp-ctx-card {
+          background: ${C.white};
+          border: 1px solid ${C.bdr};
+          border-radius: ${C.radius}px;
+          padding: 16px;
+          transition: border-color .18s;
+        }
+        .cp-ctx-label {
+          font-family: ${C.mono};
+          font-size: clamp(8px, 1.4vw, 9px);
+          color: ${C.muted};
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .cp-ctx-tip {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          padding: 8px 0;
+          border-bottom: 1px solid ${C.bdr};
+          font-size: clamp(11px, 2vw, 12.5px);
+          color: ${C.muted};
+          line-height: 1.55;
+        }
+        .cp-ctx-tip:last-child { border-bottom: none; padding-bottom: 0; }
+        .cp-ctx-tip-num {
+          width: 18px; height: 18px; border-radius: 50%;
+          background: ${C.greenL}; color: ${C.green};
+          font-family: ${C.mono}; font-size: 9px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0; margin-top: 1px;
+        }
+        .cp-ctx-map {
+          background: linear-gradient(135deg,rgba(0,196,154,.06),rgba(47,110,245,.04));
+          border: 1px solid rgba(0,196,154,.2);
+          border-radius: ${C.radius}px;
+          padding: 16px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        /* ══ NAVEGAÇÃO INFERIOR MÓVEL (bottom nav) ══════════
+           Substitui o tab bar horizontal em mobile.
+           3 acções principais sempre visíveis.
+        ═══════════════════════════════════════════════════ */
+        .cp-bottom-nav {
+          display: flex;
+          position: fixed;
+          bottom: 0; left: 0; right: 0;
+          background: ${C.white};
+          border-top: 1px solid ${C.bdr2};
+          z-index: 90;
+          padding: 0;
+          box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+        }
+        .cp-bottom-nav-btn {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          padding: 10px 4px 12px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          font-family: ${C.mono};
+          font-size: clamp(8px, 2vw, 10px);
+          color: ${C.muted};
+          letter-spacing: 0.04em;
+          transition: color .14s;
+          position: relative;
+        }
+        .cp-bottom-nav-btn.active { color: ${C.yellow}; }
+        .cp-bottom-nav-btn.active::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 20%; right: 20%;
+          height: 2px;
+          background: ${C.yellow};
+          border-radius: 0 0 3px 3px;
+        }
+        .cp-bottom-nav-btn:hover { color: ${C.ink}; }
+        @media (min-width: 1024px) {
+          .cp-bottom-nav { display: none; }
+          .cp-mobile-bottom-pad { padding-bottom: 0 !important; }
+        }
+        /* Espaço em baixo do conteúdo para não ficar por trás da nav */
+        .cp-mobile-bottom-pad { padding-bottom: 72px; }
+
         /* ── Canal 3: Channel selector modal ─────────────── */
         @keyframes cp-modal-in { from{opacity:0;transform:translate(-50%,-48%) scale(.96)} to{opacity:1;transform:translate(-50%,-50%) scale(1)} }
         .cp-modal-overlay { position:fixed; inset:0; background:rgba(8,12,16,.55); z-index:200; backdrop-filter:blur(4px); }
@@ -822,7 +964,7 @@ export default function CitizenPortal() {
           { num: "6",                       color: C.blue,   label: "Canais disponíveis" },
         ].map((s, i, a) => (
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "12px 24px", gap: 3, flexShrink: 0, borderRight: i < a.length - 1 ? `1px solid ${C.bdr}` : undefined, minWidth: 110 }}>
-            <div style={{ fontFamily: C.display, fontSize: 22, fontWeight: 300, color: s.color, letterSpacing: "-0.03em", lineHeight: 1 }}>{s.num}</div>
+            <div style={{ fontFamily: C.display, fontSize: "clamp(18px,3.5vw,22px)", fontWeight: 300, color: s.color, letterSpacing: "-0.03em", lineHeight: 1 }}>{s.num}</div>
             <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted2, letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center" }}>{s.label}</div>
           </div>
         ))}
@@ -868,10 +1010,18 @@ export default function CitizenPortal() {
       {/* ── Smooth-scroll anchor (target of switchTab) ───── */}
       <div ref={contentRef} style={{ scrollMarginTop: 60 }} />
 
+      {/* ══ 2-COLUMN LAYOUT WRAPPER ══════════════════════════
+          Desktop: main content | Context Panel (sticky right)
+          Mobile:  single column + bottom nav
+      ════════════════════════════════════════════════════ */}
+      <div className="cp-content-wrapper cp-mobile-bottom-pad">
+        {/* ── Main content column ── */}
+        <div className="cp-main-col">
+
       {/* ══ TAB: ESTATÍSTICAS ══ */}
       {activeTab === "estatisticas" && (
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Estatísticas em Tempo Real</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Estatísticas em Tempo Real</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Dados actualizados automaticamente · Município dos Mulenvos</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginBottom: 28 }}>
             {[
@@ -948,7 +1098,7 @@ export default function CitizenPortal() {
       {/* ══ TAB: CANAIS & CONTACTOS ══ */}
       {activeTab === "canais" && (
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Canais de Contacto</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Canais de Contacto</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Escolha o canal mais conveniente para si</p>
 
           {/* Canal 3 — decision banner */}
@@ -1093,7 +1243,7 @@ export default function CitizenPortal() {
       {/* ══ TAB: INFORMAÇÕES ══ */}
       {activeTab === "informacoes" && (
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Informações sobre o Sistema</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Informações sobre o Sistema</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Tudo o que precisa de saber sobre o OP1NA1</p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16, marginBottom: 16 }}>
@@ -1128,7 +1278,7 @@ export default function CitizenPortal() {
       {/* ══ TAB: CONSULTAR PEDIDO ══ */}
       {activeTab === "consultar" && (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Acompanhar Pedido</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Acompanhar Pedido</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 24, letterSpacing: "0.04em" }}>Sem necessidade de código — consulte pelo seu número de telefone ou pelo número do pedido</p>
 
           {/* Mode selector */}
@@ -1564,7 +1714,7 @@ export default function CitizenPortal() {
       {/* ══ TAB: DOCUMENTOS PÚBLICOS ══ */}
       {activeTab === "documentos" && (
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Documentos Públicos</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Documentos Públicos</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Regulamentos, planos, relatórios e editais da Administração Municipal dos Mulenvos</p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 12, marginBottom: 28 }}>
@@ -1603,7 +1753,7 @@ export default function CitizenPortal() {
       {/* ══ TAB: PORTAL MUNICIPAL ══ */}
       {activeTab === "municipal" && (
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 20px 80px", animation: "cp-fade-up .3s ease" }}>
-          <h2 style={{ fontFamily: C.display, fontSize: 26, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Portal Municipal</h2>
+          <h2 className="cp-t-xl" style={{ fontFamily: C.display, fontWeight: 300, color: C.ink, marginBottom: 6 }}>Portal Municipal</h2>
           <p style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, marginBottom: 28, letterSpacing: "0.04em" }}>Ligações rápidas para portais e serviços institucionais</p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16, marginBottom: 32 }}>
@@ -1650,6 +1800,277 @@ export default function CitizenPortal() {
           </div>
         </div>
       )}
+
+        </div>{/* end .cp-main-col */}
+
+        {/* ══ PAINEL DE CONTEXTO INSTITUCIONAL DINÂMICO ════════
+            Visível apenas em desktop (≥1024px).
+            Conteúdo adapta-se automaticamente ao tab/step activo.
+        ════════════════════════════════════════════════════ */}
+        <aside className="cp-context-panel" aria-label="Painel de contexto">
+
+          {/* ── Contexto: Submeter Pedido ────────────────────── */}
+          {activeTab === "submeter" && !success && (
+            <>
+              <div className="cp-ctx-card">
+                <div className="cp-ctx-label">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.yellow} strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                  {step === 1 ? "Dicas — Passo 1" : step === 2 ? "Dicas — Passo 2" : step === 3 ? "Dicas — Passo 3" : "Revisão Final"}
+                </div>
+                {step === 1 && [
+                  ["1", "Escolha o tipo de pedido que melhor descreve a sua situação."],
+                  ["2", "\"Urgente\" é reservado para situações de risco imediato à segurança."],
+                  ["3", "Pode submeter anonimamente — os seus dados são sempre opcionais."],
+                ].map(([n, t]) => (
+                  <div key={n} className="cp-ctx-tip">
+                    <div className="cp-ctx-tip-num">{n}</div>
+                    <span>{t}</span>
+                  </div>
+                ))}
+                {step === 2 && [
+                  ["1", "Escolha a categoria que melhor classifica o problema."],
+                  ["2", "Descreva com detalhes: o quê, onde, desde quando."],
+                  ["3", "Mínimo 20 caracteres — mais detalhe = resolução mais rápida."],
+                  ["4", "Pode anexar foto para facilitar a identificação."],
+                ].map(([n, t]) => (
+                  <div key={n} className="cp-ctx-tip">
+                    <div className="cp-ctx-tip-num">{n}</div>
+                    <span>{t}</span>
+                  </div>
+                ))}
+                {step === 3 && [
+                  ["1", "O bairro ajuda a atribuir o técnico responsável correcto."],
+                  ["2", "A localização GPS é opcional mas acelera a resposta."],
+                  ["3", "Uma referência de rua (ex: \"em frente ao mercado\") é muito útil."],
+                ].map(([n, t]) => (
+                  <div key={n} className="cp-ctx-tip">
+                    <div className="cp-ctx-tip-num">{n}</div>
+                    <span>{t}</span>
+                  </div>
+                ))}
+                {step === 4 && [
+                  ["1", "Reveja os dados antes de submeter — não é possível editar depois."],
+                  ["2", "Ao aceitar os termos, receberá actualizações sobre o seu pedido."],
+                  ["3", "Guarde o código OP### que receberá após submissão."],
+                ].map(([n, t]) => (
+                  <div key={n} className="cp-ctx-tip">
+                    <div className="cp-ctx-tip-num">{n}</div>
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Tempo de resposta estimado */}
+              <div className="cp-ctx-card" style={{ background: C.greenL, borderColor: "rgba(0,196,154,.2)" }}>
+                <div className="cp-ctx-label" style={{ color: C.green }}>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.green} strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Tempo de resposta
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    { tipo: "Urgente",    tempo: "≤ 4 horas",  color: C.red },
+                    { tipo: "Alto",       tempo: "≤ 24 horas", color: C.yellow },
+                    { tipo: "Normal",     tempo: "≤ 72 horas", color: C.green },
+                  ].map(r => (
+                    <div key={r.tipo} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontFamily: C.mono, fontSize: 10, color: r.color }}>{r.tipo}</span>
+                      <span style={{ fontFamily: C.mono, fontSize: 10, color: C.muted }}>{r.tempo}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── Contexto: Consultar ──────────────────────────── */}
+          {activeTab === "consultar" && (
+            <div className="cp-ctx-card">
+              <div className="cp-ctx-label">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.blue} strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                Como consultar
+              </div>
+              {[
+                ["1", "Introduza o código OP### que recebeu por SMS ou no portal."],
+                ["2", "Ou pesquise pelo número de telefone que usou ao submeter."],
+                ["3", "O estado actualiza automaticamente quando o técnico intervém."],
+                ["4", "Receberá SMS de notificação quando o estado mudar."],
+              ].map(([n, t]) => (
+                <div key={n} className="cp-ctx-tip">
+                  <div className="cp-ctx-tip-num">{n}</div>
+                  <span>{t}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Contexto: Canais ─────────────────────────────── */}
+          {activeTab === "canais" && (
+            <div className="cp-ctx-card">
+              <div className="cp-ctx-label">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+                Número único OP1NA1
+              </div>
+              <div style={{ fontFamily: C.display, fontSize: 22, fontWeight: 300, color: C.ink, letterSpacing: "-0.02em", marginBottom: 8 }}>
+                958 746 812
+              </div>
+              {[
+                { icon: "💬", label: "WhatsApp", action: "Menu guiado automático" },
+                { icon: "📨", label: "SMS",       action: "Descreva o problema" },
+                { icon: "📞", label: "Chamada",   action: "Atendimento directo" },
+              ].map(ch => (
+                <div key={ch.label} className="cp-ctx-tip">
+                  <span style={{ fontSize: 14, flexShrink: 0 }}>{ch.icon}</span>
+                  <div>
+                    <div style={{ fontWeight: 600, color: C.ink, fontSize: 12 }}>{ch.label}</div>
+                    <div>{ch.action}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Contexto: Estatísticas ───────────────────────── */}
+          {activeTab === "estatisticas" && (
+            <div className="cp-ctx-card">
+              <div className="cp-ctx-label">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.green} strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Actualizações em directo
+              </div>
+              {[
+                ["Maio 2026", "714 pedidos resolvidos"],
+                ["Tempo médio", "38 horas"],
+                ["Bairros activos", "10 de 10"],
+                ["Mediadores", "3 disponíveis"],
+              ].map(([k, v]) => (
+                <div key={k} className="cp-ctx-tip" style={{ justifyContent: "space-between" }}>
+                  <span style={{ color: C.muted }}>{k}</span>
+                  <span style={{ fontWeight: 600, color: C.ink }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Painel base (home tabs sem conteúdo específico) ─ */}
+          {(activeTab === "documentos" || activeTab === "informacoes" || activeTab === "municipal") && (
+            <div className="cp-ctx-map">
+              <div className="cp-ctx-label" style={{ color: C.green }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.green} strokeWidth="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                Município dos Mulenvos
+              </div>
+              {/* SVG schematic map — simplified grid of bairros */}
+              <svg viewBox="0 0 220 160" style={{ width: "100%", borderRadius: 8, marginBottom: 10 }} aria-hidden="true">
+                <rect width="220" height="160" fill="rgba(0,196,154,.04)" rx="8"/>
+                {[
+                  { x:10,  y:10,  w:60, h:35, label:"CAOP A",          c:"rgba(0,196,154,.3)"  },
+                  { x:80,  y:10,  w:60, h:35, label:"CAOP B",          c:"rgba(0,196,154,.25)" },
+                  { x:150, y:10,  w:60, h:35, label:"CAOP C",          c:"rgba(0,196,154,.2)"  },
+                  { x:10,  y:55,  w:90, h:35, label:"KM 12-B",         c:"rgba(47,110,245,.2)" },
+                  { x:110, y:55,  w:100,h:35, label:"Capalanga",       c:"rgba(47,110,245,.15)"},
+                  { x:10,  y:100, w:60, h:35, label:"Boa-Fé",          c:"rgba(241,166,15,.2)" },
+                  { x:80,  y:100, w:70, h:35, label:"Mulenvos",        c:"rgba(241,166,15,.15)"},
+                  { x:160, y:100, w:50, h:35, label:"KM 14-B",         c:"rgba(180,20,20,.12)" },
+                ].map(b => (
+                  <g key={b.label}>
+                    <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="4" fill={b.c} stroke="rgba(255,255,255,.5)" strokeWidth=".5"/>
+                    <text x={b.x + b.w/2} y={b.y + b.h/2 + 1} textAnchor="middle" dominantBaseline="middle" fill={C.ink2} fontSize="7" fontFamily={C.mono}>{b.label}</text>
+                  </g>
+                ))}
+                {/* Institutional marker */}
+                <circle cx="110" cy="80" r="5" fill={C.yellow} opacity=".9"/>
+                <text x="110" y="95" textAnchor="middle" fill={C.yellow} fontSize="7" fontFamily={C.mono} fontWeight="bold">OP1NA1</text>
+              </svg>
+              <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted, textAlign: "center", letterSpacing: "0.06em" }}>
+                10 bairros · Cobertura total
+              </div>
+            </div>
+          )}
+
+          {/* ── Acesso rápido institucional (sempre visível) ─── */}
+          <div className="cp-ctx-card">
+            <div className="cp-ctx-label">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.muted} strokeWidth="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+              Documentos Institucionais
+            </div>
+            {[
+              "Regulamento Municipal 2025",
+              "Plano de Actividades 2025",
+              "Relatório Orçamental Q1",
+              "Boletim Municipal 3/2025",
+            ].map(doc => (
+              <button
+                key={doc}
+                onClick={() => switchTab("documentos")}
+                style={{ display: "block", width: "100%", textAlign: "left", padding: "6px 0", border: "none", background: "none", cursor: "pointer", fontFamily: C.sans, fontSize: 11.5, color: C.ink, lineHeight: 1.4, borderBottom: `1px solid ${C.bdr}` }}
+                onMouseOver={e => (e.currentTarget.style.color = C.green)}
+                onMouseOut={e => (e.currentTarget.style.color = C.ink)}
+              >
+                {doc} →
+              </button>
+            ))}
+          </div>
+
+          {/* ── Contacto rápido ──────────────────────────────── */}
+          <div className="cp-ctx-card" style={{ textAlign: "center" }}>
+            <div style={{ fontFamily: C.mono, fontSize: 9, color: C.muted, letterSpacing: "0.1em", marginBottom: 8, textTransform: "uppercase" }}>Contacto directo</div>
+            <a href={INST.call} style={{ fontFamily: C.display, fontSize: 20, fontWeight: 300, color: C.ink, letterSpacing: "-0.02em", display: "block", marginBottom: 10, textDecoration: "none" }}>
+              {INST.display}
+            </a>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+              <a href={INST.wa} target="_blank" rel="noopener noreferrer" style={{ padding: "7px", borderRadius: 8, background: "#25D366", color: "#fff", fontSize: 11, fontWeight: 600, textDecoration: "none", textAlign: "center" }}>
+                WhatsApp
+              </a>
+              <a href={INST.call} style={{ padding: "7px", borderRadius: 8, background: C.greenL, color: C.green, fontSize: 11, fontWeight: 600, textDecoration: "none", textAlign: "center", border: `1px solid rgba(0,196,154,.2)` }}>
+                Ligar
+              </a>
+            </div>
+          </div>
+
+        </aside>
+      </div>{/* end .cp-content-wrapper */}
+
+      {/* ══ NAVEGAÇÃO INFERIOR MÓVEL ══════════════════════════
+          Substitui o tab bar em mobile (<1024px).
+          3 acções principais sempre visíveis no ecrã.
+      ════════════════════════════════════════════════════ */}
+      <nav className="cp-bottom-nav" aria-label="Navegação rápida" role="navigation">
+        {[
+          {
+            id: "submeter", label: "Reportar",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            ),
+          },
+          {
+            id: "consultar", label: "Acompanhar",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            ),
+          },
+          {
+            id: "canais", label: "Mediador",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/>
+              </svg>
+            ),
+          },
+        ].map(btn => (
+          <button
+            key={btn.id}
+            className={`cp-bottom-nav-btn${activeTab === btn.id ? " active" : ""}`}
+            onClick={() => switchTab(btn.id)}
+            aria-label={btn.label}
+            aria-current={activeTab === btn.id ? "page" : undefined}
+          >
+            {btn.icon}
+            {btn.label}
+          </button>
+        ))}
+      </nav>
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer style={{ background: C.ink, color: "rgba(255,255,255,.4)", padding: "28px 24px 24px", fontFamily: C.mono, fontSize: 9, letterSpacing: "0.08em" }}>
