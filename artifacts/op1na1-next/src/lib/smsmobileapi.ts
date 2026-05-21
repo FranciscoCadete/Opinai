@@ -14,11 +14,12 @@
  * A API Key NÃO é armazenada em código — vem exclusivamente de env vars.
  */
 
+import { INST_NUMBER_DISPLAY, APP_URL as CONTACT_APP_URL } from "@/lib/contact";
+
 const GATEWAY =
   process.env.SMSMOBILE_GATEWAY ?? "https://api.smsmobileapi.com";
 
-const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://op1na1-next.vercel.app";
+const APP_URL = CONTACT_APP_URL;
 
 // ── Send SMS ──────────────────────────────────────────────────────────────────
 
@@ -91,7 +92,8 @@ export function buildConfirmationSms(ticketId: string): string {
     `OP1NA1 – Mulenvos\n` +
     `Pedido ${ticketId} recebido! ✅\n` +
     `Acompanhe em: ${APP_URL}/citizen-portal#consultar\n` +
-    `Envie "${ticketId}" para saber o estado.`
+    `Envie "${ticketId}" para saber o estado.\n` +
+    `Contacto: ${INST_NUMBER_DISPLAY}`
   );
 }
 

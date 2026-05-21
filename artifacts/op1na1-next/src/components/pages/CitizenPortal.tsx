@@ -79,9 +79,9 @@ const RESOLVED = [
   { Icon: Zap,      color: C.yellow, desc: "Iluminação avariada — Mulenvos de Cima", meta: "Segurança · 24h" },
 ];
 const MEDIADORES = [
-  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",   online: true,  whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
-  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "AM", name: "António M.",   zone: "CAOP C · Seg–Sex 7h–17h",    bairro: "CAOP C",    online: true,  whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "CJ", name: "Clara J.",     zone: "Capalanga · Seg–Sáb 8h–16h", bairro: "Capalanga", online: true,  whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
+  { initials: "JA", name: "João António", zone: "Boa-Fé · Ter–Sáb 9h–17h",   bairro: "Boa-Fé",   online: false, whatsapp: "244958746812", facebook: "https://m.me/municipiomulenvos" },
 ];
 
 // Mensagens dinâmicas rotativas (mobile-first)
@@ -98,9 +98,19 @@ const CHANNELS = [
   { id: "sms",      label: "SMS",        icon: <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> },
   { id: "ussd",     label: "USSD *123#", icon: <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg> },
 ];
+// ─── Número institucional único ─────────────────────────────────
+const INST = {
+  bare:    "958746812",
+  display: "958 746 812",
+  e164:    "+244958746812",
+  wa:      `https://wa.me/244958746812?text=${encodeURIComponent("Olá")}`,
+  sms:     `sms:+244958746812?body=${encodeURIComponent("OP1NA1: ")}`,
+  call:    "tel:+244958746812",
+};
+
 const CHANNEL_MSG: Record<string,string> = {
-  whatsapp: "📱 WhatsApp: envie \"OLÁ\" para 958 746 812 e siga as instruções do assistente.",
-  sms:      "📨 SMS: envie a descrição do problema para 958 746 812.",
+  whatsapp: `📱 WhatsApp: toque para abrir conversa automática → ${INST.display}`,
+  sms:      `📨 SMS: toque para abrir mensagem pré-preenchida → ${INST.display}`,
   ussd:     "📟 USSD: marque *123# no seu telemóvel e siga o menu.",
 };
 const DEMO_TRACKS = [
@@ -646,13 +656,13 @@ export default function CitizenPortal() {
               className="cp-ch-action"
               disabled={!selectedContactChannel}
               onClick={() => {
-                const phone = contactModal.phone.replace(/\D/g, "");
+                // Número institucional único — sempre +244 958 746 812
                 if (selectedContactChannel === "chamada") {
-                  window.open(`tel:+244${phone}`, "_self");
+                  window.open(INST.call, "_self");
                 } else if (selectedContactChannel === "sms") {
-                  window.open(`sms:+244${phone}`, "_self");
+                  window.open(INST.sms, "_self");
                 } else if (selectedContactChannel === "whatsapp") {
-                  window.open(`https://wa.me/244${phone}?text=OL%C3%81%20OP1NA1`, "_blank", "noopener,noreferrer");
+                  window.open(INST.wa, "_blank", "noopener,noreferrer");
                 }
                 setContactModal(null);
                 setSelectedContactChannel(null);
@@ -953,7 +963,7 @@ export default function CitizenPortal() {
               style={{ background: C.yellow, color: C.black, border: "none", fontWeight: 600, borderRadius: 10, padding: "10px 20px" }}
               onClick={() => {
                 setSelectedContactChannel(null);
-                setContactModal({ name: "OP1NA1 – Mulenvos", phone: "958746812", open: true });
+                setContactModal({ name: "OP1NA1 – Mulenvos", phone: INST.bare, open: true });
               }}
             >
               Contactar agora →
@@ -962,8 +972,8 @@ export default function CitizenPortal() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16, marginBottom: 28 }}>
             {[
-              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: "Envie \"OLÁ\" para iniciar", contact: "958 746 812", phone: "958746812", how: "Assistente automático guiado 24h/7d. Categorias, estado e confirmação.", actionable: true },
-              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: "Envie a descrição do problema", contact: "958 746 812", phone: "958746812", how: "Sem internet. Classificação automática por IA. Resposta em 2h.", actionable: true },
+              { Icon: MessageCircle, label: "WhatsApp", color: "#25D366", desc: `Toque para abrir → ${INST.display}`, contact: INST.display, phone: INST.bare, how: "Assistente automático 24h/7d. Menu guiado: Reportar · Consultar · Mediador.", actionable: true },
+              { Icon: MessageSquare, label: "SMS",       color: C.blue,    desc: `Toque para abrir → ${INST.display}`, contact: INST.display, phone: INST.bare, how: "Sem internet. Número pré-preenchido. Classificação automática por IA.", actionable: true },
               { Icon: Hash,          label: "USSD *123#",color: C.yellow,  desc: "Marque no seu telemóvel", contact: "*123#", phone: "", how: "Funciona sem internet e sem saldo. Menu guiado simples.", actionable: false },
               { Icon: Monitor,       label: "Portal Web",color: C.green,   desc: "Este portal online", contact: "op1na1.gov.ao", phone: "", how: "Formulário completo com acompanhamento em tempo real.", actionable: false },
               { Icon: Smartphone,    label: "App Móvel", color: "#8B5CF6", desc: "Android e iOS", contact: "Descarregar na loja", phone: "", how: "App offline-first. Funciona em zonas com pouca conectividade.", actionable: false },
@@ -979,17 +989,32 @@ export default function CitizenPortal() {
                 </div>
                 <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.6, flex: 1 }}>{ch.how}</div>
                 {ch.actionable && (
-                  <button
-                    className="cp-contact-trigger"
-                    style={{ marginTop: 14, width: "100%", justifyContent: "center" }}
-                    onClick={() => {
-                      setSelectedContactChannel(null);
-                      setContactModal({ name: ch.label, phone: ch.phone, open: true });
-                    }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-                    Contactar
-                  </button>
+                  <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
+                    {/* Canal directo — deep link institucional */}
+                    <a
+                      href={ch.label === "WhatsApp" ? INST.wa : INST.sms}
+                      target={ch.label === "WhatsApp" ? "_blank" : "_self"}
+                      rel="noopener noreferrer"
+                      className="cp-contact-trigger"
+                      style={{ flex: 1, justifyContent: "center", textDecoration: "none",
+                               background: ch.label === "WhatsApp" ? "#25D366" : C.blue,
+                               color: "#fff", border: "none", fontWeight: 600, borderRadius: 8 }}
+                    >
+                      {ch.label === "WhatsApp" ? "Abrir WhatsApp →" : "Abrir SMS →"}
+                    </a>
+                    {/* Ou usar selector de canal */}
+                    <button
+                      className="cp-contact-trigger"
+                      style={{ flexShrink: 0 }}
+                      title="Escolher canal de contacto"
+                      onClick={() => {
+                        setSelectedContactChannel(null);
+                        setContactModal({ name: ch.label, phone: INST.bare, open: true });
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                    </button>
+                  </div>
                 )}
               </div>
             ))}
@@ -1027,7 +1052,7 @@ export default function CitizenPortal() {
                   {/* Action buttons */}
                   <div style={{ padding: "12px 16px", display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <a
-                      href={`https://wa.me/${m.whatsapp.replace(/\D/g,"")}`}
+                      href={`https://wa.me/${m.whatsapp}?text=${encodeURIComponent("Olá OP1NA1")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="cp-med-wa"
@@ -1057,7 +1082,7 @@ export default function CitizenPortal() {
                 <div style={{ fontSize: 13, fontWeight: 500, color: C.ink2, marginBottom: 2 }}>Sem internet ou sem smartphone?</div>
                 <div style={{ fontFamily: C.mono, fontSize: 10, color: C.muted }}>SMS para <strong>958 746 812</strong> · USSD <strong>*123#</strong> · Ambos gratuitos, funcionam em 2G</div>
               </div>
-              <a href="tel:+244923000001" style={{ padding: "8px 16px", borderRadius: C.radiusSm, border: `1px solid ${C.bdr2}`, background: C.white, color: C.ink, fontSize: 12.5, fontWeight: 500, cursor: "pointer", fontFamily: C.sans, textDecoration: "none", flexShrink: 0 }}>
+              <a href="tel:+244958746812" style={{ padding: "8px 16px", borderRadius: C.radiusSm, border: `1px solid ${C.bdr2}`, background: C.white, color: C.ink, fontSize: 12.5, fontWeight: 500, cursor: "pointer", fontFamily: C.sans, textDecoration: "none", flexShrink: 0 }}>
                 Ligar
               </a>
             </div>
@@ -1671,7 +1696,7 @@ export default function CitizenPortal() {
             <span style={{ color: "rgba(255,255,255,.5)", fontSize: 9 }}>
               Linha omnicanal (chamadas · SMS · WhatsApp):
             </span>
-            <a href="tel:958746812" style={{ color: C.yellow, textDecoration: "none", fontWeight: 600, fontSize: 10, letterSpacing: "0.04em" }}>958 746 812</a>
+            <a href="tel:+244958746812" style={{ color: C.yellow, textDecoration: "none", fontWeight: 600, fontSize: 10, letterSpacing: "0.04em" }}>958 746 812</a>
           </div>
 
           {/* Academic block */}

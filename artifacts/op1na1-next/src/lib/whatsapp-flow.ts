@@ -1,39 +1,54 @@
 /**
  * whatsapp-flow.ts — Máquina de Estados da Conversa WhatsApp (Canal 2)
  *
- * Implementa o fluxo conversacional guiado do OP1NA1 via WhatsApp:
+ * Fluxo de atendimento com menu institucional de 3 opções (nível 1)
+ * seguido de submenu de categorias (nível 2) para reportes:
  *
- *   IDLE
- *     ↓  (1ª mensagem do cidadão)
- *   AWAITING_CATEGORY  — sistema apresenta menu de categorias
- *     ↓  (cidadão escolhe 1-8 ou escreve tema)
- *   AWAITING_DESCRIPTION  — sistema pede descrição
- *     ↓  (cidadão descreve o problema)
- *   COMPLETE  — sistema cria ticket, confirma, volta a IDLE
+ *   IDLE / COMPLETE
+ *     ↓  (qualquer mensagem)
+ *   AWAITING_ACTION  — sistema apresenta menu principal (3 opções)
+ *     ↓
+ *     ├─ "1" Reportar → AWAITING_CATEGORY
+ *     │     ↓
+ *     │   AWAITING_DESCRIPTION → COMPLETE
+ *     │
+ *     ├─ "2" Consultar → resposta directa (sem mudar estado)
+ *     │
+ *     └─ "3" Mediador  → resposta directa com contacto
  *
- * Estado guardado em:
- *   DEMO_MODE → Map em memória com TTL de 10 minutos
- *   Produção  → futuro: Redis ou tabela sessions no DB
+ * Estado em memória (DEMO) com TTL 10 min.
  */
+
+import { INST_NUMBER_DISPLAY, APP_URL } from "@/lib/contact";
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 
 export type ConversationState =
   | "idle"
+  | "awaiting_action"
   | "awaiting_category"
   | "awaiting_description"
   | "complete";
 
 export interface ConversationSession {
-  phone:       string;
-  state:       ConversationState;
-  category?:   string;
-  categoryNum?: number;
+  phone:        string;
+  state:        ConversationState;
+  action?:      "report" | "track" | "mediator";
+  category?:    string;
+  categoryKey?: string;
   description?: string;
-  updatedAt:   number; // epoch ms
+  updatedAt:    number;
 }
 
-// ── Menu de categorias ─────────────────────────────────────────────────────────
+// ── Menu principal (nível 1) ──────────────────────────────────────────────────
+
+export const WA_MAIN_MENU = [
+  { num: 1, label: "Reportar Problema",   action: "report"   as const },
+  { num: 2, label: "Consultar Pedido",    action: "track"    as const },
+  { num: 3, label: "Falar com Mediador",  action: "mediator" as const },
+];
+
+// ── Menu de categorias (nível 2 — só para Reportar) ──────────────────────────
 
 export const WA_CATEGORIES: Array<{ num: number; label: string; key: string }> = [
   { num: 1, label: "Saneamento",    key: "saneamento"    },
@@ -49,64 +64,80 @@ export const WA_CATEGORIES: Array<{ num: number; label: string; key: string }> =
 // ── Mensagens do sistema ──────────────────────────────────────────────────────
 
 export const WA_MSG = {
-  welcome: (name?: string) =>
-    `Olá${name ? `, ${name}` : ""}! 👋 Bem-vindo ao *OP1NA1 – Município dos Mulenvos*.\n\n` +
-    `Para registar uma ocorrência, indique a categoria:\n\n` +
+  welcome: () =>
+    `Olá! 👋 Bem-vindo ao *OP1NA1 – Município dos Mulenvos*.\n\n` +
+    `Escolha uma opção:\n\n` +
+    `*1* — Reportar Problema\n` +
+    `*2* — Consultar Pedido\n` +
+    `*3* — Falar com Mediador\n\n` +
+    `_Responda com o número da opção._`,
+
+  categoryMenu: () =>
+    `Seleccione a categoria da ocorrência:\n\n` +
     WA_CATEGORIES.map(c => `*${c.num}* — ${c.label}`).join("\n") +
-    `\n\nResponda com o número ou o nome da categoria.`,
+    `\n\nResponda com o número ou nome da categoria.`,
 
   askDescription: (category: string) =>
-    `Seleccionou: *${category}* ✅\n\n` +
-    `Por favor, descreva o problema com o máximo de detalhe possível.\n` +
-    `_(inclua a localização: rua, bairro, referência)_`,
+    `Categoria: *${category}* ✅\n\n` +
+    `Descreva o problema com o máximo de detalhe.\n` +
+    `_(inclua rua, bairro ou referência de localização)_`,
 
   confirmation: (ticketId: string, category: string, priority: string) =>
     `*Pedido registado com sucesso!* ✅\n\n` +
     `📋 Referência: *${ticketId}*\n` +
     `📁 Categoria: ${category}\n` +
     `🚦 Prioridade: ${priority}\n\n` +
-    `Guarde este número. Para consultar o estado, envie: *${ticketId}*\n\n` +
-    `_Tempo médio de resposta: 48h. Obrigado pela participação!_`,
+    `Envie *${ticketId}* a qualquer momento para consultar o estado.\n` +
+    `Tempo médio de resposta: 48h.`,
 
-  unrecognised: () =>
-    `Não reconheci a opção. Responda com o número da categoria:\n\n` +
-    WA_CATEGORIES.map(c => `*${c.num}* — ${c.label}`).join("\n"),
+  trackPrompt: () =>
+    `Envie o número do seu pedido _(ex: OP247)_ para consultar o estado.\n\n` +
+    `Ou aceda em: ${APP_URL}/citizen-portal#consultar`,
 
   statusFound: (ticketId: string, status: string) =>
     `*OP1NA1 — Estado do Pedido*\n\n` +
     `📋 Referência: *${ticketId}*\n` +
     `🚦 Estado: ${status}\n\n` +
-    `Para nova ocorrência, envie qualquer mensagem.`,
+    `Envie *1* para registar nova ocorrência.`,
 
   statusNotFound: (ticketId: string) =>
-    `Não encontrei o pedido *${ticketId}*.\n` +
-    `Verifique o número ou envie uma nova mensagem para registar uma ocorrência.`,
+    `Pedido *${ticketId}* não encontrado.\n` +
+    `Verifique o número ou envie *1* para nova ocorrência.`,
+
+  mediatorInfo: () =>
+    `*Mediadores Comunitários — OP1NA1* 👤\n\n` +
+    `Os mediadores registam pedidos _presencialmente e gratuitamente_.\n\n` +
+    `📞 Contacto directo: *${INST_NUMBER_DISPLAY}*\n\n` +
+    `Zonas disponíveis:\n` +
+    `• CAOP C — Seg–Sex 7h–17h\n` +
+    `• Capalanga — Seg–Sáb 8h–16h\n` +
+    `• Boa-Fé — Ter–Sáb 9h–17h\n\n` +
+    `Envie *1* para registar ocorrência por escrito.`,
+
+  unrecognisedAction: () =>
+    `Opção não reconhecida. Responda com *1*, *2* ou *3*:\n\n` +
+    `*1* — Reportar Problema\n*2* — Consultar Pedido\n*3* — Falar com Mediador`,
+
+  unrecognisedCategory: () =>
+    `Categoria não reconhecida. Responda com o número:\n\n` +
+    WA_CATEGORIES.map(c => `*${c.num}* — ${c.label}`).join("\n"),
 } as const;
 
 // ── Store em memória (DEMO / desenvolvimento) ──────────────────────────────────
 
 const SESSION_TTL_MS = 10 * 60 * 1000; // 10 minutos
-
 const _store = new Map<string, ConversationSession>();
 
 function purgeExpired() {
   const now = Date.now();
-  for (const [key, session] of _store) {
-    if (now - session.updatedAt > SESSION_TTL_MS) _store.delete(key);
+  for (const [key, s] of _store) {
+    if (now - s.updatedAt > SESSION_TTL_MS) _store.delete(key);
   }
 }
 
-// ── API pública ───────────────────────────────────────────────────────────────
-
 export function getSession(phone: string): ConversationSession {
   purgeExpired();
-  return (
-    _store.get(phone) ?? {
-      phone,
-      state:     "idle",
-      updatedAt: Date.now(),
-    }
-  );
+  return _store.get(phone) ?? { phone, state: "idle", updatedAt: Date.now() };
 }
 
 export function saveSession(session: ConversationSession): void {
@@ -117,34 +148,41 @@ export function resetSession(phone: string): void {
   _store.delete(phone);
 }
 
-// ── Parser de resposta do utilizador ─────────────────────────────────────────
+// ── Parsers ───────────────────────────────────────────────────────────────────
 
-/**
- * Tenta mapear a resposta do cidadão a uma das categorias do menu.
- * Aceita: número "1"–"8", nome exacto ou parcial (case-insensitive).
- */
+/** Mapeia input do utilizador à acção principal (1/2/3) */
+export function parseMainMenuInput(
+  input: string
+): typeof WA_MAIN_MENU[number] | null {
+  const t = input.trim().toLowerCase();
+  const num = parseInt(t, 10);
+  if (!isNaN(num)) {
+    return WA_MAIN_MENU.find(a => a.num === num) ?? null;
+  }
+  return (
+    WA_MAIN_MENU.find(a =>
+      a.label.toLowerCase().includes(t) || t.includes(a.action)
+    ) ?? null
+  );
+}
+
+/** Mapeia input do utilizador à categoria */
 export function parseCategoryInput(
   input: string
-): { num: number; label: string; key: string } | null {
-  const trimmed = input.trim().toLowerCase();
-
-  // Por número
-  const num = parseInt(trimmed, 10);
+): typeof WA_CATEGORIES[number] | null {
+  const t = input.trim().toLowerCase();
+  const num = parseInt(t, 10);
   if (!isNaN(num)) {
-    const cat = WA_CATEGORIES.find(c => c.num === num);
-    if (cat) return cat;
+    return WA_CATEGORIES.find(c => c.num === num) ?? null;
   }
-
-  // Por nome (parcial)
   for (const cat of WA_CATEGORIES) {
     if (
-      cat.label.toLowerCase().includes(trimmed) ||
-      trimmed.includes(cat.label.toLowerCase()) ||
-      cat.key.includes(trimmed)
+      cat.label.toLowerCase().includes(t) ||
+      t.includes(cat.label.toLowerCase()) ||
+      cat.key.includes(t)
     ) {
       return cat;
     }
   }
-
   return null;
 }
