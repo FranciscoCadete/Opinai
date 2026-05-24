@@ -442,8 +442,8 @@ export default function AuditCenter() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <ShieldCheck size={20} className="text-primary" aria-hidden="true" />
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Auditoria & Controlo de Integridade</h1>
+          <ShieldCheck size={20} className="text-primary flex-shrink-0" aria-hidden="true" />
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">Auditoria & Controlo de Integridade</h1>
           <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">ADMIN</span>
         </div>
         <p className="text-sm text-muted-foreground">
@@ -453,7 +453,7 @@ export default function AuditCenter() {
 
       {/* Tabs */}
       <div role="tablist" aria-label="Secções de auditoria"
-        className="flex gap-1 flex-wrap bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit">
+        className="flex gap-1 flex-wrap bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit max-w-full overflow-x-auto">
         {TABS.map(t => {
           const Icon = t.icon;
           return (
@@ -795,7 +795,7 @@ export default function AuditCenter() {
       {/* ── TAB 4 — CONFORMIDADE RGPD ── */}
       {tab === "rgpd" && (
         <div className="space-y-4">
-          <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl p-5 flex items-center gap-6">
+          <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl p-5 flex items-center gap-6 flex-wrap">
             <div className="flex-shrink-0">{gauge(94, "#22c55e")}</div>
             <div className="flex-1">
               <p className="text-xl font-extrabold text-foreground mb-1">Índice de Conformidade RGPD: <span className="text-green-600 dark:text-green-400">94%</span></p>

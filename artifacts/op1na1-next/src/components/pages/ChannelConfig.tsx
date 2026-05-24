@@ -410,7 +410,7 @@ export default function ChannelConfig() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Radio size={20} className="text-primary" />
-            <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Canais & Configuração SLA</h1>
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">Canais & Configuração SLA</h1>
             <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">ADMIN</span>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -425,7 +425,7 @@ export default function ChannelConfig() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit">
+      <div className="flex gap-1 bg-secondary/60 dark:bg-zinc-800/60 p-1 rounded-xl border border-border dark:border-zinc-700 w-fit max-w-full overflow-x-auto">
         {TABS.map(t => {
           const Icon = t.icon;
           return (
@@ -531,6 +531,7 @@ export default function ChannelConfig() {
           </div>
 
           <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-secondary/50 dark:bg-zinc-800/60">
@@ -596,6 +597,7 @@ export default function ChannelConfig() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">

@@ -414,7 +414,7 @@ export default function AdminDashboard() {
               <span style={{ padding: "2px 8px", borderRadius: 10, background: "rgba(0,196,154,0.08)", color: T.accent, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" }}>
                 {auth.user.role}
               </span>
-              <span style={{ color: T.muted2 }}>{auth.user.email}</span>
+              <span className="db-email-hide" style={{ color: T.muted2 }}>{auth.user.email}</span>
             </>
           ) : (
             <span>sem sessão (modo demonstração)</span>
@@ -492,6 +492,15 @@ export default function AdminDashboard() {
           .db-kpi-grid { grid-template-columns: repeat(5,1fr); }
           .db-row-2col { grid-template-columns: 2fr 1fr; }
           .db-row-11   { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ── Mobile-specific fixes (≤767px) ─────────────────────── */
+        @media (max-width: 767px) {
+          .db-email-hide { display: none; }
+          .db-bairro-label { width: clamp(60px, 22vw, 110px); }
+        }
+        @media (min-width: 768px) {
+          .db-bairro-label { width: 110px; }
         }
       `}</style>
 
@@ -592,7 +601,7 @@ export default function AdminDashboard() {
           <div style={{ padding: "0 20px 16px" }}>
             {bairroData.map((b) => (
               <div key={b.name} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 11 }}>
-                <div style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, width: 110, flexShrink: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                <div className="db-bairro-label" style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, flexShrink: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                   {b.name}
                 </div>
                 <AnimatedBar estrato={b.estrato} val={b.val} maxVal={bairroMax} mounted={mounted} label={b.name} />

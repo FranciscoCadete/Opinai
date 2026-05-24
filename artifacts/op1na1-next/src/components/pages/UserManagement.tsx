@@ -365,19 +365,19 @@ export default function UserManagement() {
             Município dos Mulenvos · 882.014 hab. (INE Censo 2024) · {users.length} utilizadores registados
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button onClick={() => setShowAudit(true)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors">
-            <ClipboardList aria-hidden="true" size={15} /> Log de Auditoria
+            <ClipboardList aria-hidden="true" size={15} /> <span className="hidden sm:inline">Log de Auditoria</span><span className="sm:hidden">Auditoria</span>
             <span className="ml-1 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{audit.length}</span>
           </button>
           <button onClick={exportCSV}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors">
-            <Download aria-hidden="true" size={15} /> Exportar CSV
+            <Download aria-hidden="true" size={15} /> <span className="hidden sm:inline">Exportar</span> CSV
           </button>
           <button onClick={openCreate}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm">
-            <Plus aria-hidden="true" size={15} /> Novo Utilizador
+            <Plus aria-hidden="true" size={15} /> <span className="hidden sm:inline">Novo </span>Utilizador
           </button>
         </div>
       </div>
@@ -541,9 +541,9 @@ export default function UserManagement() {
           </table>
         </div>
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border dark:border-zinc-800 bg-secondary/30">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-border dark:border-zinc-800 bg-secondary/30 gap-2 flex-wrap">
           <p className="text-xs text-muted-foreground">
-            A mostrar {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} de {filtered.length} utilizadores
+            <span className="hidden sm:inline">A mostrar </span>{Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)}<span className="hidden sm:inline"> de {filtered.length} utilizadores</span>
           </p>
           <div className="flex items-center gap-1">
             <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} aria-label="Página anterior"

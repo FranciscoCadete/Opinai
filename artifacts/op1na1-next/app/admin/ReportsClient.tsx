@@ -261,15 +261,19 @@ export function ReportsClient() {
 
   return (
     <>
-      {/* Print-only styles */}
+      {/* Print-only + responsive styles */}
       <style>{`
         @media print {
           .no-print { display: none !important; }
           body { background: #fff !important; color: #111 !important; }
         }
+        @media (max-width: 767px) {
+          .rp-controls { flex-direction: column; align-items: flex-start !important; }
+          .rp-bairros-table { overflow-x: auto; display: block; }
+        }
       `}</style>
 
-      <div style={{ padding: "32px 36px", maxWidth: 1100, margin: "0 auto" }}>
+      <div style={{ padding: "clamp(16px, 4vw, 32px) clamp(16px, 4vw, 36px)", maxWidth: 1100, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28, flexWrap: "wrap", gap: 12 }}>
           <div>
@@ -284,7 +288,7 @@ export function ReportsClient() {
           </div>
 
           {/* Controls */}
-          <div className="no-print" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <div className="no-print rp-controls" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             {/* Period selector */}
             <div role="group" aria-label="Período" style={{ display: "flex", background: T.srf2, borderRadius: 8, padding: 3, border: `1px solid ${T.bdr}` }}>
               {PERIODS.map(p => (
@@ -394,6 +398,7 @@ export function ReportsClient() {
             {/* Bairros + Priority row */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 12 }}>
               <Card title="Top bairros">
+                <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }} aria-label="Pedidos por bairro">
                   <thead>
                     <tr>
@@ -410,6 +415,7 @@ export function ReportsClient() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </Card>
 
               <Card title="Por prioridade">

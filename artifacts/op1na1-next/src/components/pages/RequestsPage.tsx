@@ -23,7 +23,7 @@ export default function RequestsPage() {
   }, [query]);
 
   return (
-    <main id="main-content" style={{ padding: 32, color: "#e8edf4", fontFamily: "'DM Sans', sans-serif" }}>
+    <main id="main-content" style={{ padding: "clamp(16px, 4vw, 32px)", color: "#e8edf4", fontFamily: "'DM Sans', sans-serif" }}>
       <div style={{ fontFamily: "'Fraunces', serif", fontSize: 28, fontWeight: 300, color: "#00c49a", marginBottom: 16 }}>
         {t("requests.title", "Pedidos")} <span style={{ color: "#6b7d96", fontSize: 14, fontFamily: "'DM Mono', monospace" }}>({total})</span>
       </div>
@@ -35,7 +35,7 @@ export default function RequestsPage() {
           placeholder={t("requests.search", "Pesquisar pedidos…")}
           aria-label={t("requests.search", "Pesquisar pedidos…")}
           onChange={e => setQuery(q => ({ ...q, search: e.target.value || undefined, page: 1 }))}
-          style={{ padding: "9px 14px", borderRadius: 7, border: "1px solid rgba(255,255,255,.1)", background: "#111720", color: "#e8edf4", fontFamily: "'DM Sans', sans-serif", fontSize: 13, width: 280, outline: "none" }}
+          style={{ padding: "9px 14px", borderRadius: 7, border: "1px solid rgba(255,255,255,.1)", background: "#111720", color: "#e8edf4", fontFamily: "'DM Sans', sans-serif", fontSize: 13, width: "min(280px, 100%)", outline: "none" }}
         />
       </div>
 
@@ -44,6 +44,7 @@ export default function RequestsPage() {
       ) : items.length === 0 ? (
         <div style={{ color: "#6b7d96", fontSize: 13 }}>{t("requests.noResults")}</div>
       ) : (
+        <div style={{ overflowX: "auto" }}>
         <table aria-label={t("requests.title")} style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
           <thead>
             <tr style={{ color: "#6b7d96", textAlign: "left" }}>
@@ -66,6 +67,7 @@ export default function RequestsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
 
       {/* Pagination */}
