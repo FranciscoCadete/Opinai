@@ -77,3 +77,98 @@ body {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ADMIN DASHBOARD — Mobile Responsive (≤767px)
+   Aplica-se a todas as páginas /admin/* sem alterar o desktop
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Tabelas sempre com scroll horizontal */
+#main-content table {
+  min-width: 480px;
+}
+.admin-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+
+  /* Padding geral */
+  #main-content {
+    overflow-x: hidden;
+  }
+  .db-content-wrap {
+    padding: 12px !important;
+  }
+
+  /* Grids do Dashboard */
+  .db-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .db-row-2col,
+  .db-row-11 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Tipografia */
+  #main-content h1 { font-size: clamp(18px, 5vw, 28px) !important; }
+  #main-content h2 { font-size: clamp(15px, 4vw, 22px) !important; }
+
+  /* Inputs largura total */
+  #main-content input[type="search"],
+  #main-content input[type="text"],
+  #main-content input[type="email"],
+  #main-content input[type="tel"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Tabs horizontais com scroll */
+  #main-content [role="tablist"] {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  #main-content [role="tablist"]::-webkit-scrollbar { display: none; }
+
+  /* Dashboard — email oculto no header */
+  .db-email-hide { display: none !important; }
+
+  /* Dashboard — label bairro */
+  .db-bairro-label {
+    width: clamp(56px, 20vw, 90px) !important;
+  }
+
+  /* Dashboard — KPI número */
+  .db-kpi-card div[style*="font-size: 32"] {
+    font-size: 22px !important;
+  }
+
+  /* Relatórios — controlos */
+  .rp-controls {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+  }
+  .rp-controls > * {
+    width: 100%;
+  }
+
+  /* Grids Tailwind multi-coluna — colapsar */
+  #main-content .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Flexbox header bars — não transbordar */
+  #main-content header,
+  #main-content [class*="header"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}

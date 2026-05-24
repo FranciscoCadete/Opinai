@@ -657,9 +657,9 @@ export default function AuditCenter() {
           <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-700 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-border dark:border-zinc-700 flex items-center justify-between">
               <h3 className="font-bold text-foreground flex items-center gap-2"><Server size={15} className="text-primary" /> Status dos Serviços</h3>
-              <span className="text-xs text-muted-foreground">Uptime desde: 10/04/2025 · {formatUptime(uptime + 2592000)} (sessão)</span>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Uptime desde: 10/04/2025 · {formatUptime(uptime + 2592000)} (sessão)</span>
             </div>
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto"><table className="w-full text-sm">
               <thead>
                 <tr className="bg-secondary/50 dark:bg-zinc-800/50 border-b border-border dark:border-zinc-700">
                   {["Serviço","Status","Latência","Uptime","Porta"].map(h => (
@@ -698,7 +698,7 @@ export default function AuditCenter() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
       )}
@@ -872,7 +872,7 @@ export default function AuditCenter() {
                 </span>
               )}
             </div>
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto"><table className="w-full text-sm">
               <thead>
                 <tr className="bg-secondary/50 dark:bg-zinc-800/60 border-b border-border dark:border-zinc-700">
                   {["Titular","NIF","Pedido em","Prazo","Status",""].map(h => (
@@ -907,7 +907,7 @@ export default function AuditCenter() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
             <div className="px-5 py-3 border-t border-border dark:border-zinc-700 bg-secondary/20">
               <p className="text-xs text-muted-foreground">
                 <strong>Processo de eliminação:</strong> anonimização de nome/email/telefone (substituídos por hash irreversível) →
