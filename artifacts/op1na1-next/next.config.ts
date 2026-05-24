@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     // Type checking runs separately in CI (pnpm typecheck)
-    // Several API routes import drizzle-orm/api-zod symbols that are only
-    // reachable in non-DEMO mode; the build target is always DEMO_MODE=true
     ignoreBuildErrors: true,
   },
   // Output as standalone for optimised Docker/container deploys
