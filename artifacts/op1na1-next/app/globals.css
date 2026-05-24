@@ -79,6 +79,49 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   ADMIN SIDEBAR — Fixed overlay on mobile (≤768px)
+   Garante que o sidebar é removido do fluxo flex e faz overlay
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Desktop default */
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  /* Sidebar becomes a fixed-position drawer, removed from flex flow   */
+  /* This means the <main> sibling gets flex:1 = full 100vw width      */
+  .admin-sidebar {
+    position: fixed !important;
+    left: -220px !important;
+    top: 0 !important;
+    z-index: 50 !important;
+    transition: left .24s cubic-bezier(.4,0,.2,1) !important;
+  }
+  .admin-sidebar--open {
+    left: 0 !important;
+  }
+  .sidebar-close-btn {
+    display: flex !important;
+  }
+  .mobile-topbar {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .admin-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  .mobile-topbar {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    ADMIN DASHBOARD — Mobile Responsive (≤767px)
    Aplica-se a todas as páginas /admin/* sem alterar o desktop
    ═══════════════════════════════════════════════════════════════════ */

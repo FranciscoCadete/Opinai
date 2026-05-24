@@ -58,7 +58,8 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           width: 220, flexShrink: 0, background: T.surface,
           borderRight: `1px solid ${T.bdr}`,
           display: "flex", flexDirection: "column",
-          padding: "24px 0", height: "100vh", position: "sticky", top: 0,
+          padding: "24px 0", height: "100vh",
+          /* position/top managed entirely by CSS to allow media-query override */
         }}
       >
         {/* Logo */}
@@ -142,26 +143,32 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
   return (
     <RequireAuth minRole="technician">
       <style>{`
+        /* Desktop default: sticky in flex flow */
+        .admin-sidebar {
+          position: sticky;
+          top: 0;
+        }
+        /* Mobile: fixed overlay drawer, removed from flex flow */
         @media (max-width: 768px) {
           .admin-sidebar {
             position: fixed !important;
-            left: -220px;
-            top: 0;
+            left: -220px !important;
+            top: 0 !important;
             height: 100vh !important;
-            z-index: 50;
+            z-index: 50 !important;
             transition: left .24s cubic-bezier(.4,0,.2,1);
           }
           .admin-sidebar--open { left: 0 !important; }
-          .sidebar-close-btn  { display: flex !important; }
-          .mobile-topbar      { display: flex !important; }
-          /* ensure pages don't overflow horizontally on phones */
-          #main-content { overflow-x: hidden; }
+          .sidebar-close-btn   { display: flex !important; }
+          .mobile-topbar       { display: flex !important; }
+          /* main fills full viewport once sidebar is out of flow */
+          #main-content { overflow-x: hidden; width: 100%; }
         }
         @media (min-width: 769px) {
-          .admin-sidebar { position: sticky !important; left: 0 !important; }
+          .admin-sidebar { position: sticky !important; top: 0 !important; left: 0 !important; }
           .mobile-topbar { display: none !important; }
         }
-        /* Prevent text overflow on very small phones */
+        /* Very small phones: narrower sidebar */
         @media (max-width: 400px) {
           .admin-sidebar { width: 85vw !important; }
         }
