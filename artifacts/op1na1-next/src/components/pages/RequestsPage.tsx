@@ -23,15 +23,26 @@ export default function RequestsPage() {
   }, [query]);
 
   return (
-    <main id="main-content" style={{ padding: "clamp(16px, 4vw, 32px)", color: "#e8edf4", fontFamily: "'DM Sans', sans-serif" }}>
-      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 28, fontWeight: 300, color: "#00c49a", marginBottom: 16 }}>
+    <main id="main-content" style={{ padding: "clamp(12px, 4vw, 32px)", color: "#e8edf4", fontFamily: "'DM Sans', sans-serif" }}>
+      <style>{`
+        @media (max-width: 767px) {
+          .rp-title   { font-size: 20px !important; }
+          .rp-search  { width: 100% !important; }
+          /* Hide channel column on mobile */
+          .rp-table th:nth-child(5),
+          .rp-table td:nth-child(5) { display: none !important; }
+        }
+      `}</style>
+
+      <div className="rp-title" style={{ fontFamily: "'Fraunces', serif", fontSize: 28, fontWeight: 300, color: "#00c49a", marginBottom: 16 }}>
         {t("requests.title", "Pedidos")} <span style={{ color: "#6b7d96", fontSize: 14, fontFamily: "'DM Mono', monospace" }}>({total})</span>
       </div>
 
       {/* Search */}
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 16 }}>
         <input
           type="search"
+          className="rp-search"
           placeholder={t("requests.search", "Pesquisar pedidos…")}
           aria-label={t("requests.search", "Pesquisar pedidos…")}
           onChange={e => setQuery(q => ({ ...q, search: e.target.value || undefined, page: 1 }))}
@@ -44,34 +55,34 @@ export default function RequestsPage() {
       ) : items.length === 0 ? (
         <div style={{ color: "#6b7d96", fontSize: 13 }}>{t("requests.noResults")}</div>
       ) : (
-        <div style={{ overflowX: "auto" }}>
-        <table aria-label={t("requests.title")} style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-          <thead>
-            <tr style={{ color: "#6b7d96", textAlign: "left" }}>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.ticketId")}</th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.description")}</th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.status")}</th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.priority")}</th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.channel")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(row => (
-              <tr key={row.id} style={{ borderBottom: "1px solid rgba(255,255,255,.04)" }}>
-                <td style={{ padding: "10px 12px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#4fa3f7" }}>{row.ticketId}</td>
-                <td style={{ padding: "10px 12px", maxWidth: 320, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{row.description}</td>
-                <td style={{ padding: "10px 12px" }}>{t(`requests.status.${row.status}`, row.status)}</td>
-                <td style={{ padding: "10px 12px" }}>{t(`requests.priority.${row.priority}`, row.priority)}</td>
-                <td style={{ padding: "10px 12px" }}>{row.channel}</td>
+        <div className="admin-table-wrap">
+          <table className="rp-table" aria-label={t("requests.title")} style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 480 }}>
+            <thead>
+              <tr style={{ color: "#6b7d96", textAlign: "left" }}>
+                <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.ticketId")}</th>
+                <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.description")}</th>
+                <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.status")}</th>
+                <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.priority")}</th>
+                <th style={{ padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,.07)", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.08em" }}>{t("requests.columns.channel")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map(row => (
+                <tr key={row.id} style={{ borderBottom: "1px solid rgba(255,255,255,.04)" }}>
+                  <td style={{ padding: "10px 12px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#4fa3f7", whiteSpace: "nowrap" }}>{row.ticketId}</td>
+                  <td style={{ padding: "10px 12px", maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{row.description}</td>
+                  <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{t(`requests.status.${row.status}`, row.status)}</td>
+                  <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{t(`requests.priority.${row.priority}`, row.priority)}</td>
+                  <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{row.channel}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
       {/* Pagination */}
-      <div style={{ display: "flex", gap: 8, marginTop: 20, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: 8, marginTop: 16, alignItems: "center" }}>
         <button
           disabled={query.page === 1}
           onClick={() => setQuery(q => ({ ...q, page: (q.page ?? 1) - 1 }))}

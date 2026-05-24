@@ -438,6 +438,19 @@ export default function AuditCenter() {
 
   return (
     <main id="main-content" className="flex flex-col gap-4">
+      <style>{`
+        @media (max-width: 767px) {
+          /* Audit log: hide IP (4) and Recurso (6) and lock icon (8) */
+          .ac-audit-table th:nth-child(4),
+          .ac-audit-table td:nth-child(4),
+          .ac-audit-table th:nth-child(6),
+          .ac-audit-table td:nth-child(6),
+          .ac-audit-table th:nth-child(8),
+          .ac-audit-table td:nth-child(8) { display: none !important; }
+          /* Append-only notice: hide count on far right */
+          .ac-immutable-count { display: none !important; }
+        }
+      `}</style>
 
       {/* Header */}
       <div>
@@ -478,7 +491,7 @@ export default function AuditCenter() {
             <span className="text-xs text-zinc-300">
               <strong className="text-white">Append-only:</strong> logs são imutáveis por trigger MySQL + WAL do filesystem. Nenhum utilizador, incluindo Admin, pode editar ou apagar entradas.
             </span>
-            <span className="ml-auto text-xs font-mono text-zinc-500">{auditLog.length} entradas totais</span>
+            <span className="ac-immutable-count ml-auto text-xs font-mono text-zinc-500">{auditLog.length} entradas totais</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl px-4 py-3">
@@ -509,7 +522,7 @@ export default function AuditCenter() {
 
           <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table aria-label="Log de auditoria" className="w-full text-sm">
+              <table aria-label="Log de auditoria" className="ac-audit-table w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-secondary/50 dark:bg-zinc-800/60">
                     {["","Timestamp","Actor","IP","Acção","Recurso","Sev.",""].map((h, i) => (

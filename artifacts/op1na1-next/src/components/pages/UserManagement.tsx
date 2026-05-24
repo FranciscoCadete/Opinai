@@ -352,6 +352,19 @@ export default function UserManagement() {
   // ── Render ────────────────────────────────────────────────────────
   return (
     <main id="main-content" className="flex flex-col gap-4 min-h-0">
+      <style>{`
+        @media (max-width: 767px) {
+          /* Hide Bairros (4), Registo (6), Última actividade (7) */
+          .um-table th:nth-child(4),
+          .um-table td:nth-child(4),
+          .um-table th:nth-child(6),
+          .um-table td:nth-child(6),
+          .um-table th:nth-child(7),
+          .um-table td:nth-child(7) { display: none !important; }
+          /* Compact filter bar */
+          #main-content .um-filters { padding: 10px 12px !important; gap: 8px !important; }
+        }
+      `}</style>
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -458,7 +471,7 @@ export default function UserManagement() {
       {/* Table */}
       <div className="bg-card dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table aria-label="Lista de utilizadores" className="w-full text-sm">
+          <table aria-label="Lista de utilizadores" className="um-table w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-secondary/50 dark:bg-zinc-800/60">
                 <th className="px-3 py-3 w-10">

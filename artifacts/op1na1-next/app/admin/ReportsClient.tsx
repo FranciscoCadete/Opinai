@@ -69,12 +69,12 @@ function KpiCard({ label, value, sub, color = T.accent }: {
   label: string; value: string | number; sub?: string; color?: string;
 }) {
   return (
-    <div style={{
+    <div className="rp-kpi-card" style={{
       background: T.surface, border: `1px solid ${T.bdr}`, borderRadius: 10,
       padding: "20px 24px", display: "flex", flexDirection: "column", gap: 4,
     }}>
       <div style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, letterSpacing: "0.12em", textTransform: "uppercase" }}>{label}</div>
-      <div style={{ fontFamily: T.display, fontSize: 34, fontWeight: 300, color, lineHeight: 1, letterSpacing: "-0.02em" }}>{value}</div>
+      <div className="rp-kpi-value" style={{ fontFamily: T.display, fontSize: 34, fontWeight: 300, color, lineHeight: 1, letterSpacing: "-0.02em" }}>{value}</div>
       {sub && <div style={{ fontFamily: T.sans, fontSize: 11, color: T.muted }}>{sub}</div>}
     </div>
   );
@@ -268,16 +268,21 @@ export function ReportsClient() {
           body { background: #fff !important; color: #111 !important; }
         }
         @media (max-width: 767px) {
-          .rp-controls { flex-direction: column; align-items: flex-start !important; }
-          .rp-bairros-table { overflow-x: auto; display: block; }
+          .rp-controls { flex-direction: column !important; align-items: flex-start !important; width: 100% !important; }
+          .rp-controls > * { width: 100%; }
+          .rp-kpi-card  { padding: 12px 14px !important; }
+          .rp-kpi-value { font-size: 24px !important; }
+          .rp-card      { padding: 14px !important; }
+          .rp-h1        { font-size: 20px !important; }
+          .rp-grid-2col { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
-      <div style={{ padding: "clamp(16px, 4vw, 32px) clamp(16px, 4vw, 36px)", maxWidth: 1100, margin: "0 auto" }}>
+      <div style={{ padding: "clamp(12px, 4vw, 32px) clamp(12px, 4vw, 36px)", maxWidth: 1100, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28, flexWrap: "wrap", gap: 12 }}>
           <div>
-            <h1 style={{ fontFamily: T.display, fontSize: 26, fontWeight: 300, color: T.text, margin: 0, letterSpacing: "-0.02em" }}>
+            <h1 className="rp-h1" style={{ fontFamily: T.display, fontSize: 26, fontWeight: 300, color: T.text, margin: 0, letterSpacing: "-0.02em" }}>
               Relatórios
             </h1>
             {data && (
@@ -288,7 +293,7 @@ export function ReportsClient() {
           </div>
 
           {/* Controls */}
-          <div className="no-print rp-controls" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <div className="no-print rp-controls" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", minWidth: 0 }}>
             {/* Period selector */}
             <div role="group" aria-label="Período" style={{ display: "flex", background: T.srf2, borderRadius: 8, padding: 3, border: `1px solid ${T.bdr}` }}>
               {PERIODS.map(p => (
@@ -377,7 +382,7 @@ export function ReportsClient() {
             </Card>
 
             {/* Category + Channel row */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 12, marginBottom: 20 }}>
+            <div className="rp-grid-2col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12, marginBottom: 20 }}>
               <Card title="Por categoria">
                 <HBar
                   items={data.byCategory.map((c, i) => ({ label: c.label, pct: c.pct, count: c.count, color: CATEGORY_COLORS[i % CATEGORY_COLORS.length] }))}
@@ -396,7 +401,7 @@ export function ReportsClient() {
             </div>
 
             {/* Bairros + Priority row */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 12 }}>
+            <div className="rp-grid-2col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
               <Card title="Top bairros">
                 <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }} aria-label="Pedidos por bairro">

@@ -154,7 +154,7 @@ function CardHeader({ title, dot = T.accent, children }: {
   title: string; dot?: string; children?: React.ReactNode
 }) {
   return (
-    <div style={{
+    <div className="db-card-hdr" style={{
       display: "flex", alignItems: "center", justifyContent: "space-between",
       padding: "16px 20px", borderBottom: `1px solid ${T.bdr}`,
     }}>
@@ -402,7 +402,7 @@ export default function AdminDashboard() {
     <main id="main-content" style={{ fontFamily: T.sans, color: T.text, fontSize: 14, lineHeight: 1.5 }}>
 
       {/* ── Session bar (logged-in user + logout) ───────────── */}
-      <header style={{
+      <header className="db-header" style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "10px 24px", borderBottom: `1px solid ${T.bdr}`,
         background: T.surface, gap: 12, flexWrap: "wrap",
@@ -481,23 +481,53 @@ export default function AdminDashboard() {
 
         /* ── Responsive layout ───────────────────────────────── */
         .db-content-wrap { padding: 12px; }
-        .db-kpi-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 26px; }
-        .db-row-2col { display: grid; grid-template-columns: 1fr;           gap: 16px; margin-bottom: 16px; }
-        .db-row-11   { display: grid; grid-template-columns: 1fr;           gap: 16px; margin-bottom: 16px; }
+        .db-kpi-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-bottom: 20px; }
+        .db-row-2col { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 14px; }
+        .db-row-11   { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 14px; }
         @media (min-width: 640px) {
           .db-kpi-grid { grid-template-columns: repeat(3,1fr); }
         }
         @media (min-width: 1024px) {
           .db-content-wrap { padding: 24px; }
-          .db-kpi-grid { grid-template-columns: repeat(5,1fr); }
-          .db-row-2col { grid-template-columns: 2fr 1fr; }
-          .db-row-11   { grid-template-columns: 1fr 1fr; }
+          .db-kpi-grid { grid-template-columns: repeat(5,1fr); gap: 14px; margin-bottom: 26px; }
+          .db-row-2col { grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+          .db-row-11   { grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
         }
 
         /* ── Mobile-specific fixes (≤767px) ─────────────────────── */
         @media (max-width: 767px) {
-          .db-email-hide { display: none; }
-          .db-bairro-label { width: clamp(60px, 22vw, 110px); }
+          /* Session header */
+          .db-header         { padding: 8px 14px !important; }
+          .db-email-hide     { display: none !important; }
+          /* KPI cards */
+          .db-kpi-card       { padding: 12px !important; }
+          .db-kpi-num        { font-size: 22px !important; letter-spacing: -0.02em !important; }
+          /* Card headers */
+          .db-card-hdr       { padding: 10px 14px !important; flex-wrap: wrap !important; gap: 6px !important; }
+          /* Bairro label */
+          .db-bairro-label   { width: clamp(56px, 20vw, 90px) !important; }
+          /* Bairro legend — wrap to two rows */
+          .db-bairro-legend  { flex-wrap: wrap !important; gap: 4px 10px !important;
+                               padding: 6px 14px 2px !important; }
+          /* Bairro bars section */
+          .db-bairro-bars    { padding: 0 14px 12px !important; }
+          /* Feed items */
+          .db-feed-item      { padding: 10px 14px !important; }
+          /* Crisis banner */
+          .db-crisis         { flex-wrap: wrap !important; padding: 10px 12px !important; }
+          /* Tickets: hide non-essential columns (Bairro=3, Cat=4, Canal=5, Técnico=8, Criado=9) */
+          .db-tickets-wrap th:nth-child(3),
+          .db-tickets-wrap td:nth-child(3),
+          .db-tickets-wrap th:nth-child(4),
+          .db-tickets-wrap td:nth-child(4),
+          .db-tickets-wrap th:nth-child(5),
+          .db-tickets-wrap td:nth-child(5),
+          .db-tickets-wrap th:nth-child(8),
+          .db-tickets-wrap td:nth-child(8),
+          .db-tickets-wrap th:nth-child(9),
+          .db-tickets-wrap td:nth-child(9) { display: none !important; }
+          /* Refresh bar: hide right-side stats */
+          .db-refresh-right  { display: none !important; }
         }
         @media (min-width: 768px) {
           .db-bairro-label { width: 110px; }
@@ -508,13 +538,14 @@ export default function AdminDashboard() {
       {/* ── Crisis banner ──────────────────────────────────── */}
       {crisisVisible && (
         <div
+          className="db-crisis"
           role="alert"
           aria-live="assertive"
           aria-atomic="true"
           style={{
             display: "flex", alignItems: "center", gap: 12,
             background: "rgba(247,111,111,0.08)", borderRadius: 10,
-            padding: "12px 16px", marginBottom: 24,
+            padding: "12px 16px", marginBottom: 20,
             border: "1px solid rgba(247,111,111,0.25)",
             animation: "db-pulse-border 2s ease-in-out infinite",
             ...fadeStyle(0.05),
@@ -567,7 +598,7 @@ export default function AdminDashboard() {
             <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
               {k.label}
             </div>
-            <div style={{ fontFamily: T.display, fontSize: 32, fontWeight: 300, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 8, color: k.strip === T.muted ? T.text : k.strip }}>
+            <div className="db-kpi-num" style={{ fontFamily: T.display, fontSize: 32, fontWeight: 300, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 8, color: k.strip === T.muted ? T.text : k.strip }}>
               {k.value}
             </div>
             <div style={{
@@ -590,7 +621,7 @@ export default function AdminDashboard() {
             <CardBtn active={bairroMode==="resolucao"} onClick={() => setBairroMode("resolucao")}>Resolução</CardBtn>
             <CardBtn active={bairroMode==="sla"}       onClick={() => setBairroMode("sla")}>SLA</CardBtn>
           </CardHeader>
-          <div style={{ display: "flex", gap: 14, padding: "0 20px 14px" }}>
+          <div className="db-bairro-legend" style={{ display: "flex", gap: 14, padding: "0 20px 14px" }}>
             {([["A", T.accent, "Estrato A — Consolidado"], ["B", T.accent2, "Estrato B — Em consolidação"], ["C", T.warn, "Estrato C — Crítico"]] as [string,string,string][]).map(([s,c,l]) => (
               <div key={s} style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: T.mono, fontSize: 9, color: T.muted }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: c, display: "inline-block", flexShrink: 0 }} />
@@ -598,7 +629,7 @@ export default function AdminDashboard() {
               </div>
             ))}
           </div>
-          <div style={{ padding: "0 20px 16px" }}>
+          <div className="db-bairro-bars" style={{ padding: "0 20px 16px" }}>
             {bairroData.map((b) => (
               <div key={b.name} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 11 }}>
                 <div className="db-bairro-label" style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, flexShrink: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -810,7 +841,7 @@ export default function AdminDashboard() {
           <CardBtn active={ticketFilter==="pendentes"} onClick={() => setTicketFilter("pendentes")}>Pendentes</CardBtn>
           <CardBtn>Exportar CSV</CardBtn>
         </CardHeader>
-        <div style={{ overflowX: "auto" }}>
+        <div className="db-tickets-wrap" style={{ overflowX: "auto" }}>
           <table aria-label="Tickets recentes — todos os bairros" style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr>
@@ -880,7 +911,7 @@ export default function AdminDashboard() {
           Sistema operacional · Última actualização:{" "}
           {(lastEventAt ?? lastUpdate).toLocaleString("pt-AO")} · SSE {sseStatus === "open" ? "✓ em directo" : "a reconectar…"}
         </span>
-        <span style={{ marginLeft: "auto" }}>n=390 · 10 bairros · 3 estratos · Mulenvos</span>
+        <span className="db-refresh-right" style={{ marginLeft: "auto" }}>n=390 · 10 bairros · 3 estratos · Mulenvos</span>
       </div>
       </div>{/* /db-content-wrap */}
     </main>

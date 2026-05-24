@@ -403,7 +403,7 @@ export default function ChannelConfig() {
   ] as const;
 
   return (
-    <div className="flex flex-col gap-4 min-h-0">
+    <div id="main-content" className="flex flex-col gap-4 min-h-0">
 
       {/* Header */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
