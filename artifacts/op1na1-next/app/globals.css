@@ -79,35 +79,38 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   ADMIN SIDEBAR — Fixed overlay on mobile (≤768px)
-   Garante que o sidebar é removido do fluxo flex e faz overlay
+   ADMIN SIDEBAR — Top-slide full-width overlay on mobile (≤768px)
+   Padrão jw.org: header sempre visível, menu desliza por cima
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Desktop default */
+/* Desktop default: sticky in flex flow */
 .admin-sidebar {
   position: sticky;
   top: 0;
 }
 
+/* Mobile: full-width overlay sliding from below topbar */
 @media (max-width: 768px) {
-  /* Sidebar becomes a fixed-position drawer, removed from flex flow   */
-  /* This means the <main> sibling gets flex:1 = full 100vw width      */
   .admin-sidebar {
     position: fixed !important;
-    left: -220px !important;
-    top: 0 !important;
+    top: 68px !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: auto !important;
+    max-height: calc(100vh - 68px) !important;
+    overflow-y: auto !important;
     z-index: 50 !important;
-    transition: left .24s cubic-bezier(.4,0,.2,1) !important;
+    transform: translateY(-110%) !important;
+    transition: transform .28s cubic-bezier(.4,0,.2,1) !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
   }
   .admin-sidebar--open {
-    left: 0 !important;
+    transform: translateY(0) !important;
   }
-  .sidebar-close-btn {
-    display: flex !important;
-  }
-  .mobile-topbar {
-    display: flex !important;
-  }
+  .sidebar-close-btn { display: none !important; }
+  .mobile-topbar     { display: flex !important; }
+  #admin-main        { overflow-x: hidden !important; }
 }
 
 @media (min-width: 769px) {
@@ -115,10 +118,10 @@ body {
     position: sticky !important;
     top: 0 !important;
     left: 0 !important;
+    width: 220px !important;
+    transform: none !important;
   }
-  .mobile-topbar {
-    display: none !important;
-  }
+  .mobile-topbar { display: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

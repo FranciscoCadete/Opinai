@@ -37,15 +37,17 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
 
   return (
     <>
-      {/* Backdrop — mobile only, rendered only when open */}
+      {/* Backdrop — mobile only, starts BELOW the topbar (68px) */}
+      {/* so the topbar stays accessible regardless of z-index stacking */}
       {open && (
         <div
           onClick={onClose}
           aria-hidden="true"
           className="sidebar-backdrop"
           style={{
-            position: "fixed", inset: 0,
-            background: "rgba(0,0,0,0.55)",
+            position: "fixed", left: 0, right: 0, bottom: 0,
+            top: 68,              /* below mobile topbar */
+            background: "rgba(0,0,0,0.60)",
             zIndex: 49,
           }}
         />
@@ -143,66 +145,122 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
   return (
     <RequireAuth minRole="technician">
       <style>{`
-        /* Desktop default: sticky in flex flow */
+        /* ── Desktop: sidebar sticky in flex flow ───────────────── */
         .admin-sidebar {
           position: sticky;
           top: 0;
         }
-        /* Mobile: fixed overlay drawer, removed from flex flow */
+
+        /* ── Mobile (≤768px): top-slide full-width overlay ──────── */
+        /* Pattern: jw.org — header always on top, menu slides down */
         @media (max-width: 768px) {
+          /* Remove from flex flow so <main> fills full 100vw */
           .admin-sidebar {
             position: fixed !important;
-            left: -220px !important;
-            top: 0 !important;
-            height: 100vh !important;
+            top: 68px !important;          /* right below mobile topbar */
+            left: 0 !important;
+            width: 100vw !important;
+            height: auto !important;
+            max-height: calc(100vh - 68px) !important;
+            overflow-y: auto !important;
             z-index: 50 !important;
-            transition: left .24s cubic-bezier(.4,0,.2,1);
+            transform: translateY(-110%) !important; /* hidden above topbar */
+            transition: transform .28s cubic-bezier(.4,0,.2,1) !important;
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+            padding-top: 8px !important;
+            padding-bottom: 24px !important;
           }
-          .admin-sidebar--open { left: 0 !important; }
-          .sidebar-close-btn   { display: flex !important; }
-          .mobile-topbar       { display: flex !important; }
-          /* main fills full viewport once sidebar is out of flow */
-          #main-content { overflow-x: hidden; width: 100%; }
+          /* Slide down into view when open */
+          .admin-sidebar--open {
+            transform: translateY(0) !important;
+          }
+          /* Close button inside sidebar is not needed for top-slide */
+          .sidebar-close-btn { display: none !important; }
+          /* Show mobile topbar */
+          .mobile-topbar { display: flex !important; }
+          /* Main fills full width — sidebar is out of flex flow */
+          #admin-main { overflow-x: hidden !important; }
+          /* Nav items: larger tap targets + full-width separator */
+          .admin-sidebar ul li button {
+            padding: 14px 20px !important;
+            font-size: 14px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+            border-radius: 0 !important;
+            width: 100% !important;
+          }
+          /* Logo area padding */
+          .admin-sidebar > div:first-child {
+            padding: 16px 20px !important;
+          }
         }
+
+        /* ── Desktop (≥769px): sticky sidebar, no topbar ────────── */
         @media (min-width: 769px) {
-          .admin-sidebar { position: sticky !important; top: 0 !important; left: 0 !important; }
+          .admin-sidebar {
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 220px !important;
+            transform: none !important;
+          }
           .mobile-topbar { display: none !important; }
-        }
-        /* Very small phones: narrower sidebar */
-        @media (max-width: 400px) {
-          .admin-sidebar { width: 85vw !important; }
         }
       `}</style>
 
       <div style={{ display: "flex", minHeight: "100vh", background: T.bg, color: T.text, fontFamily: T.sans }}>
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main id="main-content" style={{ flex: 1, overflow: "auto", minHeight: "100vh" }}>
-          {/* Mobile top bar */}
+        <main id="admin-main" style={{ flex: 1, overflow: "auto", minHeight: "100vh", minWidth: 0 }}>
+          {/* ── Mobile top bar ──────────────────────────────────── */}
           <div
             className="mobile-topbar"
             style={{
               display: "none",
-              alignItems: "center", gap: 12,
-              padding: "12px 16px",
+              alignItems: "center",
+              padding: "0 8px 0 4px",
+              height: 68,
               background: T.surface,
               borderBottom: `1px solid ${T.bdr}`,
-              position: "sticky", top: 0, zIndex: 40,
+              position: "sticky", top: 0, zIndex: 52,
             }}
           >
+            {/* Hamburger / close toggle */}
             <button
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Abrir menu"
+              onClick={() => setSidebarOpen(v => !v)}
+              aria-label={sidebarOpen ? "Fechar menu" : "Abrir menu"}
               aria-expanded={sidebarOpen}
-              style={{ background: "transparent", border: "none", color: T.muted, cursor: "pointer", padding: 8, display: "flex", borderRadius: 8, minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }}
+              style={{
+                background: "transparent", border: "none",
+                color: T.muted, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 8, minWidth: 48, minHeight: 48,
+              }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <line x1="3" y1="6"  x2="21" y2="6"  />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
+              {sidebarOpen ? (
+                /* X icon */
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                /* Hamburger icon */
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <line x1="3" y1="6"  x2="21" y2="6"  />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              )}
             </button>
-            <div style={{ fontFamily: T.display, fontSize: 18, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em", flex: 1, minWidth: 0 }}>OP1NA1</div>
+
+            {/* Logo */}
+            <div style={{ fontFamily: T.display, fontSize: 20, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em", flex: 1, paddingLeft: 4 }}>
+              OP1NA1
+            </div>
+
+            {/* Painel label */}
+            <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted, letterSpacing: "0.12em", textTransform: "uppercase", paddingRight: 8 }}>
+              Admin
+            </div>
           </div>
 
           {children}
