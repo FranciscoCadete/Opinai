@@ -156,7 +156,7 @@ export function LoginClient() {
   const isError   = loginState === "error";
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: T.bg, color: T.text, fontFamily: T.sans, fontSize: 14, lineHeight: 1.5, overflow: "hidden" }}>
+    <div style={{ position: "fixed", inset: 0, background: T.bg, color: T.text, fontFamily: T.sans, fontSize: 14, lineHeight: 1.5, overflow: "auto" }}>
       <style>{`
         @keyframes lp-pulse   { 0%,100%{box-shadow:0 0 0 0 rgba(0,196,154,.5)} 50%{box-shadow:0 0 0 5px rgba(0,196,154,0)} }
         @keyframes lp-pill-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
@@ -173,6 +173,17 @@ export function LoginClient() {
         .lp-forgot:hover { border-color:${T.accent} !important; }
         .lp-submit:hover:not(:disabled) { background:#00daa9 !important; transform:translateY(-1px) !important; box-shadow:0 6px 20px rgba(0,196,154,.25) !important; }
         .lp-submit:active { transform:translateY(0) !important; }
+        /* ── Mobile responsiveness ── */
+        .lp-grid { display:grid; grid-template-columns:1fr 480px; height:100vh; }
+        .lp-left { display:flex; }
+        .lp-right { display:flex; align-items:center; justify-content:center; padding:32px 48px; background:${T.panel}; position:relative; overflow:hidden; }
+        .lp-mobile-logo { display:none; }
+        @media(max-width:767px){
+          .lp-grid { grid-template-columns:1fr; overflow-y:auto; height:auto; min-height:100dvh; }
+          .lp-left { display:none; }
+          .lp-right { padding:32px 24px 40px; min-height:100dvh; align-items:flex-start; padding-top:72px; }
+          .lp-mobile-logo { display:block; }
+        }
       `}</style>
 
       {/* Back to portal */}
@@ -195,10 +206,10 @@ export function LoginClient() {
       {/* Grid overlay */}
       <div style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none", backgroundImage: `linear-gradient(rgba(0,196,154,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,196,154,.03) 1px,transparent 1px)`, backgroundSize: "48px 48px", maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)" }} />
 
-      <div style={{ position: "relative", zIndex: 10, display: "grid", gridTemplateColumns: "1fr 480px", height: "100vh" }}>
+      <div className="lp-grid" style={{ position: "relative", zIndex: 10 }}>
 
         {/* LEFT PANEL */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "48px 56px", borderRight: `1px solid ${T.bdr2}` }}>
+        <div className="lp-left" style={{ flexDirection: "column", justifyContent: "space-between", padding: "48px 56px", borderRight: `1px solid ${T.bdr2}` }}>
           <div>
             <div style={{ fontFamily: T.display, fontSize: 36, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em", lineHeight: 1 }}>OP1NA1</div>
             <div style={{ fontFamily: T.mono, fontSize: 10, color: T.muted, letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 6 }}>Sistema Integrado · Mulenvos · Luanda</div>
@@ -243,11 +254,16 @@ export function LoginClient() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 48px", background: T.panel, position: "relative", overflow: "hidden" }}>
+        <div className="lp-right">
           <div style={{ position: "absolute", top: 0, right: 0, width: 200, height: 200, background: "radial-gradient(circle at top right,rgba(0,196,154,.06),transparent 70%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, width: 180, height: 180, background: "radial-gradient(circle at bottom left,rgba(79,163,247,.04),transparent 70%)", pointerEvents: "none" }} />
 
           <div id="main-content" style={{ width: "100%", maxWidth: 360, animation: "lp-form-in 0.6s cubic-bezier(.4,0,.2,1) both" }}>
+            {/* Mobile-only logo */}
+            <div className="lp-mobile-logo" style={{ marginBottom: 28 }}>
+              <div style={{ fontFamily: T.display, fontSize: 28, fontWeight: 300, color: T.accent, letterSpacing: "-0.03em" }}>OP1NA1</div>
+              <div style={{ fontFamily: T.mono, fontSize: 9, color: T.muted, letterSpacing: "0.16em", textTransform: "uppercase", marginTop: 3 }}>Sistema Integrado · Mulenvos · Luanda</div>
+            </div>
 
             {isSuccess && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", padding: 32 }}>
