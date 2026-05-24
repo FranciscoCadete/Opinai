@@ -1,36 +1,26 @@
-import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import pg from "pg";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 import * as schema from "./schema";
 
-const { Pool } = pg;
-
-declare global {
-  // eslint-disable-next-line no-var
-  var __op1na1_pool: pg.Pool | undefined;
-}
-
-function getPool(): pg.Pool {
+function createDb() {
   if (!process.env.DATABASE_URL) {
     throw new Error(
       "DATABASE_URL must be set. Did you forget to provision a database?",
     );
   }
-  if (!globalThis.__op1na1_pool) {
-    globalThis.__op1na1_pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      max: 5,
-      idleTimeoutMillis: 30_000,
-    });
-  }
-  return globalThis.__op1na1_pool;
+  const sql = neon(process.env.DATABASE_URL);
+  return drizzle(sql, { schema });
 }
 
-export const pool: pg.Pool = new Proxy({} as pg.Pool, {
+// Lazy singleton — created on first access so the module can be imported
+// without DATABASE_URL set (e.g. during build-time tree-shaking analysis).
+let _db: ReturnType<typeof createDb> | undefined;
+
+export const db = new Proxy({} as ReturnType<typeof createDb>, {
   get(_target, prop) {
-    return Reflect.get(getPool(), prop);
+    if (!_db) _db = createDb();
+    return Reflect.get(_db, prop);
   },
 });
-
-export const db: NodePgDatabase<typeof schema> = drizzle(pool, { schema });
 
 export * from "./schema";
