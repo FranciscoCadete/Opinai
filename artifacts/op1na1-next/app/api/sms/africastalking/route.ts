@@ -63,16 +63,15 @@ async function parseBody(req: NextRequest): Promise<{ fields: Record<string, str
   return { fields, raw: buf };
 }
 
-/** Verifica assinatura X-AT-Signature se AT_API_KEY estiver configurada */
+/** Verifica assinatura X-AT-Signature (apenas SMS Premium — AT não assina SMS regulares) */
 async function isAuthorised(req: NextRequest, rawBody: string): Promise<boolean> {
   const apiKey = process.env.AT_API_KEY;
-  if (!apiKey) return true; // sem chave configurada → aceitar (aviso apenas em dev)
+  const sig    = req.headers.get("x-at-signature");
 
-  const sig = req.headers.get("x-at-signature");
-  if (!sig) {
-    console.warn("[at/webhook] X-AT-Signature ausente");
-    return false;
-  }
+  // AT só envia X-AT-Signature em SMS Premium; SMS regulares não têm assinatura.
+  // Se o header estiver presente, validamos. Se ausente, aceitamos (callback URL é o segredo).
+  if (!sig) return true;
+  if (!apiKey) return true;
 
   return verifyAtSignature(rawBody, sig, apiKey);
 }
