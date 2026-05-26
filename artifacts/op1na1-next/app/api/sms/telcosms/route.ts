@@ -213,7 +213,7 @@ export async function POST(req: NextRequest) {
 
   // TelcoSMS requer 3 requests (login + CSRF + envio) — executado de forma síncrona
   // para garantir entrega antes de responder (after() não é fiável no Vercel Hobby).
-  await sendSmsTelco(from, reply);
+  const smsResult = await sendSmsTelco(from, reply);
 
   return NextResponse.json({
     action:   "ticket_created",
@@ -222,6 +222,7 @@ export async function POST(req: NextRequest) {
     priority: clf.priority,
     location: clf.location,
     msgId,
+    sms: smsResult,   // DEBUG — remover após confirmar envio
   }, { status: 201 });
 }
 
