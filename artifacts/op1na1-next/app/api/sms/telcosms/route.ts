@@ -30,7 +30,6 @@
  *   qualquer outra coisa → cria novo pedido, responde com OP###
  */
 
-import { after } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { classifyMessage, CATEGORY_LABELS, PRIORITY_LABELS } from "@/lib/classifier";
 import {
@@ -186,13 +185,14 @@ export async function POST(req: NextRequest) {
     const status = await lookupStatus(ticket);
 
     if (status === "not_found") {
-      after(() => sendSmsTelco(from,
+      // Aguarda envio síncrono — TelcoSMS usa sessão web (3 requests, ~3s)
+      await sendSmsTelco(from,
         `OP1NA1: Pedido ${ticket} nao encontrado.\nEnvie uma mensagem para registar nova ocorrencia.`,
-      ));
+      );
       return NextResponse.json({ action: "not_found", ticket, msgId });
     }
 
-    after(() => sendSmsTelco(from, buildTelcoStatusSms(ticket, status)));
+    await sendSmsTelco(from, buildTelcoStatusSms(ticket, status));
     return NextResponse.json({ action: "status_sent", ticket, status, msgId });
   }
 
@@ -211,9 +211,9 @@ export async function POST(req: NextRequest) {
     `Prioridade: ${prioLabel}\n` +
     `Envie "${ticketId}" para acompanhar.`;
 
-  // TelcoSMS requer 3 requests (login + CSRF + envio).
-  // after() mantém a função Vercel viva após a resposta para completar o envio.
-  after(() => sendSmsTelco(from, reply));
+  // TelcoSMS requer 3 requests (login + CSRF + envio) — executado de forma síncrona
+  // para garantir entrega antes de responder (after() não é fiável no Vercel Hobby).
+  await sendSmsTelco(from, reply);
 
   return NextResponse.json({
     action:   "ticket_created",
