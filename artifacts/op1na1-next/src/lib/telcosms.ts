@@ -138,7 +138,14 @@ async function loginAndGetCsrf(): Promise<{ cookie: string; csrf: string }> {
     throw new Error("[telcosms] Não foi possível obter o CSRF token do formulário de mensagens.");
   }
 
-  return { cookie: sessionCookie, csrf: formCsrf };
+  // Rails roda a sessão em cada GET — o cookie da resposta do GET /mensagens
+  // (S3) é o que está em vigor quando o CSRF foi gerado; o POST precisa deste cookie.
+  const rotatedCookie = extractCookies(msgPage);
+  const finalCookie = rotatedCookie.includes("_telcosms_session")
+    ? rotatedCookie
+    : sessionCookie;
+
+  return { cookie: finalCookie, csrf: formCsrf };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
