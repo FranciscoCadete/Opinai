@@ -225,15 +225,17 @@ export async function POST(req: NextRequest) {
 // ── GET — health check ────────────────────────────────────────────────────────
 
 export async function GET() {
-  const status = getTelcoStatus();
+  const s = getTelcoStatus();
   return NextResponse.json({
     service:     "OP1NA1 TelcoSMS Webhook",
     status:      "online",
-    ...status,
+    configured:  s.configured,
+    sandbox:     s.sandbox,
+    shortcode:   s.shortcode,
+    appId:       s.appId,
+    mechanism:   s.mechanism,
     callbackUrl: "https://op1na1-next.vercel.app/api/sms/telcosms",
-    usage:       "POST {from, text} — TelcoSMS envia automaticamente ao receber SMS no shortcode 45544",
-    setup: status.configured
-      ? "OK"
-      : "⚠️ TELCO_API_KEY e/ou TELCO_API_URL não configuradas. Contactar suporte@telcosms.co.ao",
+    usage:       "POST {from, text} — TelcoSMS envia ao receber SMS no shortcode 45544",
+    setup:       s.configured ? "OK" : "⚠️ TELCO_LOGIN e/ou TELCO_PASSWORD não configuradas.",
   });
 }

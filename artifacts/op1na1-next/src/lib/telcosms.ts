@@ -3,33 +3,40 @@
  *
  * Arquitectura:
  *   Cidadão  ──SMS──▶  Shortcode 45544  ──▶  POST /api/sms/telcosms
- *               ◀──SMS──  TelcoSMS API   ◀──  sendSmsTelco()
+ *               ◀──SMS──  TelcoSMS web   ◀──  sendSmsTelco()
  *
- * Fornecedor: TelcoSMS (INACOM authorizado)
- *   Suporte:  suporte@telcosms.co.ao  |  +244 940 620 227
+ * Fornecedor: TelcoSMS (INACOM autorizado, App OPINAI ID: 4144)
  *   Painel:   https://telcosms.co.ao/aplicacoes/4144
+ *   Suporte:  suporte@telcosms.co.ao  |  +244 940 620 227
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * MECANISMO DE ENVIO
+ * ─────────────────────────────────────────────────────────────────────────────
+ * A TelcoSMS não expõe API REST pública com chave. O envio é feito via
+ * sessão web autenticada em 3 passos por cada SMS:
+ *   1. GET  /usuarios/sign_in      → extrai CSRF de login
+ *   2. POST /usuarios/sign_in      → autentica, obtém cookie de sessão
+ *   3. POST /mensagens             → envia SMS com cookie + CSRF da sessão
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * VARIÁVEIS DE AMBIENTE  (Vercel → Environment Variables)
  * ─────────────────────────────────────────────────────────────────────────────
- *   TELCO_API_URL      — Endpoint de envio fornecido pelo suporte TelcoSMS
- *                        (ex.: https://sms.telcosms.co.ao/api/v1/sms)
- *                        ⚠️  Confirmar com suporte@telcosms.co.ao
- *   TELCO_API_KEY      — Chave PRD:  prdf7739ac426b9ccd912c3882c68
- *                        (em QAS usar: qasfb62e7e9257bbe97cd82e20a48)
- *   TELCO_APP_ID       — ID da aplicação OPINAI: 4144
- *   TELCO_SHORTCODE    — Shortcode de envio: 45544
- *   TELCO_SANDBOX      — "true" para usar chave QAS e activar logs extra
- * ─────────────────────────────────────────────────────────────────────────────
+ *   TELCO_LOGIN     — Telemóvel de login: 940991740
+ *   TELCO_PASSWORD  — Password da conta TelcoSMS
+ *   TELCO_APP_ID    — ID da aplicação OPINAI: 4144
+ *   TELCO_SANDBOX   — "true" para logs extra sem envio real
  *
- * Configurar webhook inbound no painel TelcoSMS:
- *   Callback URL:  https://op1na1-next.vercel.app/api/sms/telcosms
- *   Método:        POST
- *   Formato:       application/x-www-form-urlencoded  ou  application/json
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CONFIGURAR WEBHOOK INBOUND no painel TelcoSMS
+ * ─────────────────────────────────────────────────────────────────────────────
+ *   https://telcosms.co.ao/aplicacoes/4144
+ *   → Callback URL: https://op1na1-next.vercel.app/api/sms/telcosms
+ *   → Método: POST
  */
 
 import { INST_NUMBER_DISPLAY, APP_URL } from "@/lib/contact";
 
+const BASE    = "https://telcosms.co.ao";
 const SANDBOX = process.env.TELCO_SANDBOX === "true";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,11 +44,101 @@ const SANDBOX = process.env.TELCO_SANDBOX === "true";
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface TelcoSmsResult {
-  ok:        boolean;
+  ok:         boolean;
   messageId?: string;
-  cost?:     string;
-  error?:    string;
-  raw?:      unknown;
+  error?:     string;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Session helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Extrai o CSRF token do meta tag csrf-token de uma página HTML. */
+function extractMetaCsrf(html: string): string {
+  return html.match(/csrf-token" content="([^"]+)"/)?.[1] ?? "";
+}
+
+/** Extrai o CSRF do input hidden de um form HTML (usa o token mais longo = mais recente). */
+function extractFormCsrf(html: string): string {
+  const all = [...html.matchAll(/name="authenticity_token" value="([^"]{40,})"/g)];
+  // O último token é o do formulário de nova mensagem
+  return all[all.length - 1]?.[1] ?? "";
+}
+
+/** Extrai cookies Set-Cookie relevantes da resposta fetch. */
+function extractCookies(res: Response): string {
+  const raw = res.headers.getSetCookie?.() ?? [];
+  return raw
+    .map(c => c.split(";")[0])
+    .filter(Boolean)
+    .join("; ");
+}
+
+/**
+ * Autentica na conta TelcoSMS e devolve cookie de sessão + CSRF da página mensagens.
+ * Flow: GET sign_in → POST sign_in → GET mensagens → { cookie, csrf }
+ */
+async function loginAndGetCsrf(): Promise<{ cookie: string; csrf: string }> {
+  const login    = process.env.TELCO_LOGIN;
+  const password = process.env.TELCO_PASSWORD;
+
+  if (!login || !password) {
+    throw new Error("[telcosms] TELCO_LOGIN ou TELCO_PASSWORD não configurados.");
+  }
+
+  // ── Passo 1: GET /usuarios/sign_in — obter CSRF de login ─────────────────
+  const loginPage = await fetch(`${BASE}/usuarios/sign_in`, {
+    signal: AbortSignal.timeout(10_000),
+  });
+  const loginHtml  = await loginPage.text();
+  const loginCsrf  = extractMetaCsrf(loginHtml);
+  const loginCookies = extractCookies(loginPage);
+
+  if (!loginCsrf) {
+    throw new Error("[telcosms] Não foi possível obter o CSRF token da página de login.");
+  }
+
+  // ── Passo 2: POST /usuarios/sign_in — autenticar ─────────────────────────
+  const body = new URLSearchParams({
+    "authenticity_token":    loginCsrf,
+    "usuario[login]":        login,
+    "usuario[password]":     password,
+  });
+
+  const authRes = await fetch(`${BASE}/usuarios/sign_in`, {
+    method:   "POST",
+    headers:  {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Cookie":       loginCookies,
+    },
+    body:     body.toString(),
+    redirect: "manual",
+    signal:   AbortSignal.timeout(10_000),
+  });
+
+  // Após login bem-sucedido Rails devolve 302 + Set-Cookie com a sessão
+  if (authRes.status !== 302) {
+    throw new Error(`[telcosms] Login falhou — HTTP ${authRes.status}`);
+  }
+
+  const sessionCookie = extractCookies(authRes);
+  if (!sessionCookie.includes("_telcosms_session")) {
+    throw new Error("[telcosms] Cookie de sessão não recebido — credenciais inválidas?");
+  }
+
+  // ── Passo 3: GET /mensagens — obter CSRF do formulário de envio ───────────
+  const msgPage = await fetch(`${BASE}/mensagens`, {
+    headers: { "Cookie": sessionCookie },
+    signal:  AbortSignal.timeout(10_000),
+  });
+  const msgHtml = await msgPage.text();
+  const formCsrf = extractFormCsrf(msgHtml);
+
+  if (!formCsrf) {
+    throw new Error("[telcosms] Não foi possível obter o CSRF token do formulário de mensagens.");
+  }
+
+  return { cookie: sessionCookie, csrf: formCsrf };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -49,82 +146,63 @@ export interface TelcoSmsResult {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Envia um SMS via TelcoSMS (shortcode 45544).
+ * Envia um SMS via TelcoSMS usando sessão web autenticada.
  *
- * O endpoint exacto deve ser confirmado com suporte@telcosms.co.ao.
- * Enquanto não for confirmado, definir TELCO_API_URL na Vercel dashboard.
- *
- * @param to      Destinatário E.164, ex: +244958000001
- * @param message Texto (max ~160 chars)
+ * @param to      Destinatário em formato angolano: "940991740" ou "+244940991740"
+ * @param message Texto (max ~160 chars para segmento único)
  */
 export async function sendSmsTelco(
   to:      string,
   message: string,
 ): Promise<TelcoSmsResult> {
-  const apiKey    = process.env.TELCO_API_KEY;
-  const apiUrl    = process.env.TELCO_API_URL;
-  const appId     = process.env.TELCO_APP_ID     ?? "4144";
-  const shortcode = process.env.TELCO_SHORTCODE  ?? "45544";
+  const appId = process.env.TELCO_APP_ID ?? "4144";
 
-  if (!apiKey) {
-    console.warn("[telcosms] TELCO_API_KEY não configurada — SMS ignorado.");
-    return { ok: false, error: "api_key_missing" };
-  }
-
-  if (!apiUrl) {
-    console.warn("[telcosms] TELCO_API_URL não configurada — SMS ignorado.");
-    console.warn("[telcosms] Contacte suporte@telcosms.co.ao para obter o endpoint.");
-    return { ok: false, error: "api_url_missing" };
-  }
+  // Normalizar destinatário: remover +244 se presente (TelcoSMS usa formato local)
+  const destinatario = to.replace(/^\+244/, "").replace(/^244/, "");
 
   if (SANDBOX) {
-    console.log(`[telcosms][SANDBOX] Simulando envio para ${to}: ${message}`);
+    console.log(`[telcosms][SANDBOX] Simulando envio para ${destinatario}: ${message}`);
+    return { ok: true, messageId: "sandbox" };
   }
 
-  const body: Record<string, string | number> = {
-    to,
-    message,
-    from:   shortcode,
-    app_id: appId,
-  };
-
   try {
-    const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type":  "application/json",
-        "Accept":        "application/json",
-      },
-      body:   JSON.stringify(body),
-      signal: AbortSignal.timeout(15_000),
+    const { cookie, csrf } = await loginAndGetCsrf();
+
+    // ── Passo 4: POST /mensagens — enviar SMS ─────────────────────────────
+    const formBody = new URLSearchParams({
+      "authenticity_token":    csrf,
+      "mensagem[aplicacao_id]": appId,
+      "mensagem[destinatario]": destinatario,
+      "mensagem[corpo_sms]":    message,
     });
 
-    const raw = await res.json().catch(() => res.text()) as Record<string, unknown>;
+    const sendRes = await fetch(`${BASE}/mensagens`, {
+      method:  "POST",
+      headers: {
+        "Content-Type":   "application/x-www-form-urlencoded",
+        "Cookie":         cookie,
+        "Accept":         "text/html,application/xhtml+xml",
+      },
+      body:     formBody.toString(),
+      redirect: "manual",
+      signal:   AbortSignal.timeout(15_000),
+    });
 
-    if (!res.ok) {
-      console.error("[telcosms] HTTP", res.status, raw);
-      return { ok: false, error: `http_${res.status}`, raw };
+    // Sucesso: Rails redireciona para /mensagens/:id
+    if (sendRes.status === 302) {
+      const location = sendRes.headers.get("location") ?? "";
+      // Extrai o ID da mensagem do redirect: /mensagens/4677163
+      const msgId = location.match(/mensagens\/(\d+)/)?.[1] ?? "";
+      console.log(`[telcosms] SMS enviado para ${destinatario} — ID: ${msgId || "desconhecido"}`);
+      return { ok: true, messageId: msgId };
     }
 
-    // Accept common success patterns from SMS providers
-    const success =
-      raw?.["success"]    === true  ||
-      raw?.["status"]     === "success" ||
-      raw?.["status"]     === "OK"      ||
-      raw?.["result"]     === "OK"      ||
-      raw?.["statusCode"] === 200       ||
-      (typeof raw?.["id"] === "string" && raw["id"].length > 0);
+    console.error("[telcosms] Resposta inesperada:", sendRes.status);
+    return { ok: false, error: `http_${sendRes.status}` };
 
-    return {
-      ok:        success,
-      messageId: (raw?.["id"] ?? raw?.["messageId"] ?? raw?.["message_id"] ?? "") as string,
-      cost:      (raw?.["cost"] ?? "") as string,
-      raw,
-    };
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
-    console.error("[telcosms] fetch error:", msg);
+    console.error("[telcosms] Erro ao enviar SMS:", msg);
     return { ok: false, error: msg };
   }
 }
@@ -181,7 +259,7 @@ export async function notifyTelco(
   try {
     const result = await sendSmsTelco(to, buildTelcoConfirmationSms(ticketId));
     if (!result.ok) {
-      console.warn("[telcosms] Envio falhou (não fatal):", result.error, result.raw);
+      console.warn("[telcosms] Envio falhou (não fatal):", result.error);
     }
   } catch (e) {
     console.warn("[telcosms] Erro inesperado (não fatal):", e);
@@ -193,11 +271,13 @@ export async function notifyTelco(
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function getTelcoStatus() {
+  const login    = process.env.TELCO_LOGIN;
+  const password = process.env.TELCO_PASSWORD;
   return {
-    configured: !!(process.env.TELCO_API_KEY && process.env.TELCO_API_URL),
+    configured: !!(login && password),
     sandbox:    SANDBOX,
-    shortcode:  process.env.TELCO_SHORTCODE ?? "45544",
-    appId:      process.env.TELCO_APP_ID    ?? "4144",
-    apiUrl:     process.env.TELCO_API_URL   ?? "(não configurado — contactar suporte@telcosms.co.ao)",
+    shortcode:  "45544",
+    appId:      process.env.TELCO_APP_ID ?? "4144",
+    mechanism:  "session-web",
   };
 }
